@@ -1,5 +1,42 @@
 #content {
-  color: #0091aa; }
+  color: #ffffff; }
+
+html {
+  min-height: 100%; }
+
+body {
+  background-color: #313c3f;
+  background-color: red;
+  /* For browsers that do not support gradients */
+  background-image: linear-gradient(#ad6052, #5e65a1);
+  /* Standard syntax (must be last) */
+  color: white;
+  font-size: large;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  min-height: 100%; }
 
 h2, h1 {
-  color: #be4a14; }
+  color: #ffffff;
+  text-align: center; }
+
+.container .row h3 {
+  border-bottom: 1px solid white;
+  margin: 5px 20px; }
+
+p {
+  font-size: 400%;
+  font-weight: lighter; }
+
+hr {
+  border-color: white;
+  width: 90%; }
+
+.divider {
+  width: 1px;
+  background-color: white; }
+
+.divider-top {
+  margin-top: 40px; }
+
+.divider-bottom {
+  margin-bottom: 40px; }
