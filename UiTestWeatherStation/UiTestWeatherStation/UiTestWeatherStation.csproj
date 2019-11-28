@@ -14,4 +14,14 @@
     <PackageReference Include="Selenium.WebDriver" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RestConsumer\RestConsumer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ModelLibrary">
+      <HintPath>..\..\..\..\..\source\repos\WeatherStationExam2019\ModelLibrary\bin\Debug\netcoreapp2.1\ModelLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
