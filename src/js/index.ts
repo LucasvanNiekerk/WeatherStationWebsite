@@ -16,6 +16,13 @@ interface IWeather {
     timeStamp: string;
 }
 
+interface IApiWeather{
+    temperature: number;
+    skyText: string;
+    humidity: number;
+    windText: string;
+}
+
 //
 // Browser data
 //
@@ -26,7 +33,15 @@ let raspberryId: string = "";
 
 
 window.onload = function(){
-    setTimeout(function(){ browserStorage(); }, 100);
+    setTimeout(function(){ 
+        browserStorage(); 
+        getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+        getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+        getLatestWeatherInformation(externalTemperatureOutputElement, "Temperature");
+        getLatestWeatherInformation(externalHumidityOutputElement, "Humidity");
+
+        getAPIWeatherInformation("roskilde");
+    }, 100);
 }
 
 function browserStorage(): void{
@@ -114,61 +129,17 @@ function showAll(): void {
         });
 }
 
-function showOne(): void{
-    let output: HTMLDivElement = <HTMLDivElement>document.getElementById("StatusCode");
-    let inputOneElement: HTMLInputElement = <HTMLInputElement>document.getElementById("GetOneInput")
-    let id: string = inputOneElement.value;
-    let uri: string = baseUri + "/" + id;
-    axios.get<IWeather>(uri)
-    .then(function (response: AxiosResponse<IWeather>): void{
-        let result: string = "ID: " + response.data.id + ". RaspId: " + response.data.raspberryId + ". Temperatur: " + response.data.temperature + ". Luftfugtighed: " + response.data.humidity + ". TimeStamp: " + response.data.timeStamp + ".";
-        outputElement.innerHTML = result;
-    })
-    .catch(function (error: AxiosError): void { // error in GET or in generateSuccess?
-        if (error.response) {
-            // the request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            // https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
-            output.innerHTML = error.message;
-        } else { // something went wrong in the .then block?
-            output.innerHTML = error.message;
-        }
-    });
-}
-
-function deleteOne(): void {
-    let output: HTMLDivElement = <HTMLDivElement>document.getElementById("contentDelete");
-    let inputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("deleteInput");
-    let id: string = inputElement.value;
-    let uri: string = baseUri + "/" + id;
-    axios.delete<IWeather>(uri)
-        .then(function (response: AxiosResponse<IWeather>): void {
-            // element.innerHTML = generateSuccessHTMLOutput(response);
-            // outputHtmlElement.innerHTML = generateHtmlTable(response.data);
-            console.log(JSON.stringify(response));
-            output.innerHTML = response.status + " " + response.statusText;
-        })
-        .catch(function (error: AxiosError): void { // error in GET or in generateSuccess?
-            if (error.response) {
-                // the request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                // https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
-                output.innerHTML = error.message;
-            } else { // something went wrong in the .then block?
-                output.innerHTML = error.message;
-            }
-        });
-}
-
-function getLatestWeatherInformation(raspberryId: number): void{
+function getLatestWeatherInformation(d: HTMLDivElement, info: string): void{
     let Url: string = baseUri + "latest/" + raspberryId;
     
+    console.log("Get latest");
     axios.get<IWeather>(Url)
-    .then((response: AxiosResponse) =>{
-
+    .then((response: AxiosResponse<IWeather>) =>{
+        if(info === "Temperature") d.innerHTML = response.data.temperature;
+        else if(info === "Humidity") d.innerHTML = response.data.humidity;
     })
     .catch((error: AxiosError) =>{
-
+        console.log(error.message);
     });
 }
 
@@ -194,4 +165,19 @@ function sumbitRaspberryId(): void{
         
     });
     */
+}
+
+
+function getAPIWeatherInformation(location: string): void{
+    let Url: string = "https://vejr.eu/api.php?location=" + location + "&degree=C";
+
+    axios.get(Url)
+    .then((response: AxiosResponse) =>{
+        console.log(response.data);
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
 }
