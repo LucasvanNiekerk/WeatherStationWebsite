@@ -26,11 +26,14 @@
     <h2>Målinger</h2>
 
     <div class="row">
-        <div class="col">
-            <h2>Indendørs</h2>
+        <div class="col divBox divInternalSize">
+            <h3>Indendørs</h3>
+            <div class="divText" id="internalTemperature">28*</div>
+            <div class="divText" id="internalHumidity">50%</div>
+
         </div>
     
-        <div class="col">
+        <div class="col divBox divExternalSize">
           <h2>Udendørs</h2>
         </div>
     </div>
@@ -51,12 +54,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col">
-        <div id="internalTemperature">Internal temp</div>
-      </div>
-      <div class="col">
-        <div id="internalHumidity">Internal hum</div>
-      </div>
+     
       <div class="divider-top"></div>
       <div class="col">
         <div id="externalTemperature">Eksternal temp</div>
@@ -70,9 +68,6 @@
       <div class="col">
         </div>
       <div class="col">
-        <button id="getOneButton">GetOne</button>
-        <button id="getAllButton">GetAll</button>
-        <div id="outputElement"></div>
         </div>
         <div class="col">
           <div id="externalHumidity">Eksternal hum</div>
@@ -137,8 +132,20 @@
             <div id="prognosisHumidity3">day3 hum</div>
           </div>
     </div>
-
   </div>
+
+  <div id="raspberryIdPopup" class="modal">
+    <div class="modal-content">
+      <div style="color: white; align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
+      <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text">
+      <button style="width: 120px; align-self: center;" id="rasberryIdSubmitButton">Submit!</button>
+      <div style="color: white; align-self: center;" id="raspberryIdErrorOutput"></div>
+    </div>
+  </div>
+
+  <div id="NoLocalStorage"></div>
+
+
   <script src="bundle.js"></script>
 </body>
 

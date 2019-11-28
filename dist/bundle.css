@@ -31,6 +31,9 @@ hr {
   border-color: white;
   width: 90%; }
 
+.divText {
+  font-size: 400%; }
+
 .divider {
   width: 1px;
   background-color: white; }
@@ -40,3 +43,53 @@ hr {
 
 .divider-bottom {
   margin-bottom: 40px; }
+
+.divBox {
+  background-color: #0000005e;
+  display: block;
+  margin: auto;
+  border-radius: 20px;
+  box-shadow: 0px 0px 40px #0000005e; }
+
+.divInternalSize {
+  max-width: 20%;
+  min-width: 220px;
+  height: 400px; }
+
+.divExternalSize {
+  max-width: 40%;
+  min-width: 440px; }
+
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: black;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */ }
+
+/* Modal Content */
+.modal-content {
+  background-color: #313c3f;
+  background-color: red;
+  /* For browsers that do not support gradients */
+  background-image: linear-gradient(#5E65A1, #AD6052);
+  /* Standard syntax (must be last) */
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; }
