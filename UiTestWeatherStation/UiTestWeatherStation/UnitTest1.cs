@@ -59,32 +59,17 @@ namespace UiTestWeatherStation
             WeatherInformation externalTempData = worker.GetLast();
             Assert.AreEqual(externalTempData.Temperature, externalTemperature.Text);
 
-            IWebElement externalApiTemperature = _driver.FindElement(By.Id("externalApiTemperature"));
-            WeatherInformation externalApiTempData = worker.GetLast();
-            Assert.AreEqual(externalApiTempData.Temperature, externalApiTemperature.Text);
+            //IWebElement externalApiTemperature = _driver.FindElement(By.Id("externalApiTemperature"));
+            //WeatherInformation externalApiTempData = worker.GetLast();
+            //Assert.AreEqual(externalApiTempData.Temperature, externalApiTemperature.Text);
 
             IWebElement externalHumidity = _driver.FindElement(By.Id("externalHumidity"));
             WeatherInformation externalHumData = worker.GetLast();
             Assert.AreEqual(externalHumData.Humidity, externalHumidity.Text);
 
-            IWebElement externalApiHumidity = _driver.FindElement(By.Id("externalApiHumidity"));
-            WeatherInformation externalApiHumData = worker.GetLast();
-            Assert.AreEqual(externalApiHumData.Humidity, externalApiHumidity.Text);
-
-            IWebElement showAllButton = _driver.FindElement(By.Id("showAllButton"));
-            showAllButton.Click();
-
-            IWebElement showOneButton = _driver.FindElement(By.Id("showOneButton"));
-            showOneButton.Click();
-
-            IWebElement postButton = _driver.FindElement(By.Id("postButton"));
-            postButton.Click();
-
-            IWebElement deleteButton = _driver.FindElement(By.Id("deleteButton"));
-            deleteButton.Click();
-
-            IWebElement getRangeButton = _driver.FindElement(By.Id("getRangeButton"));
-            getRangeButton.Click();
+            //IWebElement externalApiHumidity = _driver.FindElement(By.Id("externalApiHumidity"));
+            //WeatherInformation externalApiHumData = worker.GetLast();
+            //Assert.AreEqual(externalApiHumData.Humidity, externalApiHumidity.Text);
 
             IWebElement outputElement = _driver.FindElement(By.Id("outputField"));
             string text = outputElement.Text;
