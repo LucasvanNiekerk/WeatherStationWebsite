@@ -70,8 +70,6 @@
       <div class="col">
         </div>
       <div class="col">
-        <button id="getOneButton">GetOne</button>
-        <button id="getAllButton">GetAll</button>
         <div id="outputElement"></div>
         </div>
         <div class="col">
@@ -138,8 +136,20 @@
           </div>
     </div>
 
+    <div id="NoLocalStorage"></div>
+
   </div>
+
+
+  <div id="raspberryIdPopup" class="modal">
+    <div class="modal-content">
+      <div style="color: white; align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
+      <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text">
+      <button style="width: 120px; align-self: center;" id="rasberryIdSubmitButton">Submit!</button>
+      <div style="color: white; align-self: center;" id="raspberryIdErrorOutput"></div>
+    </div>
+  </div>
+  
   <script src="bundle.js"></script>
 </body>
-
 </html>

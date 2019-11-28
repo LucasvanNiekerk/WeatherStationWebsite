@@ -16,6 +16,36 @@ interface IWeather {
     timeStamp: string;
 }
 
+//
+// Browser data
+//
+
+let temperatureAnnotation: string = "celsius";
+let raspberryId: string = "";
+
+
+
+window.onload = function(){
+    setTimeout(function(){ browserStorage(); }, 100);
+}
+
+function browserStorage(): void{
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        if(localStorage.getItem("raspId") != null){
+            console.log(localStorage.getItem("raspId"));
+            raspberryId = localStorage.getItem("raspId");
+        }
+        else{
+            popupElement.style.display = "block";
+        }  
+    } 
+    else {
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage."
+        console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
+    }
+}
+
 
 let baseUri: string = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 
@@ -39,24 +69,19 @@ let prognosisHumidityOutputElement2: HTMLDivElement = <HTMLDivElement>document.g
 let prognosisTemperatureOutputElement3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisTemperature3");
 let prognosisHumidityOutputElement3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisHumidity3");
 
+let NoLocalStorageOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("NoLocalStorage");
 
 let outputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("outputElement");
 
+let popupElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdPopup");
+
+let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdErrorOutput");
 
 //
 // Buttons
 //
-
-let showAllButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("getAllButton");
-showAllButton.addEventListener("click", showAll);
-
-let showOneButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("showOneButton");
-showOneButton.addEventListener("click", showOne);
-
-let deleteButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("deleteButton");
-deleteButton.addEventListener("click", deleteOne)
-
-
+let rasberryIdSubmitButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("rasberryIdSubmitButton");
+rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 
 //
 // Functions
@@ -136,7 +161,8 @@ function deleteOne(): void {
 }
 
 function getLatestWeatherInformation(raspberryId: number): void{
-    let Url: string = baseUri + "";
+    let Url: string = baseUri + "latest/" + raspberryId;
+    
     axios.get<IWeather>(Url)
     .then((response: AxiosResponse) =>{
 
@@ -144,4 +170,28 @@ function getLatestWeatherInformation(raspberryId: number): void{
     .catch((error: AxiosError) =>{
 
     });
+}
+
+function sumbitRaspberryId(): void{
+    let Url: string = baseUri + "checkRaspberryId/" + raspberryId;
+
+    console.log("Hello");
+    //popupElement.style.display = "None";
+    localStorage.setItem("raspId", "TestData22");
+    popupElement.style.display = "None";
+    /*
+    axios.get<IWeather>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+            popupElement.style.display = "None";
+        }
+        else{
+            raspberryIdErrorDivOutputElement.innerHTML = "Not a valid RaspberryPi Id";
+        }
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        
+    });
+    */
 }
