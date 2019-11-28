@@ -2075,7 +2075,14 @@ __webpack_require__.r(__webpack_exports__);
 var temperatureAnnotation = "celsius";
 var raspberryId = "";
 window.onload = function () {
-    setTimeout(function () { browserStorage(); }, 100);
+    setTimeout(function () {
+        browserStorage();
+        getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+        getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+        getLatestWeatherInformation(externalTemperatureOutputElement, "Temperature");
+        getLatestWeatherInformation(externalHumidityOutputElement, "Humidity");
+        getAPIWeatherInformation("roskilde");
+    }, 100);
 };
 function browserStorage() {
     if (typeof (Storage) !== "undefined") {
@@ -2148,58 +2155,18 @@ function showAll() {
         console.log("Failure");
     });
 }
-function showOne() {
-    var output = document.getElementById("StatusCode");
-    var inputOneElement = document.getElementById("GetOneInput");
-    var id = inputOneElement.value;
-    var uri = baseUri + "/" + id;
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(uri)
-        .then(function (response) {
-        var result = "ID: " + response.data.id + ". RaspId: " + response.data.raspberryId + ". Temperatur: " + response.data.temperature + ". Luftfugtighed: " + response.data.humidity + ". TimeStamp: " + response.data.timeStamp + ".";
-        outputElement.innerHTML = result;
-    })
-        .catch(function (error) {
-        if (error.response) {
-            // the request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            // https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
-            output.innerHTML = error.message;
-        }
-        else { // something went wrong in the .then block?
-            output.innerHTML = error.message;
-        }
-    });
-}
-function deleteOne() {
-    var output = document.getElementById("contentDelete");
-    var inputElement = document.getElementById("deleteInput");
-    var id = inputElement.value;
-    var uri = baseUri + "/" + id;
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.delete(uri)
-        .then(function (response) {
-        // element.innerHTML = generateSuccessHTMLOutput(response);
-        // outputHtmlElement.innerHTML = generateHtmlTable(response.data);
-        console.log(JSON.stringify(response));
-        output.innerHTML = response.status + " " + response.statusText;
-    })
-        .catch(function (error) {
-        if (error.response) {
-            // the request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            // https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
-            output.innerHTML = error.message;
-        }
-        else { // something went wrong in the .then block?
-            output.innerHTML = error.message;
-        }
-    });
-}
-function getLatestWeatherInformation(raspberryId) {
+function getLatestWeatherInformation(d, info) {
     var Url = baseUri + "latest/" + raspberryId;
+    console.log("Get latest");
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
+        if (info === "Temperature")
+            d.innerHTML = response.data.temperature;
+        else if (info === "Humidity")
+            d.innerHTML = response.data.humidity;
     })
         .catch(function (error) {
+        console.log(error.message);
     });
 }
 function sumbitRaspberryId() {
@@ -2223,6 +2190,18 @@ function sumbitRaspberryId() {
         
     });
     */
+}
+function getAPIWeatherInformation(location) {
+    var Url = "https://vejr.eu/api.php?location=" + location + "&degree=C";
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        console.log(response.data);
+    })
+        .catch(function (error) {
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
 }
 
 
