@@ -87,7 +87,7 @@ hr {
   background-color: #313c3f;
   background-color: red;
   /* For browsers that do not support gradients */
-  background-image: linear-gradient(#5E65A1, #AD6052);
+  background-image: linear-gradient(#5e65a1, #ad6052);
   /* Standard syntax (must be last) */
   margin: auto;
   padding: 20px;

@@ -2069,6 +2069,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/axios/index */ "./node_modules/axios/index.js");
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__);
 
+//
+// Browser data
+//
+var temperatureAnnotation = "celsius";
+var raspberryId = "";
+window.onload = function () {
+    setTimeout(function () { browserStorage(); }, 100);
+};
+function browserStorage() {
+    if (typeof (Storage) !== "undefined") {
+        // Store
+        if (localStorage.getItem("raspId") != null) {
+            console.log(localStorage.getItem("raspId"));
+            raspberryId = localStorage.getItem("raspId");
+        }
+        else {
+            popupElement.style.display = "block";
+        }
+    }
+    else {
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage.";
+        console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
+    }
+}
 var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 //
 // Diverse elemenets
@@ -2085,16 +2109,15 @@ var prognosisTemperatureOutputElement2 = document.getElementById("prognosisTempe
 var prognosisHumidityOutputElement2 = document.getElementById("prognosisHumidity2");
 var prognosisTemperatureOutputElement3 = document.getElementById("prognosisTemperature3");
 var prognosisHumidityOutputElement3 = document.getElementById("prognosisHumidity3");
+var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
 var outputElement = document.getElementById("outputElement");
+var popupElement = document.getElementById("raspberryIdPopup");
+var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
 //
 // Buttons
 //
-var showAllButton = document.getElementById("getAllButton");
-showAllButton.addEventListener("click", showAll);
-var showOneButton = document.getElementById("showOneButton");
-showOneButton.addEventListener("click", showOne);
-var deleteButton = document.getElementById("deleteButton");
-deleteButton.addEventListener("click", deleteOne);
+var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
+rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 //
 // Functions
 //
@@ -2172,12 +2195,34 @@ function deleteOne() {
     });
 }
 function getLatestWeatherInformation(raspberryId) {
-    var Url = baseUri + "";
+    var Url = baseUri + "latest/" + raspberryId;
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
     })
         .catch(function (error) {
     });
+}
+function sumbitRaspberryId() {
+    var Url = baseUri + "checkRaspberryId/" + raspberryId;
+    console.log("Hello");
+    //popupElement.style.display = "None";
+    localStorage.setItem("raspId", "TestData22");
+    popupElement.style.display = "None";
+    /*
+    axios.get<IWeather>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+            popupElement.style.display = "None";
+        }
+        else{
+            raspberryIdErrorDivOutputElement.innerHTML = "Not a valid RaspberryPi Id";
+        }
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        
+    });
+    */
 }
 
 
