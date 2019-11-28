@@ -24,7 +24,9 @@ h2
 
 .container .row h3 {
     border-bottom: 1px solid white; 
-    margin: 5px 20px;
+    margin: 5px 0px;
+    font-size: calc(12px + 1vw);
+    text-align: center;
 }
 
 h1{
@@ -42,12 +44,13 @@ hr{
 }
 
 .divText{
-    font-size: 5vw;
+    font-size: calc(30px + 2.5vw);
+    
 }
 
 .divider{
     width: 1px;
-     background-color: white;
+    background-color: white;
 }
 
 .divider-top {
@@ -66,19 +69,21 @@ hr{
     margin: auto;
     border-radius: 20px;
     box-shadow: 0px 0px 40px #0000005e;
+    height: 30vw;
+    max-height: 300px;
+    min-height: 200px;
     
 }
 
 .divInternalSize{
-    max-width: 20%;
+    max-width: 25%;
     min-width: 130px;
-    height: 300px;
+
 }
 
 .divExternalSize{
-    max-width: 40%;
+    max-width: 45%;
     min-width: 260px;
-    height: 300px;
 }
 
 
