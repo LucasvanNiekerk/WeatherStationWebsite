@@ -1,0 +1,11 @@
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\UiTestWeatherStation.deps.json
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\UiTestWeatherStation.runtimeconfig.json
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\UiTestWeatherStation.runtimeconfig.dev.json
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\bin\Debug\netcoreapp2.1\UiTestWeatherStation.dll
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\obj\Debug\netcoreapp2.1\UiTestWeatherStation.csprojAssemblyReference.cache
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\obj\Debug\netcoreapp2.1\UiTestWeatherStation.csproj.CoreCompileInputs.cache
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\obj\Debug\netcoreapp2.1\UiTestWeatherStation.AssemblyInfoInputs.cache
+C:\Users\Bruger\source\repos\UiTestWeatherStation\UiTestWeatherStation\obj\Debug\netcoreapp2.1\UiTestWeatherStation.AssemblyInfo.cs
