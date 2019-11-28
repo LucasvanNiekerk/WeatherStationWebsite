@@ -2069,14 +2069,35 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/axios/index */ "./node_modules/axios/index.js");
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__);
 
-var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/WeatherInformations";
+var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
+//
+// Diverse elemenets
+//
+var internalTemperatureOutputElement = document.getElementById("internalTemperature");
+var internalHumidityOutputElement = document.getElementById("internalHumidity");
+var externalTemperatureOutputElement = document.getElementById("externalTemperature");
+var externalHumidityOutputElement = document.getElementById("externalHumidity");
+var externalAPITemperatureOutputElement = document.getElementById("externalAPITemperature");
+var externalAPIHumidityOutputElement = document.getElementById("externalAPIHumidity");
+var prognosisTemperatureOutputElement1 = document.getElementById("prognosisTemperature1");
+var prognosisHumidityOutputElement1 = document.getElementById("prognosisHumidity1");
+var prognosisTemperatureOutputElement2 = document.getElementById("prognosisTemperature2");
+var prognosisHumidityOutputElement2 = document.getElementById("prognosisHumidity2");
+var prognosisTemperatureOutputElement3 = document.getElementById("prognosisTemperature3");
+var prognosisHumidityOutputElement3 = document.getElementById("prognosisHumidity3");
 var outputElement = document.getElementById("outputElement");
-var showAllButton = document.getElementById("showAllButton");
+//
+// Buttons
+//
+var showAllButton = document.getElementById("getAllButton");
 showAllButton.addEventListener("click", showAll);
 var showOneButton = document.getElementById("showOneButton");
 showOneButton.addEventListener("click", showOne);
 var deleteButton = document.getElementById("deleteButton");
 deleteButton.addEventListener("click", deleteOne);
+//
+// Functions
+//
 function showAll() {
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(baseUri)
         .then(function (response) {
@@ -2089,6 +2110,7 @@ function showAll() {
         });
         result += "</ul>";
         outputElement.innerHTML = result;
+        console.log("Success");
     })
         .catch(function (error) {
         if (error.response) {
@@ -2100,6 +2122,7 @@ function showAll() {
         else { // something went wrong in the .then block?
             outputElement.innerHTML = error.message;
         }
+        console.log("Failure");
     });
 }
 function showOne() {
@@ -2146,6 +2169,14 @@ function deleteOne() {
         else { // something went wrong in the .then block?
             output.innerHTML = error.message;
         }
+    });
+}
+function getLatestWeatherInformation(raspberryId) {
+    var Url = baseUri + "";
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+    })
+        .catch(function (error) {
     });
 }
 
