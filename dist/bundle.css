@@ -32,7 +32,7 @@ hr {
   width: 90%; }
 
 .divText {
-  font-size: 400%; }
+  font-size: 5vw; }
 
 .divider {
   width: 1px;
@@ -53,12 +53,13 @@ hr {
 
 .divInternalSize {
   max-width: 20%;
-  min-width: 220px;
-  height: 400px; }
+  min-width: 130px;
+  height: 300px; }
 
 .divExternalSize {
   max-width: 40%;
-  min-width: 440px; }
+  min-width: 260px;
+  height: 300px; }
 
 .modal {
   display: none;
