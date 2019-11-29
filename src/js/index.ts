@@ -63,7 +63,7 @@ function browserStorage(): void{
             temperatureAnnotation = localStorage.getItem("temperatureType");
         }
         else{
-            temperatureAnnotation = "celsius";
+            temperatureAnnotation = "Celsius";
         }
         //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
@@ -116,13 +116,13 @@ changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnn
 //
 
 function changeTemperatureAnnotation(): void{
-    if(temperatureAnnotation === "celsius"){
-        temperatureAnnotation = "fahrenheit";
+    if(temperatureAnnotation === "Celsius"){
+        temperatureAnnotation = "Fahrenheit";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         localStorage.setItem("temperatureType", temperatureAnnotation);
     }
-    else if(temperatureAnnotation === "fahrenheit"){
-        temperatureAnnotation = "celsius";
+    else if(temperatureAnnotation === "Fahrenheit"){
+        temperatureAnnotation = "Celsius";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         localStorage.setItem("temperatureType", temperatureAnnotation);
     }
@@ -137,10 +137,10 @@ function getLatestWeatherInformation(d: HTMLDivElement, info: string): void{
     axios.get<IWeather>(Url)
     .then((response: AxiosResponse<IWeather>) =>{
         if(info === "Temperature"){
-            if(temperatureAnnotation === "celsius"){
+            if(temperatureAnnotation === "Celsius"){
                 d.innerHTML = response.data.temperature + "°";
             }
-            else if(temperatureAnnotation === "fahrenheit"){
+            else if(temperatureAnnotation === "Fahrenheit"){
                 d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
             }
         } 

@@ -2102,7 +2102,7 @@ function browserStorage() {
             temperatureAnnotation = localStorage.getItem("temperatureType");
         }
         else {
-            temperatureAnnotation = "celsius";
+            temperatureAnnotation = "Celsius";
         }
         //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
@@ -2142,13 +2142,13 @@ changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnn
 // Functions
 //
 function changeTemperatureAnnotation() {
-    if (temperatureAnnotation === "celsius") {
-        temperatureAnnotation = "fahrenheit";
+    if (temperatureAnnotation === "Celsius") {
+        temperatureAnnotation = "Fahrenheit";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         localStorage.setItem("temperatureType", temperatureAnnotation);
     }
-    else if (temperatureAnnotation === "fahrenheit") {
-        temperatureAnnotation = "celsius";
+    else if (temperatureAnnotation === "Fahrenheit") {
+        temperatureAnnotation = "Celsius";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         localStorage.setItem("temperatureType", temperatureAnnotation);
     }
@@ -2161,10 +2161,10 @@ function getLatestWeatherInformation(d, info) {
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         if (info === "Temperature") {
-            if (temperatureAnnotation === "celsius") {
+            if (temperatureAnnotation === "Celsius") {
                 d.innerHTML = response.data.temperature + "°";
             }
-            else if (temperatureAnnotation === "fahrenheit") {
+            else if (temperatureAnnotation === "Fahrenheit") {
                 d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
             }
         }
