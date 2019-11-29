@@ -2079,8 +2079,6 @@ window.onload = function () {
         browserStorage();
         getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-        getLatestWeatherInformation(externalTemperatureOutputElement, "Temperature");
-        getLatestWeatherInformation(externalHumidityOutputElement, "Humidity");
         getAPIWeatherInformation("roskilde");
     }, 100);
 };
@@ -2106,8 +2104,6 @@ var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 //
 var internalTemperatureOutputElement = document.getElementById("internalTemperature");
 var internalHumidityOutputElement = document.getElementById("internalHumidity");
-var externalTemperatureOutputElement = document.getElementById("externalTemperature");
-var externalHumidityOutputElement = document.getElementById("externalHumidity");
 var externalAPITemperatureOutputElement = document.getElementById("externalAPITemperature");
 var externalAPIHumidityOutputElement = document.getElementById("externalAPIHumidity");
 var prognosisTemperatureOutputElement1 = document.getElementById("prognosisTemperature1");
