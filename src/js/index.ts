@@ -32,7 +32,7 @@ let temperatureAnnotation: string;
 
 // The raspberryPi where the data is comming from. Raspberry id is a string and has to be exactly 10 characters long.
 //This information is saved in localStorage with the key "raspId".
-let raspberryId: string;
+let raspberryId: string = "";
 
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
@@ -40,8 +40,7 @@ window.onload = onloadMethods;
 function onloadMethods(): void{
     setTimeout(()=>{
         browserStorage(); 
-        getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-        getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+        loadData();
 
         //getAPIWeatherInformation("roskilde");
     }, 10)
@@ -101,6 +100,8 @@ let popupElement: HTMLDivElement = <HTMLDivElement>document.getElementById("rasp
 
 let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdErrorOutput");
 
+let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
+
 //
 // Buttons
 //
@@ -119,33 +120,39 @@ function changeTemperatureAnnotation(): void{
     if(temperatureAnnotation === "Celsius"){
         temperatureAnnotation = "Fahrenheit";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
-        localStorage.setItem("temperatureType", temperatureAnnotation);
     }
     else if(temperatureAnnotation === "Fahrenheit"){
         temperatureAnnotation = "Celsius";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
-        localStorage.setItem("temperatureType", temperatureAnnotation);
     }
+    localStorage.setItem("temperatureType", temperatureAnnotation);
+    
+    loadData();
+}
+
+function loadData(): void{
+    //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
 }
 
-function getLatestWeatherInformation(d: HTMLDivElement, info: string): void{
-    // eg. 
+// Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
+function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void{
+    // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
     let Url: string = baseUri + "latest/" + raspberryId;
     
     axios.get<IWeather>(Url)
     .then((response: AxiosResponse<IWeather>) =>{
-        if(info === "Temperature"){
+        if(typeOfInfo === "Temperature"){
             if(temperatureAnnotation === "Celsius"){
-                d.innerHTML = response.data.temperature + "°";
+                divElement.innerHTML = response.data.temperature + "°";
             }
             else if(temperatureAnnotation === "Fahrenheit"){
-                d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
             }
         } 
-        else if(info === "Humidity"){
-         d.innerHTML = response.data.humidity + "%";
+        else if(typeOfInfo === "Humidity"){
+            divElement.innerHTML = response.data.humidity + "%";
         }   
     })
     .catch((error: AxiosError) =>{
@@ -154,30 +161,42 @@ function getLatestWeatherInformation(d: HTMLDivElement, info: string): void{
 }
 
 function sumbitRaspberryId(): void{
-    let Url: string = baseUri + "checkRaspberryId/" + raspberryId;
+    //We save the raspberry Id from our user input as a temp string.
+    let tempId: string = raspberryIdInputElement.value;
 
-    console.log("Hello");
-    //popupElement.style.display = "None";
-    localStorage.setItem("raspId", "TestData22");
-    popupElement.style.display = "None";
-    /*
-    axios.get<IWeather>(Url)
-    .then((response: AxiosResponse) =>{
-        if(response.data){
-            popupElement.style.display = "None";
-        }
-        else{
-            raspberryIdErrorDivOutputElement.innerHTML = "Not a valid RaspberryPi Id";
-        }
-    })
-    .catch((error: AxiosError) =>{
-        console.log(error.message);
-        
-    });
-    */
+    //We check if it has the required length, otherwise there is no point in checking if it exists(since it wont).
+    if(tempId.length == 10){
+        // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/checkRaspberryId/78ANBj918k
+        let Url: string = baseUri + "checkRaspberryId/" + tempId;
+
+        //We tjek our database to see if the raspberry id exists.
+        axios.get<IWeather>(Url)
+        .then((response: AxiosResponse) =>{
+            if(response.data){
+                //Since we now know that the id is valid we save it.
+                raspberryId = tempId;
+
+                //We save the id in local storage and close the popup.
+                localStorage.setItem("raspId", raspberryId);
+                loadData();
+                popupElement.style.display = "None";
+            }
+            else{
+                raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
+            }   
+        })
+        .catch((error: AxiosError) =>{
+            console.log(error.message);
+        });
+    }
+    else{
+        raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
+    }
 }
 
+//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp: string): string{
+    // tF = tC * 9/5 + 32
     return  (Number(temp) * (9/5) + 32).toFixed(1);
 }
 
