@@ -2070,40 +2070,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__);
 
 //
-// Browser data
+// Browser data / local storage.
 //
+// Determines whether celcius or fahrenheit is used. This information is saved in localStorage with the key "temperatureType".
 var temperatureAnnotation;
+// The raspberryPi where the data is comming from. Raspberry id is a string and has to be exactly 10 characters long.
+//This information is saved in localStorage with the key "raspId".
 var raspberryId;
-window.onload = function () {
+// This is run after the page has loaded. Here we get the data to show and load localStorage.
+window.onload = onloadMethods;
+function onloadMethods() {
     setTimeout(function () {
         browserStorage();
         getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-        getAPIWeatherInformation("roskilde");
-    }, 50);
-};
+        //getAPIWeatherInformation("roskilde");
+    }, 10);
+}
 function browserStorage() {
+    //Tjek if localStorage is supported.
     if (typeof (Storage) !== "undefined") {
-        // Store
+        // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
         if (localStorage.getItem("raspId") != null) {
             raspberryId = localStorage.getItem("raspId");
         }
         else {
             popupElement.style.display = "block";
         }
+        // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
         if (localStorage.getItem("temperatureType") != null) {
             temperatureAnnotation = localStorage.getItem("temperatureType");
         }
         else {
-            temperatureAnnotation = "celsius";
+            temperatureAnnotation = "Celsius";
         }
+        //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
+    //If localStorage is not supported we tell the client. 
     else {
-        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage.";
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
     }
 }
+// The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
 var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 //
 // Diverse elemenets
@@ -2119,7 +2129,6 @@ var prognosisHumidityOutputElement2 = document.getElementById("prognosisHumidity
 var prognosisTemperatureOutputElement3 = document.getElementById("prognosisTemperature3");
 var prognosisHumidityOutputElement3 = document.getElementById("prognosisHumidity3");
 var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
-var outputElement = document.getElementById("outputElement");
 var popupElement = document.getElementById("raspberryIdPopup");
 var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
 //
@@ -2133,56 +2142,29 @@ changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnn
 // Functions
 //
 function changeTemperatureAnnotation() {
-    if (temperatureAnnotation === "celsius") {
-        temperatureAnnotation = "fahrenheit";
+    if (temperatureAnnotation === "Celsius") {
+        temperatureAnnotation = "Fahrenheit";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         localStorage.setItem("temperatureType", temperatureAnnotation);
     }
-    else if (temperatureAnnotation === "fahrenheit") {
-        temperatureAnnotation = "celsius";
+    else if (temperatureAnnotation === "Fahrenheit") {
+        temperatureAnnotation = "Celsius";
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         localStorage.setItem("temperatureType", temperatureAnnotation);
     }
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
 }
-function showAll() {
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(baseUri)
-        .then(function (response) {
-        // element.innerHTML = generateSuccessHTMLOutput(response);
-        // outputHtmlElement.innerHTML = generateHtmlTable(response.data);
-        // outputHtmlElement.innerHTML = JSON.stringify(response.data);
-        var result = "<ul>";
-        response.data.forEach(function (weather) {
-            result += "<li>" + weather.id + " " + weather.raspberryId + " " + weather.temperature + weather.humidity + " " + weather.timeStamp + "</li>";
-        });
-        result += "</ul>";
-        outputElement.innerHTML = result;
-        console.log("Success");
-    })
-        .catch(function (error) {
-        if (error.response) {
-            // the request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            // https://kapeli.com/cheat_sheets/Axios.docset/Contents/Resources/Documents/index
-            outputElement.innerHTML = error.message;
-        }
-        else { // something went wrong in the .then block?
-            outputElement.innerHTML = error.message;
-        }
-        console.log("Failure");
-    });
-}
 function getLatestWeatherInformation(d, info) {
+    // eg. 
     var Url = baseUri + "latest/" + raspberryId;
-    console.log("Get latest");
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         if (info === "Temperature") {
-            if (temperatureAnnotation === "celsius") {
+            if (temperatureAnnotation === "Celsius") {
                 d.innerHTML = response.data.temperature + "°";
             }
-            else if (temperatureAnnotation === "fahrenheit") {
+            else if (temperatureAnnotation === "Fahrenheit") {
                 d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
             }
         }
@@ -2219,18 +2201,21 @@ function sumbitRaspberryId() {
 function convertToFahrenheit(temp) {
     return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
-function getAPIWeatherInformation(location) {
-    var Url = "https://vejr.eu/api.php?location=" + location + "&degree=C";
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
-        .then(function (response) {
+/*
+function getAPIWeatherInformation(location: string): void{
+    let Url: string = "https://vejr.eu/api.php?location=" + location + "&degree=C";
+
+    axios.get(Url)
+    .then((response: AxiosResponse) =>{
         console.log(response.data);
     })
-        .catch(function (error) {
+    .catch((error: AxiosError) =>{
         console.log(error.message);
         console.log(error.code);
         console.log(error.response);
     });
 }
+*/ 
 
 
 /***/ }),
