@@ -25,63 +25,22 @@
   <div class="container" style="text-align: center;  max-width: 1000px;">
     <h2>Målinger</h2>
 
-    <div class="row">
-        <div class="col divBox divInternalSize">
+    <div class="row" style="width: 50vw; min-width: 400px; margin: auto;">
+        <div class="col divBox divLatestSize">
             <h3>Indendørs</h3>
             <div class="divText" id="internalTemperature">28,6°</div>
             <div class="divText" id="internalHumidity">50%</div>
-
         </div>
     
-        <div class="col">
-          <h2>Udendørs</h2>
+        <div class="col divBox divLatestSize">
+          <h3>Udendørs(DMI)</h3>
+          <div class="divText" id="externalAPITemperature">28,6°</div>
+          <div class="divText" id="externalAPIHumidity">50%</div>
         </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <h3>Temperatur</h3>
-      </div>
-      <div class="col">
-          <h3>Luftfugtighed</h3>
-        </div>
-
-      <div class="col">
-        <h3>Local</h3>
-      </div>
-      <div class="col">
-        <h3>DMI</h3>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <div id="internalTemperature">Internal temp</div>
-      </div>
-      <div class="col">
-        <div id="internalHumidity">Internal hum</div>
-      </div>
-      <div class="divider-top"></div>
-      <div class="col">
-        <div id="externalTemperature">Eksternal temp</div>
-      </div>
-      <div class="col">
-        <div id="externalAPITemperature">Eksternal API temp</div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="divider-bottom" ></div>
-      <div class="col">
-        </div>
-      <div class="col">
-        <div id="outputElement"></div>
-        </div>
-        <div class="col">
-          <div id="externalHumidity">Eksternal hum</div>
-          </div>
-      <div class="col">
-        <div id="externalAPIHumidity">Eksternal api hum</div>
-      </div>
-    </div>
+    
+    
   </div>
 
   <hr>
@@ -146,7 +105,7 @@
     <div class="modal-content">
       <div style="color: white; align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
       <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text">
-      <button style="width: 120px; align-self: center;" id="rasberryIdSubmitButton">Submit!</button>
+      <button class="btn btn-primary" style="width: 120px; align-self: center;" id="rasberryIdSubmitButton">Submit!</button>
       <div style="color: white; align-self: center;" id="raspberryIdErrorOutput"></div>
     </div>
   </div>

@@ -5,10 +5,9 @@ html {
   min-height: 100%; }
 
 body {
-  background-color: #313c3f;
-  background-color: red;
+  background-color: #006086;
   /* For browsers that do not support gradients */
-  background-image: linear-gradient(#ad6052, #5e65a1);
+  background-image: linear-gradient(to top right, #00558d, #00856f);
   /* Standard syntax (must be last) */
   color: white;
   font-size: large;
@@ -56,11 +55,11 @@ hr {
   max-height: 300px;
   min-height: 200px; }
 
-.divInternalSize {
-  max-width: 25%;
-  min-width: 130px; }
+.divLatestSize {
+  max-width: 40%;
+  min-width: 160px; }
 
-.divExternalSize {
+.div3dagsPrognoseSize {
   max-width: 45%;
   min-width: 260px; }
 
@@ -71,7 +70,7 @@ hr {
   /* Stay in place */
   z-index: 1;
   /* Sit on top */
-  padding-top: 100px;
+  padding-top: 200px;
   /* Location of the box */
   left: 0;
   top: 0;
@@ -88,12 +87,10 @@ hr {
 
 /* Modal Content */
 .modal-content {
-  background-color: #313c3f;
-  background-color: red;
+  background-color: rgba(26, 45, 48, 0.836);
   /* For browsers that do not support gradients */
-  background-image: linear-gradient(#5e65a1, #ad6052);
-  /* Standard syntax (must be last) */
+  border-radius: 20px;
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; }
+  width: calc(20% + 300px); }
