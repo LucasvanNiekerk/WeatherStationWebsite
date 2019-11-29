@@ -37,8 +37,6 @@ window.onload = function(){
         browserStorage(); 
         getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-        getLatestWeatherInformation(externalTemperatureOutputElement, "Temperature");
-        getLatestWeatherInformation(externalHumidityOutputElement, "Humidity");
 
         getAPIWeatherInformation("roskilde");
     }, 100);
@@ -70,9 +68,6 @@ let baseUri: string = "https://weatherstationrest2019.azurewebsites.net/api/wi/"
 
 let internalTemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("internalTemperature");
 let internalHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("internalHumidity");
-
-let externalTemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalTemperature");
-let externalHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalHumidity");
 
 let externalAPITemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalAPITemperature");
 let externalAPIHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalAPIHumidity");
