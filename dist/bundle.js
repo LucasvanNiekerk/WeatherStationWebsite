@@ -2153,11 +2153,6 @@ function changeTemperatureAnnotation() {
     localStorage.setItem("temperatureType", temperatureAnnotation);
     loadData();
 }
-function loadData() {
-    //Todo insert rest of div
-    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-}
 // Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
 function getLatestWeatherInformation(divElement, typeOfInfo) {
     // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
@@ -2214,6 +2209,11 @@ function sumbitRaspberryId() {
 function convertToFahrenheit(temp) {
     // tF = tC * 9/5 + 32
     return (Number(temp) * (9 / 5) + 32).toFixed(1);
+}
+function loadData() {
+    //Todo insert rest of div
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
 }
 /*
 function getAPIWeatherInformation(location: string): void{

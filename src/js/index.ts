@@ -130,12 +130,6 @@ function changeTemperatureAnnotation(): void{
     loadData();
 }
 
-function loadData(): void{
-    //Todo insert rest of div
-    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-}
-
 // Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
 function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void{
     // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
@@ -200,6 +194,11 @@ function convertToFahrenheit(temp: string): string{
     return  (Number(temp) * (9/5) + 32).toFixed(1);
 }
 
+function loadData(): void{
+    //Todo insert rest of div
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
 
 /*
 function getAPIWeatherInformation(location: string): void{
