@@ -2072,28 +2072,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 // Browser data
 //
-var temperatureAnnotation = "celsius";
-var raspberryId = "";
+var temperatureAnnotation;
+var raspberryId;
 window.onload = function () {
     setTimeout(function () {
         browserStorage();
         getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-        getLatestWeatherInformation(externalTemperatureOutputElement, "Temperature");
-        getLatestWeatherInformation(externalHumidityOutputElement, "Humidity");
         getAPIWeatherInformation("roskilde");
-    }, 100);
+    }, 50);
 };
 function browserStorage() {
     if (typeof (Storage) !== "undefined") {
         // Store
         if (localStorage.getItem("raspId") != null) {
-            console.log(localStorage.getItem("raspId"));
             raspberryId = localStorage.getItem("raspId");
         }
         else {
             popupElement.style.display = "block";
         }
+        if (localStorage.getItem("temperatureType") != null) {
+            temperatureAnnotation = localStorage.getItem("temperatureType");
+        }
+        else {
+            temperatureAnnotation = "celsius";
+        }
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
     else {
         NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage.";
@@ -2106,8 +2110,6 @@ var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 //
 var internalTemperatureOutputElement = document.getElementById("internalTemperature");
 var internalHumidityOutputElement = document.getElementById("internalHumidity");
-var externalTemperatureOutputElement = document.getElementById("externalTemperature");
-var externalHumidityOutputElement = document.getElementById("externalHumidity");
 var externalAPITemperatureOutputElement = document.getElementById("externalAPITemperature");
 var externalAPIHumidityOutputElement = document.getElementById("externalAPIHumidity");
 var prognosisTemperatureOutputElement1 = document.getElementById("prognosisTemperature1");
@@ -2125,9 +2127,25 @@ var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdError
 //
 var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
+var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
+changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
 //
 // Functions
 //
+function changeTemperatureAnnotation() {
+    if (temperatureAnnotation === "celsius") {
+        temperatureAnnotation = "fahrenheit";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    else if (temperatureAnnotation === "fahrenheit") {
+        temperatureAnnotation = "celsius";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
 function showAll() {
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(baseUri)
         .then(function (response) {
@@ -2160,10 +2178,17 @@ function getLatestWeatherInformation(d, info) {
     console.log("Get latest");
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
-        if (info === "Temperature")
-            d.innerHTML = response.data.temperature;
-        else if (info === "Humidity")
-            d.innerHTML = response.data.humidity;
+        if (info === "Temperature") {
+            if (temperatureAnnotation === "celsius") {
+                d.innerHTML = response.data.temperature + "°";
+            }
+            else if (temperatureAnnotation === "fahrenheit") {
+                d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+            }
+        }
+        else if (info === "Humidity") {
+            d.innerHTML = response.data.humidity + "%";
+        }
     })
         .catch(function (error) {
         console.log(error.message);
@@ -2190,6 +2215,9 @@ function sumbitRaspberryId() {
         
     });
     */
+}
+function convertToFahrenheit(temp) {
+    return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
 function getAPIWeatherInformation(location) {
     var Url = "https://vejr.eu/api.php?location=" + location + "&degree=C";

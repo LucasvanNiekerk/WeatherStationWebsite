@@ -27,9 +27,8 @@ interface IApiWeather{
 // Browser data
 //
 
-let temperatureAnnotation: string = "celsius";
-let raspberryId: string = "";
-
+let temperatureAnnotation: string;
+let raspberryId: string;
 
 
 window.onload = function(){
@@ -37,23 +36,28 @@ window.onload = function(){
         browserStorage(); 
         getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-        getLatestWeatherInformation(externalTemperatureOutputElement, "Temperature");
-        getLatestWeatherInformation(externalHumidityOutputElement, "Humidity");
 
         getAPIWeatherInformation("roskilde");
-    }, 100);
+    }, 50);
 }
 
 function browserStorage(): void{
     if (typeof(Storage) !== "undefined") {
         // Store
         if(localStorage.getItem("raspId") != null){
-            console.log(localStorage.getItem("raspId"));
             raspberryId = localStorage.getItem("raspId");
         }
         else{
             popupElement.style.display = "block";
-        }  
+        }
+        
+        if(localStorage.getItem("temperatureType") != null){
+            temperatureAnnotation = localStorage.getItem("temperatureType");
+        }
+        else{
+            temperatureAnnotation = "celsius";
+        }
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     } 
     else {
         NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage."
@@ -70,9 +74,6 @@ let baseUri: string = "https://weatherstationrest2019.azurewebsites.net/api/wi/"
 
 let internalTemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("internalTemperature");
 let internalHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("internalHumidity");
-
-let externalTemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalTemperature");
-let externalHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalHumidity");
 
 let externalAPITemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalAPITemperature");
 let externalAPIHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalAPIHumidity");
@@ -95,12 +96,31 @@ let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.
 //
 // Buttons
 //
+
 let rasberryIdSubmitButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
+
+let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
+changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
 
 //
 // Functions
 //
+
+function changeTemperatureAnnotation(): void{
+    if(temperatureAnnotation === "celsius"){
+        temperatureAnnotation = "fahrenheit";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    else if(temperatureAnnotation === "fahrenheit"){
+        temperatureAnnotation = "celsius";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
 
 function showAll(): void {
     axios.get<IWeather[]>(baseUri)
@@ -135,8 +155,17 @@ function getLatestWeatherInformation(d: HTMLDivElement, info: string): void{
     console.log("Get latest");
     axios.get<IWeather>(Url)
     .then((response: AxiosResponse<IWeather>) =>{
-        if(info === "Temperature") d.innerHTML = response.data.temperature;
-        else if(info === "Humidity") d.innerHTML = response.data.humidity;
+        if(info === "Temperature"){
+            if(temperatureAnnotation === "celsius"){
+                d.innerHTML = response.data.temperature + "°";
+            }
+            else if(temperatureAnnotation === "fahrenheit"){
+                d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+            }
+        } 
+        else if(info === "Humidity"){
+         d.innerHTML = response.data.humidity + "%";
+        }   
     })
     .catch((error: AxiosError) =>{
         console.log(error.message);
@@ -165,6 +194,10 @@ function sumbitRaspberryId(): void{
         
     });
     */
+}
+
+function convertToFahrenheit(temp: string): string{
+    return  (Number(temp) * (9/5) + 32).toFixed(1);
 }
 
 
