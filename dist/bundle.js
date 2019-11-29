@@ -2072,26 +2072,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 // Browser data
 //
-var temperatureAnnotation = "celsius";
-var raspberryId = "";
+var temperatureAnnotation;
+var raspberryId;
 window.onload = function () {
     setTimeout(function () {
         browserStorage();
         getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
         getAPIWeatherInformation("roskilde");
-    }, 100);
+    }, 50);
 };
 function browserStorage() {
     if (typeof (Storage) !== "undefined") {
         // Store
         if (localStorage.getItem("raspId") != null) {
-            console.log(localStorage.getItem("raspId"));
             raspberryId = localStorage.getItem("raspId");
         }
         else {
             popupElement.style.display = "block";
         }
+        if (localStorage.getItem("temperatureType") != null) {
+            temperatureAnnotation = localStorage.getItem("temperatureType");
+        }
+        else {
+            temperatureAnnotation = "celsius";
+        }
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
     else {
         NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage.";
@@ -2121,9 +2127,25 @@ var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdError
 //
 var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
+var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
+changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
 //
 // Functions
 //
+function changeTemperatureAnnotation() {
+    if (temperatureAnnotation === "celsius") {
+        temperatureAnnotation = "fahrenheit";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    else if (temperatureAnnotation === "fahrenheit") {
+        temperatureAnnotation = "celsius";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
 function showAll() {
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(baseUri)
         .then(function (response) {

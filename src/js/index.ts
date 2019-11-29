@@ -27,9 +27,8 @@ interface IApiWeather{
 // Browser data
 //
 
-let temperatureAnnotation: string = "celsius";
-let raspberryId: string = "";
-
+let temperatureAnnotation: string;
+let raspberryId: string;
 
 
 window.onload = function(){
@@ -39,19 +38,26 @@ window.onload = function(){
         getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
 
         getAPIWeatherInformation("roskilde");
-    }, 100);
+    }, 50);
 }
 
 function browserStorage(): void{
     if (typeof(Storage) !== "undefined") {
         // Store
         if(localStorage.getItem("raspId") != null){
-            console.log(localStorage.getItem("raspId"));
             raspberryId = localStorage.getItem("raspId");
         }
         else{
             popupElement.style.display = "block";
-        }  
+        }
+        
+        if(localStorage.getItem("temperatureType") != null){
+            temperatureAnnotation = localStorage.getItem("temperatureType");
+        }
+        else{
+            temperatureAnnotation = "celsius";
+        }
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     } 
     else {
         NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage."
@@ -90,12 +96,31 @@ let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.
 //
 // Buttons
 //
+
 let rasberryIdSubmitButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
+
+let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
+changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
 
 //
 // Functions
 //
+
+function changeTemperatureAnnotation(): void{
+    if(temperatureAnnotation === "celsius"){
+        temperatureAnnotation = "fahrenheit";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    else if(temperatureAnnotation === "fahrenheit"){
+        temperatureAnnotation = "celsius";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        localStorage.setItem("temperatureType", temperatureAnnotation);
+    }
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
 
 function showAll(): void {
     axios.get<IWeather[]>(baseUri)
