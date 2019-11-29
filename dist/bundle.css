@@ -5,7 +5,7 @@ html {
   min-height: 100%; }
 
 body {
-  background-color: #006086;
+  background-color: #008585;
   /* For browsers that do not support gradients */
   background-image: linear-gradient(to top right, #00558d, #00856f);
   /* Standard syntax (must be last) */
@@ -34,16 +34,6 @@ hr {
 
 .divText {
   font-size: calc(30px + 2.5vw); }
-
-.divider {
-  width: 1px;
-  background-color: white; }
-
-.divider-top {
-  margin-top: 40px; }
-
-.divider-bottom {
-  margin-bottom: 40px; }
 
 .divBox {
   background-color: #0000005e;
@@ -79,7 +69,7 @@ hr {
   /* Full height */
   overflow: auto;
   /* Enable scroll if needed */
-  background-color: #1a2d30;
+  background-color: #1f3338;
   /* For browsers that do not support gradients */
   background-color: #1f3338da;
   /* For browsers that do not support gradients */ }
