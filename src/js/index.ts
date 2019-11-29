@@ -131,6 +131,7 @@ function changeTemperatureAnnotation(): void{
 }
 
 function loadData(): void{
+    //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
 }
@@ -163,7 +164,6 @@ function sumbitRaspberryId(): void{
     //We save the raspberry Id from our user input as a temp string.
     let tempId: string = raspberryIdInputElement.value;
 
-    /*
     //We check if it has the required length, otherwise there is no point in checking if it exists(since it wont).
     if(tempId.length == 10){
         // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/checkRaspberryId/78ANBj918k
@@ -178,6 +178,7 @@ function sumbitRaspberryId(): void{
 
                 //We save the id in local storage and close the popup.
                 localStorage.setItem("raspId", raspberryId);
+                loadData();
                 popupElement.style.display = "None";
             }
             else{
@@ -190,14 +191,12 @@ function sumbitRaspberryId(): void{
     }
     else{
         raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
-    }*/
-
-    localStorage.setItem("raspId", "TestData22");
-    popupElement.style.display = "None";
+    }
 }
 
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp: string): string{
+    // tF = tC * 9/5 + 32
     return  (Number(temp) * (9/5) + 32).toFixed(1);
 }
 

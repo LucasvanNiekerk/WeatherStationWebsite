@@ -2154,6 +2154,7 @@ function changeTemperatureAnnotation() {
     loadData();
 }
 function loadData() {
+    //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
 }
@@ -2182,39 +2183,36 @@ function getLatestWeatherInformation(divElement, typeOfInfo) {
 function sumbitRaspberryId() {
     //We save the raspberry Id from our user input as a temp string.
     var tempId = raspberryIdInputElement.value;
-    /*
     //We check if it has the required length, otherwise there is no point in checking if it exists(since it wont).
-    if(tempId.length == 10){
+    if (tempId.length == 10) {
         // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/checkRaspberryId/78ANBj918k
-        let Url: string = baseUri + "checkRaspberryId/" + tempId;
-
+        var Url = baseUri + "checkRaspberryId/" + tempId;
         //We tjek our database to see if the raspberry id exists.
-        axios.get<IWeather>(Url)
-        .then((response: AxiosResponse) =>{
-            if(response.data){
+        _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+            .then(function (response) {
+            if (response.data) {
                 //Since we now know that the id is valid we save it.
                 raspberryId = tempId;
-
                 //We save the id in local storage and close the popup.
                 localStorage.setItem("raspId", raspberryId);
+                loadData();
                 popupElement.style.display = "None";
             }
-            else{
+            else {
                 raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
             }
         })
-        .catch((error: AxiosError) =>{
+            .catch(function (error) {
             console.log(error.message);
         });
     }
-    else{
+    else {
         raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
-    }*/
-    localStorage.setItem("raspId", "TestData22");
-    popupElement.style.display = "None";
+    }
 }
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp) {
+    // tF = tC * 9/5 + 32
     return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
 /*
@@ -2231,7 +2229,7 @@ function getAPIWeatherInformation(location: string): void{
         console.log(error.response);
     });
 }
-*/ 
+*/
 
 
 /***/ }),
