@@ -130,8 +130,17 @@ function getLatestWeatherInformation(d: HTMLDivElement, info: string): void{
     console.log("Get latest");
     axios.get<IWeather>(Url)
     .then((response: AxiosResponse<IWeather>) =>{
-        if(info === "Temperature") d.innerHTML = response.data.temperature;
-        else if(info === "Humidity") d.innerHTML = response.data.humidity;
+        if(info === "Temperature"){
+            if(temperatureAnnotation === "celsius"){
+                d.innerHTML = response.data.temperature + "°";
+            }
+            else if(temperatureAnnotation === "fahrenheit"){
+                d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+            }
+        } 
+        else if(info === "Humidity"){
+         d.innerHTML = response.data.humidity + "%";
+        }   
     })
     .catch((error: AxiosError) =>{
         console.log(error.message);
@@ -160,6 +169,10 @@ function sumbitRaspberryId(): void{
         
     });
     */
+}
+
+function convertToFahrenheit(temp: string): string{
+    return  (Number(temp) * (9/5) + 32).toFixed(1);
 }
 
 

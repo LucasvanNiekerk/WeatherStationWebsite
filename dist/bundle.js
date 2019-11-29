@@ -2156,10 +2156,17 @@ function getLatestWeatherInformation(d, info) {
     console.log("Get latest");
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
-        if (info === "Temperature")
-            d.innerHTML = response.data.temperature;
-        else if (info === "Humidity")
-            d.innerHTML = response.data.humidity;
+        if (info === "Temperature") {
+            if (temperatureAnnotation === "celsius") {
+                d.innerHTML = response.data.temperature + "°";
+            }
+            else if (temperatureAnnotation === "fahrenheit") {
+                d.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+            }
+        }
+        else if (info === "Humidity") {
+            d.innerHTML = response.data.humidity + "%";
+        }
     })
         .catch(function (error) {
         console.log(error.message);
@@ -2186,6 +2193,9 @@ function sumbitRaspberryId() {
         
     });
     */
+}
+function convertToFahrenheit(temp) {
+    return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
 function getAPIWeatherInformation(location) {
     var Url = "https://vejr.eu/api.php?location=" + location + "&degree=C";
