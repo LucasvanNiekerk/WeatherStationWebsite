@@ -13,23 +13,40 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center nav-tabs">
-    <ul class="navbar-nav">
-      <li class="nav-item active"><a class="nav-link" href="index.htm">Forside</a> </li>
-      <li class="nav-item active"><a class="nav-link" href="TidligereData.htm">Tidlligere data </a></li>
-      <li class="nav-item active"><a class="nav-link" href="Konto.htm">Konto</a> </li>
-    </ul>
-  </nav>
 
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#">Navbar</a>
+      
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.htm">Forside</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="TidligereData.htm">Tidligere Data</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="Konto.htm">Konto</a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
+      </nav>
+  
 
   <div class="container" style="text-align: center;  max-width: 1000px;">
     <h2>Målinger</h2>
-
-    <button id="changeTemperatureAnnotation"></button>
     <div class="row" style="width: 50vw; min-width: 400px; margin: auto;">
         <div class="col divBox divLatestSize">
             <h3>Indendørs</h3>
-            <div style="float: left;" class="divText" id="internalTemperature">28,6°</div>
+            <div class="divText" id="internalTemperature">28,6°</div>
             <div class="divText" id="internalHumidity">50%</div>
         </div>
     
