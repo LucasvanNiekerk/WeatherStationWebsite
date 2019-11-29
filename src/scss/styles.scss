@@ -67,7 +67,6 @@ hr{
     display: block;
     margin: auto;
     border-radius: 20px;
-    box-shadow: 0px 0px 40px #0000005e;
     height: 30vw;
     max-height: 300px;
     min-height: 200px;
@@ -82,7 +81,9 @@ hr{
 
 .div3dagsPrognoseSize{
     max-width: 45%;
-    min-width: 260px;
+    min-width: 130px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 
