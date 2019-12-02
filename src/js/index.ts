@@ -69,9 +69,10 @@ function browserStorage(): void{
     }
     //If localStorage is not supported we tell the client. 
     else {
-        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information)."
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
     }
+    console.log(localStorage.getItem("raspId"));
 }
 
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
@@ -102,6 +103,7 @@ let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.
 
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
 
+<<<<<<< HEAD
 let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
 
 //
@@ -145,6 +147,11 @@ var myChart = new Chart(chart, {
         }
     }
 });
+=======
+let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
+let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
+let kontoDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Konto");
+>>>>>>> add05da6bf9d467068f0f39e145e128a1fa3314f
 
 //
 // Buttons
@@ -153,8 +160,33 @@ var myChart = new Chart(chart, {
 let rasberryIdSubmitButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 
+let changeRaspberryIdButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetRaspberryId");
+changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
+
 let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+
+let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
+frontpageButton.addEventListener("click", ()=>{
+    frontpageDivElement.style.display = "Block";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "None";
+})
+
+let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
+olderDataButton.addEventListener("click", ()=>{
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "Block";
+    kontoDivElement.style.display = "None";
+})
+
+let KontoButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("KontoButton");
+KontoButton.addEventListener("click", ()=>{
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "Block";
+})
+
 
 //
 // Functions
@@ -232,17 +264,6 @@ function sumbitRaspberryId(): void{
     }
 }
 
-//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
-function convertToFahrenheit(temp: string): string{
-    // tF = tC * 9/5 + 32
-    return  (Number(temp) * (9/5) + 32).toFixed(1);
-}
-
-function loadData(): void{
-    //Todo insert rest of div
-    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-}
 
 /*
 function getAPIWeatherInformation(location: string): void{
@@ -259,3 +280,20 @@ function getAPIWeatherInformation(location: string): void{
     });
 }
 */
+
+
+//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
+function convertToFahrenheit(temp: string): string{
+    // tF = tC * 9/5 + 32
+    return  (Number(temp) * (9/5) + 32).toFixed(1);
+}
+
+function loadData(): void{
+    //Todo insert rest of div
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
+
+function openRaspberryIdPopup(){
+    popupElement.style.display = "block";
+}

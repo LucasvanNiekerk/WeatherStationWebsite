@@ -35913,6 +35913,7 @@ function browserStorage() {
         NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
     }
+    console.log(localStorage.getItem("raspId"));
 }
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
 var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
@@ -35973,13 +35974,30 @@ var myChart = new chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](chart, {
         }
     }
 });
-//
-// Buttons
-//
 var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
+var changeRaspberryIdButton = document.getElementById("resetRaspberryId");
+changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
 var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+var frontpageButton = document.getElementById("FrontpageButton");
+frontpageButton.addEventListener("click", function () {
+    frontpageDivElement.style.display = "Block";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "None";
+});
+var olderDataButton = document.getElementById("OlderDataButton");
+olderDataButton.addEventListener("click", function () {
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "Block";
+    kontoDivElement.style.display = "None";
+});
+var KontoButton = document.getElementById("KontoButton");
+KontoButton.addEventListener("click", function () {
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "Block";
+});
 //
 // Functions
 //
@@ -36047,16 +36065,6 @@ function sumbitRaspberryId() {
         raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
     }
 }
-//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
-function convertToFahrenheit(temp) {
-    // tF = tC * 9/5 + 32
-    return (Number(temp) * (9 / 5) + 32).toFixed(1);
-}
-function loadData() {
-    //Todo insert rest of div
-    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-}
 /*
 function getAPIWeatherInformation(location: string): void{
     let Url: string = "https://vejr.eu/api.php?location=" + location + "&degree=C";
@@ -36072,6 +36080,19 @@ function getAPIWeatherInformation(location: string): void{
     });
 }
 */
+//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
+function convertToFahrenheit(temp) {
+    // tF = tC * 9/5 + 32
+    return (Number(temp) * (9 / 5) + 32).toFixed(1);
+}
+function loadData() {
+    //Todo insert rest of div
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
+function openRaspberryIdPopup() {
+    popupElement.style.display = "block";
+}
 
 
 /***/ }),
