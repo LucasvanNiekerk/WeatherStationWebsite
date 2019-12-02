@@ -2068,6 +2068,8 @@ module.exports = __webpack_require__.p + "index.htm";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/axios/index */ "./node_modules/axios/index.js");
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__);
+!(function webpackMissingModule() { var e = new Error("Cannot find module '../../node_modules/chart.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+
 
 //
 // Browser data / local storage.
@@ -2150,6 +2152,56 @@ cityDropDownElement.addEventListener("change", function () {
     localStorage.setItem("currentCity", currentCity);
     loadApiData();
 });
+//
+// Chart
+//
+var chart = document.getElementById("chart");
+var myChart = new !(function webpackMissingModule() { var e = new Error("Cannot find module '../../node_modules/chart.js'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(chart, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 397, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+        }
+    }
+});
+/*
+function getRange(range: number){
+    let Url: string = baseUri + raspberryId + "/" + range;
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+            /
+            raspberryId = tempId;
+}
+*/
 //
 // Buttons
 //
