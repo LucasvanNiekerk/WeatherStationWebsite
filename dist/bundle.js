@@ -2077,13 +2077,15 @@ var temperatureAnnotation;
 // The raspberryPi where the data is comming from. Raspberry id is a string and has to be exactly 10 characters long.
 //This information is saved in localStorage with the key "raspId".
 var raspberryId = "";
+// The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
+var currentCity = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 function onloadMethods() {
     setTimeout(function () {
         browserStorage();
+        fillDropDown();
         loadData();
-        //getAPIWeatherInformation("roskilde");
     }, 10);
 }
 function browserStorage() {
@@ -2094,7 +2096,7 @@ function browserStorage() {
             raspberryId = localStorage.getItem("raspId");
         }
         else {
-            popupElement.style.display = "block";
+            openRaspberryIdPopup();
         }
         // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
         if (localStorage.getItem("temperatureType") != null) {
@@ -2105,6 +2107,13 @@ function browserStorage() {
         }
         //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+        //To check what city the user wants to see information from.
+        if (localStorage.getItem("currentCity") != null) {
+            currentCity = localStorage.getItem("currentCity");
+        }
+        else {
+            currentCity = "Roskilde";
+        }
     }
     //If localStorage is not supported we tell the client. 
     else {
@@ -2134,7 +2143,13 @@ var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdError
 var raspberryIdInputElement = document.getElementById("raspberryIdInput");
 var frontpageDivElement = document.getElementById("Frontpage");
 var olderDataDivElement = document.getElementById("OlderData");
-var kontoDivElement = document.getElementById("Konto");
+var cityDropDownElement = document.getElementById("cityDropDown");
+cityDropDownElement.addEventListener("change", function () {
+    displayFrontpage();
+    currentCity = cityDropDownElement.value;
+    localStorage.setItem("currentCity", currentCity);
+    loadApiData();
+});
 //
 // Buttons
 //
@@ -2145,26 +2160,20 @@ changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
 var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
 var frontpageButton = document.getElementById("FrontpageButton");
-frontpageButton.addEventListener("click", function () {
-    frontpageDivElement.style.display = "Block";
-    olderDataDivElement.style.display = "None";
-    kontoDivElement.style.display = "None";
-});
+frontpageButton.addEventListener("click", displayFrontpage);
 var olderDataButton = document.getElementById("OlderDataButton");
-olderDataButton.addEventListener("click", function () {
-    frontpageDivElement.style.display = "None";
-    olderDataDivElement.style.display = "Block";
-    kontoDivElement.style.display = "None";
-});
-var KontoButton = document.getElementById("KontoButton");
-KontoButton.addEventListener("click", function () {
-    frontpageDivElement.style.display = "None";
-    olderDataDivElement.style.display = "None";
-    kontoDivElement.style.display = "Block";
-});
+olderDataButton.addEventListener("click", displayOlderData);
 //
 // Functions
 //
+function displayFrontpage() {
+    frontpageDivElement.style.display = "block";
+    olderDataDivElement.style.display = "none";
+}
+function displayOlderData() {
+    frontpageDivElement.style.display = "none";
+    olderDataDivElement.style.display = "block";
+}
 function changeTemperatureAnnotation() {
     if (temperatureAnnotation === "Celsius") {
         temperatureAnnotation = "Fahrenheit";
@@ -2229,21 +2238,29 @@ function sumbitRaspberryId() {
         raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
     }
 }
-/*
-function getAPIWeatherInformation(location: string): void{
-    let Url: string = "https://vejr.eu/api.php?location=" + location + "&degree=C";
-
-    axios.get(Url)
-    .then((response: AxiosResponse) =>{
-        console.log(response.data);
+function getAPIWeatherInformation(divElement, typeOfInfo) {
+    var Url = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        console.log(response.data.CurrentData.humidity);
+        if (typeOfInfo === "Temperature") {
+            if (temperatureAnnotation === "Celsius") {
+                divElement.innerHTML = response.data.CurrentData.temperature + "°";
+            }
+            else if (temperatureAnnotation === "Fahrenheit") {
+                divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
+            }
+        }
+        else if (typeOfInfo === "Humidity") {
+            divElement.innerHTML = response.data.CurrentData.humidity + "%";
+        }
     })
-    .catch((error: AxiosError) =>{
+        .catch(function (error) {
         console.log(error.message);
         console.log(error.code);
         console.log(error.response);
     });
 }
-*/
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp) {
     // tF = tC * 9/5 + 32
@@ -2253,9 +2270,24 @@ function loadData() {
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+}
+function loadApiData() {
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
 }
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
+}
+function fillDropDown() {
+    var cities = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense",];
+    for (var index = 0; index < cities.length; index++) {
+        var option = document.createElement('option');
+        option.text = option.value = cities[index].toLowerCase();
+        cityDropDownElement.add(option, 0);
+    }
+    cityDropDownElement.value = currentCity;
 }
 
 

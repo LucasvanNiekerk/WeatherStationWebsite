@@ -17,6 +17,11 @@ interface IWeather {
 }
 
 interface IApiWeather{
+    LocationName: string;
+    CurrentData: ICurrentData;
+}
+
+interface ICurrentData{
     temperature: number;
     skyText: string;
     humidity: number;
@@ -34,15 +39,17 @@ let temperatureAnnotation: string;
 //This information is saved in localStorage with the key "raspId".
 let raspberryId: string = "";
 
+// The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
+let currentCity: string = "";
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
 function onloadMethods(): void{
     setTimeout(()=>{
         browserStorage(); 
+        fillDropDown();
         loadData();
-
-        //getAPIWeatherInformation("roskilde");
     }, 10)
 }
 
@@ -54,7 +61,7 @@ function browserStorage(): void{
             raspberryId = localStorage.getItem("raspId");
         }
         else{
-            popupElement.style.display = "block";
+            openRaspberryIdPopup();
         }
         
         // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
@@ -66,6 +73,14 @@ function browserStorage(): void{
         }
         //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+
+        //To check what city the user wants to see information from.
+        if(localStorage.getItem("currentCity") != null){
+            currentCity = localStorage.getItem("currentCity");
+        }
+        else{
+            currentCity = "Roskilde";
+        }
     }
     //If localStorage is not supported we tell the client. 
     else {
@@ -105,7 +120,14 @@ let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getEl
 
 let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
-let kontoDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Konto");
+
+let cityDropDownElement: HTMLSelectElement = <HTMLSelectElement>document.getElementById("cityDropDown");
+cityDropDownElement.addEventListener("change", ()=>{
+    displayFrontpage();
+    currentCity = cityDropDownElement.value;
+    localStorage.setItem("currentCity", currentCity);
+    loadApiData();
+});
 
 //
 // Buttons
@@ -121,30 +143,25 @@ let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>do
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
 
 let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
-frontpageButton.addEventListener("click", ()=>{
-    frontpageDivElement.style.display = "Block";
-    olderDataDivElement.style.display = "None";
-    kontoDivElement.style.display = "None";
-})
+frontpageButton.addEventListener("click", displayFrontpage);
 
 let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
-olderDataButton.addEventListener("click", ()=>{
-    frontpageDivElement.style.display = "None";
-    olderDataDivElement.style.display = "Block";
-    kontoDivElement.style.display = "None";
-})
-
-let KontoButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("KontoButton");
-KontoButton.addEventListener("click", ()=>{
-    frontpageDivElement.style.display = "None";
-    olderDataDivElement.style.display = "None";
-    kontoDivElement.style.display = "Block";
-})
+olderDataButton.addEventListener("click", displayOlderData);
 
 
 //
 // Functions
 //
+
+function displayFrontpage(): void{
+    frontpageDivElement.style.display = "block";
+    olderDataDivElement.style.display = "none";
+}
+
+function displayOlderData(): void{
+    frontpageDivElement.style.display = "none";
+    olderDataDivElement.style.display = "block";
+}
 
 function changeTemperatureAnnotation(): void{
     if(temperatureAnnotation === "Celsius"){
@@ -219,13 +236,24 @@ function sumbitRaspberryId(): void{
 }
 
 
-/*
-function getAPIWeatherInformation(location: string): void{
-    let Url: string = "https://vejr.eu/api.php?location=" + location + "&degree=C";
 
-    axios.get(Url)
-    .then((response: AxiosResponse) =>{
-        console.log(response.data);
+function getAPIWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void{
+    let Url: string = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+
+    axios.get<IApiWeather>(Url)
+    .then((response: AxiosResponse<IApiWeather>) =>{
+        console.log(response.data.CurrentData.humidity);
+        if(typeOfInfo === "Temperature"){
+            if(temperatureAnnotation === "Celsius"){
+                divElement.innerHTML = response.data.CurrentData.temperature + "°";
+            }
+            else if(temperatureAnnotation === "Fahrenheit"){
+                divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
+            }
+        } 
+        else if(typeOfInfo === "Humidity"){
+            divElement.innerHTML = response.data.CurrentData.humidity + "%";
+        }  
     })
     .catch((error: AxiosError) =>{
         console.log(error.message);
@@ -233,7 +261,6 @@ function getAPIWeatherInformation(location: string): void{
         console.log(error.response);
     });
 }
-*/
 
 
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
@@ -246,8 +273,27 @@ function loadData(): void{
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+}
+
+function loadApiData(): void{
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
 }
 
 function openRaspberryIdPopup(){
     popupElement.style.display = "block";
+}
+
+function fillDropDown(){
+    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense", ]
+    
+    for (let index = 0; index < cities.length; index++) {
+        let option: HTMLOptionElement = document.createElement('option');
+        option.text = option.value = cities[index].toLowerCase();
+        cityDropDownElement.add(option, 0);
+    }
+    
+    cityDropDownElement.value = currentCity;
 }
