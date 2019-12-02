@@ -107,12 +107,12 @@ let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementByI
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
 let kontoDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Konto");
 
-let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
 
 //
 // Chart
 //
 
+let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
 var myChart = new Chart(chart, {
     type: 'line',
     data: {
@@ -150,6 +150,15 @@ var myChart = new Chart(chart, {
         }
     }
 });
+
+function getRange(range: number){
+    let Url: string = baseUri + raspberryId + "/" + range;
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+            /
+            raspberryId = tempId;
+}
 
 
 //
