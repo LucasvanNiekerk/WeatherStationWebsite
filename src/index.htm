@@ -16,6 +16,7 @@
 
 <body>
 
+  
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
         <a class="navbar-brand" href="#">Navbar</a>
@@ -29,20 +30,23 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="index.htm">Forside</a>
+              <!--a class="nav-link" href="index.htm">Forside</a-->
+              <button class="btn btn-dark" id="FrontpageButton">Forside</button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="TidligereData.htm">Tidligere Data</a>
+              <!--a class="nav-link" href="TidligereData.htm">Tidligere Data</a-->
+              <button class="btn btn-dark" id="OlderDataButton">Gamle data</button>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="Konto.htm">Konto</a>
+              <!--a class="nav-link" href="Konto.htm">Konto</a-->
+              <button class="btn btn-dark" id="KontoButton">Konto</button>
             </li>
           </ul>
         </div>
         <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Change sensor</button>
         <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
       </nav>
-  
+      <div id="Frontpage">
 
   <div class="container" style="text-align: center;  max-width: 1000px;">
     <h2>Målinger</h2>
@@ -101,6 +105,17 @@
     </div>
   </div>
   
+</div>
+
+<div id="OlderData">
+<div>Gamle data haha</div>
+</div>
+
+<div id="Konto">
+<div>Konto haha</div>
+</div>
+
+
   <script src="bundle.js"></script>
 </body>
 </html>

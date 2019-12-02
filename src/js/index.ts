@@ -103,6 +103,10 @@ let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.
 
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
 
+let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
+let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
+let kontoDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Konto");
+
 //
 // Buttons
 //
@@ -115,6 +119,27 @@ changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
 
 let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+
+let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
+frontpageButton.addEventListener("click", ()=>{
+    frontpageDivElement.style.display = "Block";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "None";
+})
+
+let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
+olderDataButton.addEventListener("click", ()=>{
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "Block";
+    kontoDivElement.style.display = "None";
+})
+
+let KontoButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("KontoButton");
+KontoButton.addEventListener("click", ()=>{
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "Block";
+})
 
 
 //

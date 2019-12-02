@@ -2132,6 +2132,9 @@ var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
 var popupElement = document.getElementById("raspberryIdPopup");
 var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
 var raspberryIdInputElement = document.getElementById("raspberryIdInput");
+var frontpageDivElement = document.getElementById("Frontpage");
+var olderDataDivElement = document.getElementById("OlderData");
+var kontoDivElement = document.getElementById("Konto");
 //
 // Buttons
 //
@@ -2141,6 +2144,24 @@ var changeRaspberryIdButton = document.getElementById("resetRaspberryId");
 changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
 var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+var frontpageButton = document.getElementById("FrontpageButton");
+frontpageButton.addEventListener("click", function () {
+    frontpageDivElement.style.display = "Block";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "None";
+});
+var olderDataButton = document.getElementById("OlderDataButton");
+olderDataButton.addEventListener("click", function () {
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "Block";
+    kontoDivElement.style.display = "None";
+});
+var KontoButton = document.getElementById("KontoButton");
+KontoButton.addEventListener("click", function () {
+    frontpageDivElement.style.display = "None";
+    olderDataDivElement.style.display = "None";
+    kontoDivElement.style.display = "Block";
+});
 //
 // Functions
 //
