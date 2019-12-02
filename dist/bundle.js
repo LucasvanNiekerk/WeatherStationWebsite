@@ -35867,8 +35867,8 @@ module.exports = __webpack_require__.p + "index.htm";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/axios/index */ "./node_modules/axios/index.js");
 /* harmony import */ var _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js");
-/* harmony import */ var chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chart_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/chart.js */ "./node_modules/chart.js/dist/Chart.js");
+/* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
 //
@@ -35934,17 +35934,20 @@ var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
 var popupElement = document.getElementById("raspberryIdPopup");
 var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
 var raspberryIdInputElement = document.getElementById("raspberryIdInput");
+var frontpageDivElement = document.getElementById("Frontpage");
+var olderDataDivElement = document.getElementById("OlderData");
+var kontoDivElement = document.getElementById("Konto");
 var chart = document.getElementById("chart");
 //
 // Chart
 //
-var myChart = new chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](chart, {
+var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](chart, {
     type: 'line',
     data: {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
                 label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                data: [12, 19, 397, 5, 2, 3],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -35974,6 +35977,9 @@ var myChart = new chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](chart, {
         }
     }
 });
+//
+// Buttons
+//
 var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 var changeRaspberryIdButton = document.getElementById("resetRaspberryId");

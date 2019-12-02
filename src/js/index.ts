@@ -2,7 +2,7 @@ import axios, {
     AxiosResponse,
     AxiosError
 } from "../../node_modules/axios/index";
-import { BorderWidth, Chart, Point, ChartColor } from 'chart.js';
+import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js';
 
 //
 // Interfaces
@@ -103,7 +103,10 @@ let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.
 
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
 
-<<<<<<< HEAD
+let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
+let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
+let kontoDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Konto");
+
 let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
 
 //
@@ -116,7 +119,7 @@ var myChart = new Chart(chart, {
         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: [12, 19, 397, 5, 2, 3],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -147,11 +150,7 @@ var myChart = new Chart(chart, {
         }
     }
 });
-=======
-let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
-let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
-let kontoDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Konto");
->>>>>>> add05da6bf9d467068f0f39e145e128a1fa3314f
+
 
 //
 // Buttons
