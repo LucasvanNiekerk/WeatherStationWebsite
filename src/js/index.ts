@@ -69,9 +69,10 @@ function browserStorage(): void{
     }
     //If localStorage is not supported we tell the client. 
     else {
-        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information)."
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
     }
+    console.log(localStorage.getItem("raspId"));
 }
 
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
@@ -109,8 +110,12 @@ let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getEl
 let rasberryIdSubmitButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 
+let changeRaspberryIdButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetRaspberryId");
+changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
+
 let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+
 
 //
 // Functions
@@ -188,17 +193,6 @@ function sumbitRaspberryId(): void{
     }
 }
 
-//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
-function convertToFahrenheit(temp: string): string{
-    // tF = tC * 9/5 + 32
-    return  (Number(temp) * (9/5) + 32).toFixed(1);
-}
-
-function loadData(): void{
-    //Todo insert rest of div
-    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-}
 
 /*
 function getAPIWeatherInformation(location: string): void{
@@ -215,3 +209,20 @@ function getAPIWeatherInformation(location: string): void{
     });
 }
 */
+
+
+//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
+function convertToFahrenheit(temp: string): string{
+    // tF = tC * 9/5 + 32
+    return  (Number(temp) * (9/5) + 32).toFixed(1);
+}
+
+function loadData(): void{
+    //Todo insert rest of div
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+}
+
+function openRaspberryIdPopup(){
+    popupElement.style.display = "block";
+}
