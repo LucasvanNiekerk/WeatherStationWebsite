@@ -4,22 +4,18 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Forside</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="bundle.css">
-
 </head>
 
-<body>
-
-  
+<body>  
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <!-- Brand -->
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="">Navbar</a>
       
         <!-- Toggler/collapsibe Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -30,42 +26,36 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <!--a class="nav-link" href="index.htm">Forside</a-->
               <button class="btn btn-dark" id="FrontpageButton">Forside</button>
             </li>
             <li class="nav-item">
-              <!--a class="nav-link" href="TidligereData.htm">Tidligere Data</a-->
               <button class="btn btn-dark" id="OlderDataButton">Gamle data</button>
-            </li>
-            <li class="nav-item">
-              <!--a class="nav-link" href="Konto.htm">Konto</a-->
-              <button class="btn btn-dark" id="KontoButton">Konto</button>
             </li>
           </ul>
         </div>
+        <select name="By" id="cityDropDown">by</select>
         <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Change sensor</button>
         <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
       </nav>
-      <div id="Frontpage">
+
+  <!--Frontpage div opening div-->
+  <div id="Frontpage">
 
   <div class="container" style="text-align: center;  max-width: 1000px;">
     <h2>Målinger</h2>
     <div class="row" style="width: 50vw; min-width: 400px; margin: auto;">
         <div class="col divBox divLatestSize">
             <h3>Indendørs</h3>
-            <div class="divText" id="internalTemperature">28,6°</div>
-            <div class="divText" id="internalHumidity">50%</div>
+            <div class="divText" id="internalTemperature"></div>
+            <div class="divText" id="internalHumidity"></div>
         </div>
     
         <div class="col divBox divLatestSize">
           <h3>Udendørs(DMI)</h3>
-          <div class="divText" id="externalAPITemperature">28,6°</div>
-          <div class="divText" id="externalAPIHumidity">50%</div>
+          <div class="divText" id="externalAPITemperature"></div>
+          <div class="divText" id="externalAPIHumidity"></div>
         </div>
     </div>
-
-    
-    
   </div>
 
   <hr>
@@ -89,14 +79,14 @@
         <div class="divText" id="prognosisTemperature3">20</div>
         <div class="divText" id="prognosisHumidity3">30</div>
       </div>
-    </div>
-    
-    
+    </div>    
   </div>
+
+  <!--Error text-->
   <div id="NoLocalStorage"></div>
-<div style="height: 500px; width: 500px;">
-  <canvas id="chart"></canvas>
-</div>
+
+
+  <!--Popup for raspberry pi ID-->
   <div id="raspberryIdPopup" class="modal">
     <div class="modal-content">
       <div style="align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
@@ -105,15 +95,16 @@
       <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
     </div>
   </div>
-  
+
+<!--Frontpage closing div-->  
 </div>
 
-<div id="OlderData">
-<div>Gamle data haha</div>
-</div>
-
-<div id="Konto">
-<div>Konto haha</div>
+<!--Older data opening div-->
+<div id="OlderData" style="display: none;">
+  <div style="height: 500px; width: 500px;">
+    <canvas id="chart"></canvas>
+  </div>
+<!--Older data closing div-->
 </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chart.js/2.1.3/Chart"></script>
