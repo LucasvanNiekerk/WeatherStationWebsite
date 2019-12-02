@@ -150,7 +150,7 @@ var myChart = new Chart(chart, {
         }
     }
 });
-
+/*
 function getRange(range: number){
     let Url: string = baseUri + raspberryId + "/" + range;
     axios.get<IWeather[]>(Url)
@@ -159,7 +159,7 @@ function getRange(range: number){
             /
             raspberryId = tempId;
 }
-
+*/
 
 //
 // Buttons
