@@ -51,14 +51,7 @@ hr{
     background-color: #0000005e;
     display: block;
     margin: auto;
-    border-radius: 20px;
-<<<<<<< HEAD
-    height: 30vw;
-    min-height: 200px;
-=======
-    
->>>>>>> origin/master
-    
+    border-radius: 20px;    
 }
 
 .divLatestSize{
@@ -76,6 +69,32 @@ hr{
     max-height: 300px;
 }
 
+//border
+table.table-bordered{
+    border:1px solid #ffffff83;
+    color: white;
+    margin-top:20px;
+  }
+table.table-bordered > thead > tr > th{
+    border:1px solid #ffffff83;
+    color: white;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid #ffffff83;
+    color: white;
+}
+
+//borderless
+table.table-borderless{
+    color: white;
+    margin-top:20px;
+  }
+table.table-borderless > thead > tr > th{
+    color: white;
+}
+table.table-borderless > tbody > tr > td{
+    color: white;
+}
 
 //Popup
 .modal {

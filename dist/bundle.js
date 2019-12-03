@@ -35962,14 +35962,14 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
     data: {
         labels: ['6 dage siden', '5 dage siden', '4 dage siden', '3 dage siden', '2 dage siden', '1 dag siden', 'Idag'],
         datasets: [{
-                label: 'Tidligere data',
+                label: 'Temperatur',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 data: [101, 12, 19, 397, 5, 2, 3],
                 borderWidth: 1
             },
             {
-                label: 'Humidity',
+                label: 'Luftfugtighed',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 data: [11, 112, 129, 37, 51, 212, 33],

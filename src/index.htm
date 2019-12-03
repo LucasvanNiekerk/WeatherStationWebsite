@@ -12,106 +12,157 @@
   <link rel="stylesheet" type="text/css" href="bundle.css">
 </head>
 
-<body>  
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <!-- Brand -->
-        <a class="navbar-brand" href="">Navbar</a>
-      
-        <!-- Toggler/collapsibe Button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <!-- Navbar links -->
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <button class="btn btn-dark" id="FrontpageButton">Forside</button>
-            </li>
-            <li class="nav-item">
-              <button class="btn btn-dark" id="OlderDataButton">Gamle data</button>
-            </li>
-          </ul>
-        </div>
-        <select name="By" id="cityDropDown">by</select>
-        <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Change sensor</button>
-        <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
-      </nav>
+<body>
+  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <!-- Brand -->
+    <a class="navbar-brand" href="">Navbar</a>
+
+    <!-- Toggler/collapsibe Button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <button class="btn btn-dark" id="FrontpageButton">Forside</button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-dark" id="OlderDataButton">Gamle data</button>
+        </li>
+      </ul>
+    </div>
+    <select name="By" id="cityDropDown">by</select>
+    <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Change sensor</button>
+    <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
+  </nav>
 
   <!--Frontpage div opening div-->
   <div id="Frontpage">
 
-  <div class="container" style="text-align: center;  max-width: 1000px;">
-    <h2>Målinger</h2>
-    <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">
+    <div class="container" style="text-align: center;  max-width: 1000px;">
+      <h2>Målinger</h2>
+      <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">
         <div class="col divBox divLatestSize">
-            <h3>Indendørs</h3>
-            <div class="divText" id="internalTemperature">↺</div>
-            <div class="divText" id="internalHumidity">↺</div>
-            <br>
+          <h3>Indendørs</h3>
+          <div class="divText" id="internalTemperature">↺</div>
+          <div class="divText" id="internalHumidity">↺</div>
+          <br>
         </div>
-    
+
         <div class="col divBox divLatestSize">
           <h3>Udendørs(DMI)</h3>
           <div class="divText" id="externalAPITemperature">↺</div>
           <div class="divText" id="externalAPIHumidity">↺</div>
           <br>
         </div>
+      </div>
     </div>
-  </div>
 
-  <hr>
-  <div class="container" style="text-align: center;  max-width: 900px;">
-    <h2>3 dags prognose</h2>
-    <div class="row">
-      <div class="col divBox div3dagsPrognoseSize">
-        <h3>I dag</h3>
-        <div class="divText" id="prognosisTemperature1">↺</div>
-        <div class="divText" id="prognosisHumidity1">↺</div>
-        <br>
+    <hr>
+    <div class="container" style="text-align: center;  max-width: 900px;">
+      <h2>3 dags prognose</h2>
+      <div class="row">
+        <div class="col divBox div3dagsPrognoseSize">
+          <h3>I dag</h3>
+          <div class="divText" id="prognosisTemperature1">↺</div>
+          <div class="divText" id="prognosisHumidity1">↺</div>
+          <br>
 
+        </div>
+        <div class="col divBox div3dagsPrognoseSize">
+          <h3>I morgen</h3>
+          <div class="divText" id="prognosisTemperature2">↺</div>
+          <div class="divText" id="prognosisHumidity2">↺</div>
+          <br>
+
+        </div>
+        <div class="col divBox div3dagsPrognoseSize">
+          <h3>I Overmorgen</h3>
+          <div class="divText" id="prognosisTemperature3">↺</div>
+          <div class="divText" id="prognosisHumidity3">↺</div>
+          <br>
+        </div>
       </div>
-      <div class="col divBox div3dagsPrognoseSize">
-        <h3>I morgen</h3>
-        <div class="divText" id="prognosisTemperature2">↺</div>
-        <div class="divText" id="prognosisHumidity2">↺</div>
-        <br>
-
-      </div>
-      <div class="col divBox div3dagsPrognoseSize">
-        <h3>I Overmorgen</h3>
-        <div class="divText" id="prognosisTemperature3">↺</div>
-        <div class="divText" id="prognosisHumidity3">↺</div>
-        <br>
-      </div>
-    </div>    
-  </div>
-
-  <!--Error text-->
-  <div id="NoLocalStorage"></div>
-
-
-  <!--Popup for raspberry pi ID-->
-  <div id="raspberryIdPopup" class="modal">
-    <div class="modal-content">
-      <div style="align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
-      <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text" id="raspberryIdInput">
-      <button class="btn btn-primary" style="width: 120px; align-self: center;" id="rasberryIdSubmitButton">Submit!</button>
-      <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
     </div>
+
+    <!--Error text-->
+    <div id="NoLocalStorage"></div>
+
+
+    <!--Popup for raspberry pi ID-->
+    <div id="raspberryIdPopup" class="modal">
+      <div class="modal-content">
+        <div style="align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
+        <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
+          id="raspberryIdInput">
+        <button class="btn btn-primary" style="width: 120px; align-self: center;"
+          id="rasberryIdSubmitButton">Submit!</button>
+        <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
+      </div>
+    </div>
+
+    <!--Frontpage closing div-->
   </div>
 
-<!--Frontpage closing div-->  
-</div>
-
-<!--Older data opening div-->
-<div id="OlderData" style="display: none;">
-  <div class='divBox' style="margin: auto; margin-top: 100px; padding: 10px; height: 100%; width: 1000px;">
-    <canvas id="chart"></canvas>
+  <!--Older data opening div-->
+  <div id="OlderData" style="display: none; margin: 50px; margin-top: 50px; margin-bottom: 50px;">
+    <div class='divBox' style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+      <canvas id="chart"></canvas>
+    </div>
+    <div class='divBox' style="margin: auto; margin-top: 50px; padding: 10px; height: 100%; width: 100%;">
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th scope="col">Dage</th>
+            <th scope="col">Temperatur</th>
+            <th scope="col">Luftfugtighed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>6 dage siden</th>
+            <td>23.4 °C</td>
+            <td>48 %</td>
+          </tr>
+          <tr>
+            <th scope="row">5 dage siden</th>
+            <td>25.1 °C</td>
+            <td>46.3 %</td>
+          </tr>
+          <tr>
+            <th scope="row">4 dage siden</th>
+            <td>22.4 °C</td>
+            <td>48.2 %</td>
+          </tr>
+          <tr>
+            <th scope="row">3 dage siden</th>
+            <td>21.1 °C</td>
+            <td>43.1 %</td>
+          </tr>
+          <tr>
+            <th scope="row">2 dage siden</th>
+            <td>29.6 °C</td>
+            <td>49 %</td>
+          </tr>
+          <tr>
+            <th scope="row">1 dag siden</th>
+            <td>22.3 °C</td>
+            <td>42.5 %</td>
+          </tr>
+          <tr>
+            <th scope="row">Idag</th>
+            <td>28.1 °C</td>
+            <td>42.3 %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--Older data closing div-->
   </div>
-<!--Older data closing div-->
-</div>
 
   <script src="bundle.js"></script>
 </body>
+
 </html>
