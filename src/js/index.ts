@@ -186,6 +186,8 @@ var myChart = new Chart(chart, {
     }
 });
 
+Chart.defaults.global.defaultFontColor = "#fff";
+
 let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField")
 
 function getRangeOfDay(day: string){

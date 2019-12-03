@@ -36004,6 +36004,7 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
+_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 var dayInputField = document.getElementById("dayInputField");
 function getRangeOfDay(day) {
     var Url = baseUri + raspberryId + "/" + day;
