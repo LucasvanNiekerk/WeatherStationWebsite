@@ -35958,35 +35958,47 @@ cityDropDownElement.addEventListener("change", function () {
 var chart = document.getElementById("chart");
 var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](chart, {
     type: 'line',
+    scaleFontColor: 'rgba(255,255,255,1)',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['6 dage siden', '5 dage siden', '4 dage siden', '3 dage siden', '2 dage siden', '1 dag siden', 'Idag'],
         datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 397, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
+                label: 'Temperatur',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                data: [101, 12, 19, 397, 5, 2, 3],
+                borderWidth: 1
+            },
+            {
+                label: 'Luftfugtighed',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                data: [11, 112, 129, 37, 51, 212, 33],
                 borderWidth: 1
             }]
     },
     options: {
+        title: {
+            display: true,
+            text: 'Tidligere data'
+        },
+        scaleLabel: {
+            display: true,
+            labelString: 'hej'
+        },
         scales: {
             yAxes: [{
                     ticks: {
                         beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: 'rgba(255,255,255,0.5)'
+                    }
+                }],
+            xAxes: [{
+                    gridLines: {
+                        display: true,
+                        color: 'rgba(255,255,255,0.5)'
                     }
                 }]
         }
