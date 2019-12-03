@@ -172,16 +172,15 @@ var myChart = new Chart(chart, {
         }
     }
 });
-/*
+
 function getRange(range: number){
     let Url: string = baseUri + raspberryId + "/" + range;
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
-            /
-            raspberryId = tempId;
+            
 }
-*/
+
 
 //
 // Buttons
@@ -350,4 +349,4 @@ function fillDropDown(){
     }
     
     cityDropDownElement.value = currentCity;
-}
+}})}
