@@ -35960,12 +35960,12 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
     type: 'line',
     scaleFontColor: 'rgba(255,255,255,1)',
     data: {
-        labels: ['6 dage siden', '5 dage siden', '4 dage siden', '3 dage siden', '2 dage siden', '1 dag siden', 'Idag'],
+        labels: ['27. nov', '28. nov', '29. nov', '30. nov', '1. dec', '2. dec', '3. dec'],
         datasets: [{
                 label: 'Temperatur',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                data: [101, 12, 19, 397, 5, 2, 3],
+                data: [101, 12, 19, 20, 5, 2, 3],
                 borderWidth: 1
             },
             {

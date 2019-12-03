@@ -53,27 +53,17 @@ hr {
   margin-right: 5px;
   max-height: 300px; }
 
-table.table-bordered {
-  border: 1px solid #ffffff83;
-  color: white;
-  margin-top: 20px; }
-
-table.table-bordered > thead > tr > th {
-  border: 1px solid #ffffff83;
-  color: white; }
-
-table.table-bordered > tbody > tr > td {
-  border: 1px solid #ffffff83;
-  color: white; }
-
 table.table-borderless {
+  text-align: center;
   color: white;
   margin-top: 20px; }
 
 table.table-borderless > thead > tr > th {
+  text-align: center;
   color: white; }
 
 table.table-borderless > tbody > tr > td {
+  text-align: center;
   color: white; }
 
 .modal {

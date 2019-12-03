@@ -33,7 +33,7 @@
         </li>
       </ul>
     </div>
-    <select name="By" id="cityDropDown">by</select>
+    <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
     <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Change sensor</button>
     <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
   </nav>
@@ -111,9 +111,10 @@
     <input type="datetime" id="dayInputField">
     <button id="inputButton">Submit</button>
     <div class='divBox' style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+    <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
       <canvas id="chart"></canvas>
     </div>
-    <div class='divBox' style="margin: auto; margin-top: 50px; padding: 10px; height: 100%; width: 100%;">
+    <div class='divBox' style=" margin-top: 50px; padding: 10px;">
       <table class="table table-borderless">
         <thead>
           <tr>
@@ -124,39 +125,39 @@
         </thead>
         <tbody>
           <tr>
-            <th>6 dage siden</th>
-            <td>23.4 °C</td>
-            <td>48 %</td>
+            <th scope="row">3. dec</th>
+            <td>28.1 °C</td>
+            <td>42.3 %</td>
           </tr>
           <tr>
-            <th scope="row">5 dage siden</th>
-            <td>25.1 °C</td>
-            <td>46.3 %</td>
-          </tr>
-          <tr>
-            <th scope="row">4 dage siden</th>
-            <td>22.4 °C</td>
-            <td>48.2 %</td>
-          </tr>
-          <tr>
-            <th scope="row">3 dage siden</th>
-            <td>21.1 °C</td>
-            <td>43.1 %</td>
-          </tr>
-          <tr>
-            <th scope="row">2 dage siden</th>
-            <td>29.6 °C</td>
-            <td>49 %</td>
-          </tr>
-          <tr>
-            <th scope="row">1 dag siden</th>
+            <th scope="row">2. dec</th>
             <td>22.3 °C</td>
             <td>42.5 %</td>
           </tr>
           <tr>
-            <th scope="row">Idag</th>
-            <td>28.1 °C</td>
-            <td>42.3 %</td>
+            <th scope="row">1. dec</th>
+            <td>29.6 °C</td>
+            <td>49 %</td>
+          </tr>
+          <tr>
+            <th scope="row">30. nov</th>
+            <td>21.1 °C</td>
+            <td>43.1 %</td>
+          </tr>
+          <tr>
+            <th scope="row">29. nov</th>
+            <td>22.4 °C</td>
+            <td>48.2 %</td>
+          </tr>
+          <tr>
+            <th scope="row">28. nov</th>
+            <td>25.1 °C</td>
+            <td>46.3 %</td>
+          </tr>
+          <tr>
+            <th scope="row">27. nov</th>
+            <td>23.4 °C</td>
+            <td>48 %</td>
           </tr>
         </tbody>
       </table>
