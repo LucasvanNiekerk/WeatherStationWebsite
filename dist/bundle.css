@@ -21,7 +21,7 @@ h2, h1 {
 .container .row h3 {
   border-bottom: 1px solid white;
   margin: 5px 0px;
-  font-size: calc(12px + 1vw);
+  font-size: calc(7px + 1.5vw);
   text-align: center; }
 
 p {
@@ -39,6 +39,7 @@ hr {
   background-color: #0000005e;
   display: block;
   margin: auto;
+<<<<<<< HEAD
   border-radius: 20px;
   height: 30vw;
   min-height: 200px; }
@@ -47,6 +48,13 @@ hr {
   max-width: 40%;
   min-width: 110px;
   max-height: 300px; }
+=======
+  border-radius: 20px; }
+
+.divLatestSize {
+  max-width: 45%;
+  min-width: 110px; }
+>>>>>>> origin/master
 
 .div3dagsPrognoseSize {
   max-width: 45%;

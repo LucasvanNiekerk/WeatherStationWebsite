@@ -36006,14 +36006,13 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
 });
 _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 /*
-function getRange(range: number){
+function getRange(range: number) {
     let Url: string = baseUri + raspberryId + "/" + range;
     axios.get<IWeather[]>(Url)
-    .then((response: AxiosResponse) =>{
-        if(response.data){
-            /
-            raspberryId = tempId;
-}
+        .then((response: AxiosResponse) => {
+            if (response.data) {
+
+            }
 */
 //
 // Buttons
