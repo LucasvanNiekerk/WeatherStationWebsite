@@ -36004,14 +36004,20 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
-var dayInputField = document.getElementById("dayInputField");
-function getRangeOfDay(day) {
-    var Url = baseUri + raspberryId + "/" + day;
+var inputButton = document.getElementById("inputButton");
+inputButton.addEventListener("click", function () { getRangeOfDay(date); });
+function getRangeOfDay(date) {
+    var Url = baseUri + raspberryId + "/" + dayInputField.value;
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         if (response.data) {
         }
     });
+}
+function get7Days() {
+    var dayInputField = document.getElementById("dayInputField");
+    var date = new Date(dayInputField.value);
+    var dateList;
 }
 //
 // Buttons

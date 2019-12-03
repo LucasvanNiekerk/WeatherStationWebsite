@@ -186,15 +186,25 @@ var myChart = new Chart(chart, {
     }
 });
 
-let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField")
+let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
+inputButton.addEventListener("click", function(){getRangeOfDay(date)})
 
-function getRangeOfDay(day: string){
-    let Url: string = baseUri + raspberryId + "/" + day;
+
+
+function getRangeOfDay(date: Date): void{
+
+    let Url: string = baseUri + raspberryId + "/" + dayInputField.value;
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
 
         }})
+}
+
+function get7Days(): void{
+    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+    let date: Date = new Date(dayInputField.value);
+    let dateList: string[] 
 }
 
 
