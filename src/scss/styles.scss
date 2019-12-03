@@ -24,7 +24,7 @@ h2
 .container .row h3 {
     border-bottom: 1px solid white; 
     margin: 5px 0px;
-    font-size: calc(12px + 1vw);
+    font-size: calc(7px + 1.5vw);
     text-align: center;
 }
 
@@ -52,14 +52,13 @@ hr{
     display: block;
     margin: auto;
     border-radius: 20px;
-    height: 30vw;
-    max-height: 300px;
-    min-height: 200px;
+    
     
 }
 
 .divLatestSize{
-    max-width: 40%;
+    
+    max-width: 45%;
     min-width: 110px;
 
 }
