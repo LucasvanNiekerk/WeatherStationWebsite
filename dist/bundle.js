@@ -35998,8 +35998,7 @@ function getRange(range: number){
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
-            /
-            raspberryId = tempId;
+            
 }
 */
 //
