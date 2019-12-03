@@ -185,16 +185,18 @@ var myChart = new Chart(chart, {
         }
     }
 });
-Chart.defaults.global.defaultFontColor = "#fff";
-/*
-function getRange(range: number) {
-    let Url: string = baseUri + raspberryId + "/" + range;
-    axios.get<IWeather[]>(Url)
-        .then((response: AxiosResponse) => {
-            if (response.data) {
 
-            }
-*/
+let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField")
+
+function getRangeOfDay(day: string){
+    let Url: string = baseUri + raspberryId + "/" + day;
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+
+        }})
+}
+
 
 //
 // Buttons
