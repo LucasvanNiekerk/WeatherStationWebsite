@@ -36004,21 +36004,29 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
-var inputButton = document.getElementById("inputButton");
-inputButton.addEventListener("click", function () { getRangeOfDay(date); });
-function getRangeOfDay(date) {
-    var Url = baseUri + raspberryId + "/" + dayInputField.value;
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
-        .then(function (response) {
-        if (response.data) {
-        }
-    });
+/*
+let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
+inputButton.addEventListener("click", function(){getRangeOfDay(date)})
+
+
+
+function getRangeOfDay(date: Date): void{
+
+    let Url: string = baseUri + raspberryId + "/";
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+
+        }})
 }
-function get7Days() {
-    var dayInputField = document.getElementById("dayInputField");
-    var date = new Date(dayInputField.value);
-    var dateList;
+
+function get7Days(): void{
+    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+    let date: Date = new Date(dayInputField.value);
+    let dateList: string[]
 }
+
+*/
 //
 // Buttons
 //

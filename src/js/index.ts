@@ -185,7 +185,7 @@ var myChart = new Chart(chart, {
         }
     }
 });
-
+/*
 let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
 inputButton.addEventListener("click", function(){getRangeOfDay(date)})
 
@@ -193,7 +193,7 @@ inputButton.addEventListener("click", function(){getRangeOfDay(date)})
 
 function getRangeOfDay(date: Date): void{
 
-    let Url: string = baseUri + raspberryId + "/" + dayInputField.value;
+    let Url: string = baseUri + raspberryId + "/";
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
@@ -207,6 +207,7 @@ function get7Days(): void{
     let dateList: string[] 
 }
 
+*/
 
 //
 // Buttons
