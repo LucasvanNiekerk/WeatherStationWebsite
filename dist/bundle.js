@@ -35993,13 +35993,13 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
     }
 });
 /*
-function getRange(range: number){
+function getRange(range: number) {
     let Url: string = baseUri + raspberryId + "/" + range;
     axios.get<IWeather[]>(Url)
-    .then((response: AxiosResponse) =>{
-        if(response.data){
-            
-}
+        .then((response: AxiosResponse) => {
+            if (response.data) {
+
+            }
 */
 //
 // Buttons
