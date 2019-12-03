@@ -74,6 +74,7 @@ table.table-borderless > thead > tr > th {
   color: white; }
 
 table.table-borderless > tbody > tr > td {
+  text-align: center;
   color: white; }
 
 .modal {

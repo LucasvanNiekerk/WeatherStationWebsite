@@ -139,7 +139,7 @@ var myChart = new Chart(chart, {
     type: 'line',
     scaleFontColor: 'rgba(255,255,255,1)',
     data: {
-        labels: ['6 dage siden', '5 dage siden', '4 dage siden', '3 dage siden', '2 dage siden', '1 dag siden', 'Idag'],
+        labels: ['6. dag', '5. dag', '4. dag', '3. dag', '2. dag', '1. dag', 'Idag'],
         datasets: [{
             label: 'Temperatur',
             borderColor: 'rgba(255, 99, 132, 1)',
