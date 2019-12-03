@@ -2,7 +2,7 @@ import axios, {
     AxiosResponse,
     AxiosError
 } from "../../node_modules/axios/index";
-
+import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js';
 
 //
 // Interfaces
@@ -17,6 +17,11 @@ interface IWeather {
 }
 
 interface IApiWeather{
+    LocationName: string;
+    CurrentData: ICurrentData;
+}
+
+interface ICurrentData{
     temperature: number;
     skyText: string;
     humidity: number;
@@ -34,15 +39,17 @@ let temperatureAnnotation: string;
 //This information is saved in localStorage with the key "raspId".
 let raspberryId: string = "";
 
+// The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
+let currentCity: string = "";
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
 function onloadMethods(): void{
     setTimeout(()=>{
         browserStorage(); 
+        fillDropDown();
         loadData();
-
-        //getAPIWeatherInformation("roskilde");
     }, 10)
 }
 
@@ -54,7 +61,7 @@ function browserStorage(): void{
             raspberryId = localStorage.getItem("raspId");
         }
         else{
-            popupElement.style.display = "block";
+            openRaspberryIdPopup();
         }
         
         // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
@@ -66,12 +73,21 @@ function browserStorage(): void{
         }
         //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+
+        //To check what city the user wants to see information from.
+        if(localStorage.getItem("currentCity") != null){
+            currentCity = localStorage.getItem("currentCity");
+        }
+        else{
+            currentCity = "Roskilde";
+        }
     }
     //If localStorage is not supported we tell the client. 
     else {
-        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information)."
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
     }
+    console.log(localStorage.getItem("raspId"));
 }
 
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
@@ -102,6 +118,71 @@ let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.
 
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
 
+let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
+let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
+
+let cityDropDownElement: HTMLSelectElement = <HTMLSelectElement>document.getElementById("cityDropDown");
+cityDropDownElement.addEventListener("change", ()=>{
+    displayFrontpage();
+    currentCity = cityDropDownElement.value;
+    localStorage.setItem("currentCity", currentCity);
+    loadApiData();
+});
+
+
+//
+// Chart
+//
+
+let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
+var myChart = new Chart(chart, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 397, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+            
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+/*
+function getRange(range: number){
+    let Url: string = baseUri + raspberryId + "/" + range;
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+            /
+            raspberryId = tempId;
+}
+*/
+
 //
 // Buttons
 //
@@ -109,12 +190,32 @@ let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getEl
 let rasberryIdSubmitButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 
+let changeRaspberryIdButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetRaspberryId");
+changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
+
 let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
 changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+
+let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
+frontpageButton.addEventListener("click", displayFrontpage);
+
+let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
+olderDataButton.addEventListener("click", displayOlderData);
+
 
 //
 // Functions
 //
+
+function displayFrontpage(): void{
+    frontpageDivElement.style.display = "block";
+    olderDataDivElement.style.display = "none";
+}
+
+function displayOlderData(): void{
+    frontpageDivElement.style.display = "none";
+    olderDataDivElement.style.display = "block";
+}
 
 function changeTemperatureAnnotation(): void{
     if(temperatureAnnotation === "Celsius"){
@@ -188,6 +289,34 @@ function sumbitRaspberryId(): void{
     }
 }
 
+
+
+function getAPIWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void{
+    let Url: string = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+
+    axios.get<IApiWeather>(Url)
+    .then((response: AxiosResponse<IApiWeather>) =>{
+        console.log(response.data.CurrentData.humidity);
+        if(typeOfInfo === "Temperature"){
+            if(temperatureAnnotation === "Celsius"){
+                divElement.innerHTML = response.data.CurrentData.temperature + "°";
+            }
+            else if(temperatureAnnotation === "Fahrenheit"){
+                divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
+            }
+        } 
+        else if(typeOfInfo === "Humidity"){
+            divElement.innerHTML = response.data.CurrentData.humidity + "%";
+        }  
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
+}
+
+
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp: string): string{
     // tF = tC * 9/5 + 32
@@ -198,20 +327,27 @@ function loadData(): void{
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
 }
 
-/*
-function getAPIWeatherInformation(location: string): void{
-    let Url: string = "https://vejr.eu/api.php?location=" + location + "&degree=C";
-
-    axios.get(Url)
-    .then((response: AxiosResponse) =>{
-        console.log(response.data);
-    })
-    .catch((error: AxiosError) =>{
-        console.log(error.message);
-        console.log(error.code);
-        console.log(error.response);
-    });
+function loadApiData(): void{
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
 }
-*/
+
+function openRaspberryIdPopup(){
+    popupElement.style.display = "block";
+}
+
+function fillDropDown(){
+    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense", ]
+    
+    for (let index = 0; index < cities.length; index++) {
+        let option: HTMLOptionElement = document.createElement('option');
+        option.text = option.value = cities[index].toLowerCase();
+        cityDropDownElement.add(option, 0);
+    }
+    
+    cityDropDownElement.value = currentCity;
+}
