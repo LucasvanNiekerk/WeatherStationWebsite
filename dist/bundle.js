@@ -35992,152 +35992,153 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
-function getRange(range) {
-    var Url = baseUri + raspberryId + "/" + range;
+/*
+function getRange(range: number){
+    let Url: string = baseUri + raspberryId + "/" + range;
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+            
+}
+*/
+//
+// Buttons
+//
+var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
+rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
+var changeRaspberryIdButton = document.getElementById("resetRaspberryId");
+changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
+var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
+changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+var frontpageButton = document.getElementById("FrontpageButton");
+frontpageButton.addEventListener("click", displayFrontpage);
+var olderDataButton = document.getElementById("OlderDataButton");
+olderDataButton.addEventListener("click", displayOlderData);
+//
+// Functions
+//
+function displayFrontpage() {
+    frontpageDivElement.style.display = "block";
+    olderDataDivElement.style.display = "none";
+}
+function displayOlderData() {
+    frontpageDivElement.style.display = "none";
+    olderDataDivElement.style.display = "block";
+}
+function changeTemperatureAnnotation() {
+    if (temperatureAnnotation === "Celsius") {
+        temperatureAnnotation = "Fahrenheit";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+    }
+    else if (temperatureAnnotation === "Fahrenheit") {
+        temperatureAnnotation = "Celsius";
+        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+    }
+    localStorage.setItem("temperatureType", temperatureAnnotation);
+    loadData();
+}
+// Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
+function getLatestWeatherInformation(divElement, typeOfInfo) {
+    // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
+    var Url = baseUri + "latest/" + raspberryId;
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
-        if (response.data) {
-        }
-        //
-        // Buttons
-        //
-        var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
-        rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
-        var changeRaspberryIdButton = document.getElementById("resetRaspberryId");
-        changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
-        var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
-        changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
-        var frontpageButton = document.getElementById("FrontpageButton");
-        frontpageButton.addEventListener("click", displayFrontpage);
-        var olderDataButton = document.getElementById("OlderDataButton");
-        olderDataButton.addEventListener("click", displayOlderData);
-        //
-        // Functions
-        //
-        function displayFrontpage() {
-            frontpageDivElement.style.display = "block";
-            olderDataDivElement.style.display = "none";
-        }
-        function displayOlderData() {
-            frontpageDivElement.style.display = "none";
-            olderDataDivElement.style.display = "block";
-        }
-        function changeTemperatureAnnotation() {
+        if (typeOfInfo === "Temperature") {
             if (temperatureAnnotation === "Celsius") {
-                temperatureAnnotation = "Fahrenheit";
-                changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+                divElement.innerHTML = response.data.temperature + "°";
             }
             else if (temperatureAnnotation === "Fahrenheit") {
-                temperatureAnnotation = "Celsius";
-                changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
+                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
             }
-            localStorage.setItem("temperatureType", temperatureAnnotation);
-            loadData();
         }
-        // Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
-        function getLatestWeatherInformation(divElement, typeOfInfo) {
-            // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
-            var Url = baseUri + "latest/" + raspberryId;
-            _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
-                .then(function (response) {
-                if (typeOfInfo === "Temperature") {
-                    if (temperatureAnnotation === "Celsius") {
-                        divElement.innerHTML = response.data.temperature + "°";
-                    }
-                    else if (temperatureAnnotation === "Fahrenheit") {
-                        divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
-                    }
-                }
-                else if (typeOfInfo === "Humidity") {
-                    divElement.innerHTML = response.data.humidity + "%";
-                }
-            })
-                .catch(function (error) {
-                console.log(error.message);
-            });
+        else if (typeOfInfo === "Humidity") {
+            divElement.innerHTML = response.data.humidity + "%";
         }
-        function sumbitRaspberryId() {
-            //We save the raspberry Id from our user input as a temp string.
-            var tempId = raspberryIdInputElement.value;
-            //We check if it has the required length, otherwise there is no point in checking if it exists(since it wont).
-            if (tempId.length == 10) {
-                // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/checkRaspberryId/78ANBj918k
-                var Url_1 = baseUri + "checkRaspberryId/" + tempId;
-                //We tjek our database to see if the raspberry id exists.
-                _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url_1)
-                    .then(function (response) {
-                    if (response.data) {
-                        //Since we now know that the id is valid we save it.
-                        raspberryId = tempId;
-                        //We save the id in local storage and close the popup.
-                        localStorage.setItem("raspId", raspberryId);
-                        loadData();
-                        popupElement.style.display = "None";
-                    }
-                    else {
-                        raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
-                    }
-                })
-                    .catch(function (error) {
-                    console.log(error.message);
-                });
+    })
+        .catch(function (error) {
+        console.log(error.message);
+    });
+}
+function sumbitRaspberryId() {
+    //We save the raspberry Id from our user input as a temp string.
+    var tempId = raspberryIdInputElement.value;
+    //We check if it has the required length, otherwise there is no point in checking if it exists(since it wont).
+    if (tempId.length == 10) {
+        // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/checkRaspberryId/78ANBj918k
+        var Url = baseUri + "checkRaspberryId/" + tempId;
+        //We tjek our database to see if the raspberry id exists.
+        _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+            .then(function (response) {
+            if (response.data) {
+                //Since we now know that the id is valid we save it.
+                raspberryId = tempId;
+                //We save the id in local storage and close the popup.
+                localStorage.setItem("raspId", raspberryId);
+                loadData();
+                popupElement.style.display = "None";
             }
             else {
-                raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
+                raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
+            }
+        })
+            .catch(function (error) {
+            console.log(error.message);
+        });
+    }
+    else {
+        raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
+    }
+}
+function getAPIWeatherInformation(divElement, typeOfInfo) {
+    var Url = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        console.log(response.data.CurrentData.humidity);
+        if (typeOfInfo === "Temperature") {
+            if (temperatureAnnotation === "Celsius") {
+                divElement.innerHTML = response.data.CurrentData.temperature + "°";
+            }
+            else if (temperatureAnnotation === "Fahrenheit") {
+                divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
             }
         }
-        function getAPIWeatherInformation(divElement, typeOfInfo) {
-            var Url = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
-            _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
-                .then(function (response) {
-                console.log(response.data.CurrentData.humidity);
-                if (typeOfInfo === "Temperature") {
-                    if (temperatureAnnotation === "Celsius") {
-                        divElement.innerHTML = response.data.CurrentData.temperature + "°";
-                    }
-                    else if (temperatureAnnotation === "Fahrenheit") {
-                        divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
-                    }
-                }
-                else if (typeOfInfo === "Humidity") {
-                    divElement.innerHTML = response.data.CurrentData.humidity + "%";
-                }
-            })
-                .catch(function (error) {
-                console.log(error.message);
-                console.log(error.code);
-                console.log(error.response);
-            });
+        else if (typeOfInfo === "Humidity") {
+            divElement.innerHTML = response.data.CurrentData.humidity + "%";
         }
-        //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
-        function convertToFahrenheit(temp) {
-            // tF = tC * 9/5 + 32
-            return (Number(temp) * (9 / 5) + 32).toFixed(1);
-        }
-        function loadData() {
-            //Todo insert rest of div
-            getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
-            getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-            getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-            getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
-        }
-        function loadApiData() {
-            getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-            getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
-        }
-        function openRaspberryIdPopup() {
-            popupElement.style.display = "block";
-        }
-        function fillDropDown() {
-            var cities = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense",];
-            for (var index = 0; index < cities.length; index++) {
-                var option = document.createElement('option');
-                option.text = option.value = cities[index].toLowerCase();
-                cityDropDownElement.add(option, 0);
-            }
-            cityDropDownElement.value = currentCity;
-        }
+    })
+        .catch(function (error) {
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
     });
+}
+//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
+function convertToFahrenheit(temp) {
+    // tF = tC * 9/5 + 32
+    return (Number(temp) * (9 / 5) + 32).toFixed(1);
+}
+function loadData() {
+    //Todo insert rest of div
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+}
+function loadApiData() {
+    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
+    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+}
+function openRaspberryIdPopup() {
+    popupElement.style.display = "block";
+}
+function fillDropDown() {
+    var cities = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense",];
+    for (var index = 0; index < cities.length; index++) {
+        var option = document.createElement('option');
+        option.text = option.value = cities[index].toLowerCase();
+        cityDropDownElement.add(option, 0);
+    }
+    cityDropDownElement.value = currentCity;
 }
 
 
