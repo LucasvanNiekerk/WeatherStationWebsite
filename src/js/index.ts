@@ -172,15 +172,18 @@ var myChart = new Chart(chart, {
         }
     }
 });
-/*
-function getRange(range: number){
-    let Url: string = baseUri + raspberryId + "/" + range;
+
+let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField")
+
+function getRangeOfDay(day: string){
+    let Url: string = baseUri + raspberryId + "/" + day;
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
-            
+
+        }})
 }
-*/
+
 
 //
 // Buttons
