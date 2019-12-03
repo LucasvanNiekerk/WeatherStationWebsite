@@ -53,7 +53,6 @@ hr{
     margin: auto;
     border-radius: 20px;
     height: 30vw;
-    max-height: 300px;
     min-height: 200px;
     
 }
@@ -61,7 +60,7 @@ hr{
 .divLatestSize{
     max-width: 40%;
     min-width: 110px;
-
+    max-height: 300px;
 }
 
 .div3dagsPrognoseSize{
@@ -69,6 +68,7 @@ hr{
     min-width: 95px;
     margin-left: 5px;
     margin-right: 5px;
+    max-height: 300px;
 }
 
 
