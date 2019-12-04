@@ -115,3 +115,24 @@ sup {
     vertical-align: super;
     font-size: 20px;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #00856f;
+    //background-image: linear-gradient(to top right, #00558d, #00856f); /* Standard syntax (must be last) */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #00558d;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #00558d;
+}

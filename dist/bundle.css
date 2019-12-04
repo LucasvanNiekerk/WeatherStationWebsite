@@ -101,3 +101,19 @@ table.table-borderless > tbody > tr > td {
 sup {
   vertical-align: super;
   font-size: 20px; }
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px; }
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #00856f; }
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #00558d; }
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #00558d; }

@@ -35948,6 +35948,12 @@ var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
 var popupElement = document.getElementById("raspberryIdPopup");
 var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
 var raspberryIdInputElement = document.getElementById("raspberryIdInput");
+raspberryIdInputElement.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        rasberryIdSubmitButton.click();
+    }
+});
 var frontpageDivElement = document.getElementById("Frontpage");
 var olderDataDivElement = document.getElementById("OlderData");
 var cityDropDownElement = document.getElementById("cityDropDown");

@@ -114,6 +114,12 @@ let popupElement: HTMLDivElement = <HTMLDivElement>document.getElementById("rasp
 let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdErrorOutput");
 
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
+raspberryIdInputElement.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        rasberryIdSubmitButton.click();
+    }
+});
 
 let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
