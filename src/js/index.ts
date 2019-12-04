@@ -32,6 +32,7 @@ interface Main
     temp_max: number;
 }
 
+
 //
 // Browser data / local storage.
 //
@@ -209,7 +210,7 @@ inputButton.addEventListener("click", get7Days)
 
 
 
-function getRangeOfDay(date: Date): void {
+function getRangeOfDay(date: Date, index: number): void {
     let i: number = 0;
     let resultTemperature: number = 0;
     let resultHumidity: number = 0;
@@ -219,7 +220,7 @@ function getRangeOfDay(date: Date): void {
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
 
-            console.log(response.data);
+            //console.log(response.data);
             response.data.forEach((weatherInfo: IWeather) => {
                 i++;
                 resultTemperature += Number(weatherInfo.temperature);
@@ -232,16 +233,24 @@ function getRangeOfDay(date: Date): void {
             }
             console.log("temp: " + avgTemperature);
             console.log("hum: " + avgHumidity);
+            
+            myChart.data.datasets[0].data[index] = avgTemperature;  
+            myChart.data.datasets[1].data[index] = avgHumidity;   
+            myChart.update(); 
 
-        });
+        }) 
+        
+        
 }
 
 function get7Days(): void {
     let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
     let date: Date = new Date(dayInputField.value);
+   
 
     for (let i = 0; i < 7; i++) {
-        getRangeOfDay(date);
+        getRangeOfDay(date, i);
+  
         date.setDate(date.getDate() - 1);
     }
 }

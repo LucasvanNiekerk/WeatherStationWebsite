@@ -36017,7 +36017,7 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
 _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 var inputButton = document.getElementById("inputButton");
 inputButton.addEventListener("click", get7Days);
-function getRangeOfDay(date) {
+function getRangeOfDay(date, index) {
     var i = 0;
     var resultTemperature = 0;
     var resultHumidity = 0;
@@ -36026,7 +36026,7 @@ function getRangeOfDay(date) {
     var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
-        console.log(response.data);
+        //console.log(response.data);
         response.data.forEach(function (weatherInfo) {
             i++;
             resultTemperature += Number(weatherInfo.temperature);
@@ -36038,13 +36038,16 @@ function getRangeOfDay(date) {
         }
         console.log("temp: " + avgTemperature);
         console.log("hum: " + avgHumidity);
+        myChart.data.datasets[0].data[index] = avgTemperature;
+        myChart.data.datasets[1].data[index] = avgHumidity;
+        myChart.update();
     });
 }
 function get7Days() {
     var dayInputField = document.getElementById("dayInputField");
     var date = new Date(dayInputField.value);
     for (var i = 0; i < 7; i++) {
-        getRangeOfDay(date);
+        getRangeOfDay(date, i);
         date.setDate(date.getDate() - 1);
     }
 }
