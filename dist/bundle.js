@@ -35888,7 +35888,6 @@ function onloadMethods() {
         browserStorage();
         fillDropDown();
         loadData();
-        gettemp();
     }, 10);
 }
 function browserStorage() {
@@ -35909,8 +35908,6 @@ function browserStorage() {
             temperatureAnnotation = "Celsius";
             localStorage.setItem("temperatureType", temperatureAnnotation);
         }
-        //Change the name of the button to the annotion currently shown.
-        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
             currentCity = localStorage.getItem("currentCity");
@@ -35950,6 +35947,12 @@ var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
 var popupElement = document.getElementById("raspberryIdPopup");
 var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
 var raspberryIdInputElement = document.getElementById("raspberryIdInput");
+raspberryIdInputElement.addEventListener("keyup", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        rasberryIdSubmitButton.click();
+    }
+});
 var frontpageDivElement = document.getElementById("Frontpage");
 var olderDataDivElement = document.getElementById("OlderData");
 var cityDropDownElement = document.getElementById("cityDropDown");
@@ -35972,14 +35975,14 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
                 label: 'Temperatur',
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                data: [101, 12, 19, 20, 5, 2, 3],
+                data: [23.4, 25.1, 22.4, 21.1, 29.6, 22.3, 28.1],
                 borderWidth: 1
             },
             {
                 label: 'Luftfugtighed',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                data: [11, 112, 129, 37, 51, 212, 33],
+                data: [48, 46.3, 48.2, 43.1, 49, 42.5, 42.3],
                 borderWidth: 1
             }]
     },
@@ -36011,6 +36014,7 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
+_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 var inputButton = document.getElementById("inputButton");
 inputButton.addEventListener("click", get7Days);
 function getRangeOfDay(date) {
@@ -36051,8 +36055,10 @@ var rasberryIdSubmitButton = document.getElementById("rasberryIdSubmitButton");
 rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 var changeRaspberryIdButton = document.getElementById("resetRaspberryId");
 changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
-var changeTemperatureAnnotationButton = document.getElementById("changeTemperatureAnnotation");
-changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+var annotationOption1 = document.getElementById("annotationOption1");
+annotationOption1.onchange = changeTemperatureAnnotation;
+var annotationOption2 = document.getElementById("annotationOption2");
+annotationOption2.onchange = changeTemperatureAnnotation;
 var frontpageButton = document.getElementById("FrontpageButton");
 frontpageButton.addEventListener("click", displayFrontpage);
 var olderDataButton = document.getElementById("OlderDataButton");
@@ -36069,13 +36075,11 @@ function displayOlderData() {
     olderDataDivElement.style.display = "block";
 }
 function changeTemperatureAnnotation() {
-    if (temperatureAnnotation === "Celsius") {
+    if (annotationOption2.checked) {
         temperatureAnnotation = "Fahrenheit";
-        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
-    else if (temperatureAnnotation === "Fahrenheit") {
+    else if (annotationOption1.checked) {
         temperatureAnnotation = "Celsius";
-        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
     localStorage.setItem("temperatureType", temperatureAnnotation);
     loadData();
@@ -36088,17 +36092,16 @@ function getLatestWeatherInformation(divElement, typeOfInfo) {
         .then(function (response) {
         if (typeOfInfo === "Temperature") {
             if (temperatureAnnotation === "Celsius") {
-                divElement.innerHTML = response.data.temperature + "°";
+                divElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
             }
             else if (temperatureAnnotation === "Fahrenheit") {
-                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "<sup>°F</sup>";
             }
         }
         else if (typeOfInfo === "Humidity") {
             divElement.innerHTML = response.data.humidity + "%";
         }
-    })
-        .catch(function (error) {
+    }).catch(function (error) {
         console.log(error.message);
     });
 }
@@ -36136,7 +36139,6 @@ function getAPIWeatherInformation() {
     var annotion = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
     var city = cityDropDownElement.value;
     var Url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
-    console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         var responseData = JSON.stringify(response.data);
@@ -36151,27 +36153,59 @@ function getAPIWeatherInformation() {
         console.log(error.response);
     });
 }
-function gettemp() {
+function getApiPrognosisWeatherInformation() {
     var annotion = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
     var city = cityDropDownElement.value;
     var Url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
-    console.log(Url);
-    var today = new Date();
-    var date = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + " 12:00:00";
-    console.log(date);
-    /*
-    axios.get<bulResonse>(Url)
-    .then((response: AxiosResponse<bulResonse>) =>{
-        
-        
-        
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        // Current date used to compare to data from 3rd parti api.
+        var date = new Date();
+        // The data we got from 3rd parti api.
+        var responseData = response.data;
+        var dateIndex = 1;
+        // [min temperature1, max temperature1, min humidity1, max humidity1, 
+        //  min temperature2, max temperature2, min humidity2, max humidity2, 
+        //  min temperature3, max temperature3, min humidity3, max humidity3]
+        var ar = [];
+        var tempary = [];
+        var humary = [];
+        responseData.list.forEach(function (weatherinfo) {
+            if (dateIndex < 4) {
+                var currentDate = new Date(weatherinfo.dt_txt);
+                if (compareDates(currentDate, date)) {
+                    tempary.push(weatherinfo.main.temp);
+                    humary.push(weatherinfo.main.humidity);
+                }
+                else {
+                    ar.push(Math.min.apply(null, tempary));
+                    ar.push(Math.max.apply(null, tempary));
+                    ar.push(Math.min.apply(null, humary));
+                    ar.push(Math.max.apply(null, humary));
+                    date.setDate(new Date().getDate() + dateIndex);
+                    dateIndex++;
+                    tempary = [];
+                    humary = [];
+                }
+            }
+            prognosisHumidityOutputElement1.innerHTML = ar[2] + " | " + ar[3];
+            prognosisHumidityOutputElement2.innerHTML = ar[6] + " | " + ar[7];
+            prognosisHumidityOutputElement3.innerHTML = ar[10] + " | " + ar[11];
+            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " | " + ar[1];
+            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " | " + ar[5];
+            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " | " + ar[9];
+        });
     })
-    .catch((error: AxiosError) =>{
+        .catch(function (error) {
         console.log(error.message);
         console.log(error.code);
         console.log(error.response);
     });
-    */
+}
+function compareDates(firstDate, secondDate) {
+    return firstDate.getFullYear() == secondDate.getFullYear()
+        && firstDate.getMonth() == secondDate.getMonth()
+        && firstDate.getDate() == secondDate.getDate();
 }
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp) {
@@ -36185,10 +36219,12 @@ function loadData() {
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation();
     //loadApiData();
 }
 function loadApiData() {
     getAPIWeatherInformation();
+    getApiPrognosisWeatherInformation();
 }
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
@@ -36204,6 +36240,66 @@ function fillDropDown() {
     }
     cityDropDownElement.value = currentCity;
 }
+//
+// OpenWeatherMap API models. (We only use small part).
+//
+/*
+interface Coord
+{
+    lon: number;
+    lat: number;
+}
+
+interface Weather {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+}
+
+interface Main {
+    temp: number;
+    pressure: number;
+    humidity: number;
+    temp_min: number;
+    temp_max: number;
+}
+
+interface Wind {
+    speed: number;
+    deg: number;
+}
+
+interface Clouds {
+    all: number;
+}
+
+interface Sys {
+    type: number;
+    id: number;
+    message: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+}
+
+
+interface ResponseWeather
+{
+    coord: Coord;
+    weather: Weather[];
+    base: string;
+    main: Main;
+    visibility: number;
+    wind: Wind;
+    clouds: Clouds;
+    dt: number;
+    sys: Sys;
+    id: number;
+    name: string;
+    cod: number;
+}
+*/
 
 
 /***/ }),

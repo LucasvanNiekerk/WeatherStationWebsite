@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en-US">
 
 <head>
@@ -15,7 +15,7 @@
 <body>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
     <!-- Brand -->
-    <a class="navbar-brand" href="">Navbar</a>
+    <a class="navbar-brand" href="">PiVejr</a>
 
     <!-- Toggler/collapsibe Button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -34,8 +34,15 @@
       </ul>
     </div>
     <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
-    <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Change sensor</button>
-    <button class="btn btn-dark" style="position: relative; float: right;" id="changeTemperatureAnnotation"></button>
+    <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Skift sensor</button>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary active">
+          <input type="radio" name="options" id="annotationOption1" autocomplete="off" checked> °C
+        </label>
+        <label class="btn btn-secondary">
+          <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
+        </label>
+      </div>
   </nav>
 
   <!--Frontpage div opening div-->
@@ -90,19 +97,6 @@
     <!--Error text-->
     <div id="NoLocalStorage"></div>
 
-
-    <!--Popup for raspberry pi ID-->
-    <div id="raspberryIdPopup" class="modal">
-      <div class="modal-content">
-        <div style="align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
-        <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
-          id="raspberryIdInput">
-        <button class="btn btn-primary" style="width: 120px; align-self: center;"
-          id="rasberryIdSubmitButton">Submit!</button>
-        <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
-      </div>
-    </div>
-
     <!--Frontpage closing div-->
   </div>
 
@@ -111,61 +105,75 @@
     <input type="date" id="dayInputField">
     <button id="inputButton">Submit</button>
     <div class='divBox' style="margin: auto; padding: 10px; height: 100%; width: 100%;">
-    <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
-      <canvas id="chart"></canvas>
+        <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
+            <canvas id="chart"></canvas>
+        </div>
+        <div class='divBox' style=" margin-top: 50px; padding: 10px;">
+            <table class="table table-borderless">
+                <thead>
+                <tr>
+                    <th scope="col">Dage</th>
+                    <th scope="col">Temperatur</th>
+                    <th scope="col">Luftfugtighed</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">3. dec</th>
+                    <td>28.1 °C</td>
+                    <td>42.3 %</td>
+                </tr>
+                <tr>
+                    <th scope="row">2. dec</th>
+                    <td>22.3 °C</td>
+                    <td>42.5 %</td>
+                </tr>
+                <tr>
+                    <th scope="row">1. dec</th>
+                    <td>29.6 °C</td>
+                    <td>49 %</td>
+                </tr>
+                <tr>
+                    <th scope="row">30. nov</th>
+                    <td>21.1 °C</td>
+                    <td>43.1 %</td>
+                </tr>
+                <tr>
+                    <th scope="row">29. nov</th>
+                    <td>22.4 °C</td>
+                    <td>48.2 %</td>
+                </tr>
+                <tr>
+                    <th scope="row">28. nov</th>
+                    <td>25.1 °C</td>
+                    <td>46.3 %</td>
+                </tr>
+                <tr>
+                    <th scope="row">27. nov</th>
+                    <td>23.4 °C</td>
+                    <td>48 %</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--Older data closing div-->
     </div>
-    <div class='divBox' style=" margin-top: 50px; padding: 10px;">
-      <table class="table table-borderless">
-        <thead>
-          <tr>
-            <th scope="col">Dage</th>
-            <th scope="col">Temperatur</th>
-            <th scope="col">Luftfugtighed</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">3. dec</th>
-            <td>28.1 °C</td>
-            <td>42.3 %</td>
-          </tr>
-          <tr>
-            <th scope="row">2. dec</th>
-            <td>22.3 °C</td>
-            <td>42.5 %</td>
-          </tr>
-          <tr>
-            <th scope="row">1. dec</th>
-            <td>29.6 °C</td>
-            <td>49 %</td>
-          </tr>
-          <tr>
-            <th scope="row">30. nov</th>
-            <td>21.1 °C</td>
-            <td>43.1 %</td>
-          </tr>
-          <tr>
-            <th scope="row">29. nov</th>
-            <td>22.4 °C</td>
-            <td>48.2 %</td>
-          </tr>
-          <tr>
-            <th scope="row">28. nov</th>
-            <td>25.1 °C</td>
-            <td>46.3 %</td>
-          </tr>
-          <tr>
-            <th scope="row">27. nov</th>
-            <td>23.4 °C</td>
-            <td>48 %</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <!--Older data closing div-->
-  </div>
+</div>
+    
 
-  <script src="bundle.js"></script>
+<!--Popup for raspberry pi ID-->
+<div id="raspberryIdPopup" class="modal">
+    <div class="modal-content">
+        <div style="align-self: center; padding-bottom: 5px;">Please enter your RaspberryPi Id:</div>
+        <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
+               id="raspberryIdInput">
+        <button class="btn btn-primary" style="width: 120px; align-self: center;"
+                id="rasberryIdSubmitButton">Submit!</button>
+        <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
+    </div>
+</div>
+
+<script src="bundle.js"></script>
 </body>
 
 </html>
