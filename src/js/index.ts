@@ -459,7 +459,7 @@ function fillPrognosisElements(ar: string[], dates: Date[]){
     let temp: string[] = [];
 
     for (let i = 0; i < ar.length; i++) {
-        temp[i] = toNumberToFixed(ar[i]);
+        temp[i] = toNumberToFixed(ar[i], 1);
     }
 
     ar = temp;
@@ -537,8 +537,8 @@ function generateUrl(method: string): string {
     return Url;
 }
 
-function toNumberToFixed(num: string): string {
-    return Number(num).toFixed(1);
+function toNumberToFixed(num: string, amountOfDecimals: number): string {
+    return Number(num).toFixed(amountOfDecimals);
 }
 
 function compareDates(firstDate: Date, secondDate: Date): boolean {

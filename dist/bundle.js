@@ -36212,7 +36212,7 @@ function getApiPrognosisWeatherInformation(daysToGet) {
 function fillPrognosisElements(ar, dates) {
     var temp = [];
     for (var i = 0; i < ar.length; i++) {
-        temp[i] = toNumberToFixed(ar[i]);
+        temp[i] = toNumberToFixed(ar[i], 1);
     }
     ar = temp;
     prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
@@ -36273,8 +36273,8 @@ function generateUrl(method) {
     Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
     return Url;
 }
-function toNumberToFixed(num) {
-    return Number(num).toFixed(1);
+function toNumberToFixed(num, amountOfDecimals) {
+    return Number(num).toFixed(amountOfDecimals);
 }
 function compareDates(firstDate, secondDate) {
     return firstDate.getFullYear() == secondDate.getFullYear()
