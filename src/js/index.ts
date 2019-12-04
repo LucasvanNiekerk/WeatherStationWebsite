@@ -136,52 +136,77 @@ cityDropDownElement.addEventListener("change", ()=>{
 let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
 var myChart = new Chart(chart, {
     type: 'line',
+    scaleFontColor: 'rgba(255,255,255,1)',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['27. nov', '28. nov', '29. nov', '30. nov', '1. dec', '2. dec', '3. dec'],
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 397, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
+            label: 'Temperatur',
+            borderColor: 'rgba(255, 99, 132, 1)',
+			backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            data: [101, 12, 19, 20, 5, 2, 3],
             borderWidth: 1
             
+        },
+        {
+            label: 'Luftfugtighed',
+            borderColor: 'rgba(54, 162, 235, 1)',
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            data: [11, 112, 129, 37, 51, 212, 33],
+            borderWidth: 1
+​
         }]
     },
     options: {
+        title: {
+            display: true,
+            text: 'Tidligere data'
+        },
+        scaleLabel: {
+            display: true,
+            labelString:'hej'
+        },
         scales: {
             yAxes: [{
                 ticks: {
                     beginAtZero: true
+                },
+                gridLines:{
+                    display: true,
+                    color: 'rgba(255,255,255,0.5)'
+                }
+            }],
+            xAxes: [{
+                gridLines:{
+                    display: true,
+                    color: 'rgba(255,255,255,0.5)'
                 }
             }]
         }
     }
 });
 /*
-function getRange(range: number){
-    let Url: string = baseUri + raspberryId + "/" + range;
+let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
+inputButton.addEventListener("click", function(){getRangeOfDay(date)})
+​
+​
+​
+function getRangeOfDay(date: Date): void{
+​
+    let Url: string = baseUri + raspberryId + "/";
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
-            /
-            raspberryId = tempId;
+​
+        }})
 }
+​
+function get7Days(): void{
+    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+    let date: Date = new Date(dayInputField.value);
+    let dateList: string[] 
+}
+​
 */
-
 //
 // Buttons
 //

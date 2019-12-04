@@ -21,7 +21,7 @@ h2, h1 {
 .container .row h3 {
   border-bottom: 1px solid white;
   margin: 5px 0px;
-  font-size: calc(12px + 1vw);
+  font-size: calc(7px + 1.5vw);
   text-align: center; }
 
 p {
@@ -33,26 +33,38 @@ hr {
   width: 90%; }
 
 .divText {
-  font-size: calc(30px + 2.5vw); }
+  font-size: calc(25px + 2.5vw); }
 
 .divBox {
   background-color: #0000005e;
   display: block;
   margin: auto;
-  border-radius: 20px;
-  height: 30vw;
-  max-height: 300px;
-  min-height: 200px; }
+  border-radius: 20px; }
 
 .divLatestSize {
-  max-width: 40%;
-  min-width: 160px; }
+  max-width: 45%;
+  min-width: 110px;
+  max-height: 300px; }
 
 .div3dagsPrognoseSize {
   max-width: 45%;
-  min-width: 130px;
+  min-width: 95px;
   margin-left: 5px;
-  margin-right: 5px; }
+  margin-right: 5px;
+  max-height: 300px; }
+
+table.table-borderless {
+  text-align: center;
+  color: white;
+  margin-top: 20px; }
+
+table.table-borderless > thead > tr > th {
+  text-align: center;
+  color: white; }
+
+table.table-borderless > tbody > tr > td {
+  text-align: center;
+  color: white; }
 
 .modal {
   display: none;
