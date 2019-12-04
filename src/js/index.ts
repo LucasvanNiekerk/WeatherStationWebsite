@@ -264,10 +264,10 @@ function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: str
     .then((response: AxiosResponse<IWeather>) =>{
         if(typeOfInfo === "Temperature"){
             if(temperatureAnnotation === "Celsius"){
-                divElement.innerHTML = response.data.temperature + "°";
+                divElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
             }
             else if(temperatureAnnotation === "Fahrenheit"){
-                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "<sup>°F</sup>";
             }
         } 
         else if(typeOfInfo === "Humidity"){
