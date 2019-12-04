@@ -317,7 +317,7 @@ function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: str
                 if (temperatureAnnotation === "Celsius") {
                     divElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
                 }
-                else if(temperatureAnnotation === "Fahrenheit"){
+                else if (temperatureAnnotation === "Fahrenheit") {
                     divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "<sup>°F</sup>";
                 }
             }
@@ -400,13 +400,13 @@ function getApiPrognosisWeatherInformation(): void {
             let responseData: bulkResonse = response.data;
             let dateIndex: number = 1;
 
-        // [min temperature1, max temperature1, min humidity1, max humidity1, 
-        //  min temperature2, max temperature2, min humidity2, max humidity2, 
-        //  min temperature3, max temperature3, min humidity3, max humidity3]
-        let ar: string[] = [];
-        let temp: string[] = [];
-        let tempary: number[] = [];
-        let humary: number[] = [];
+            // [min temperature1, max temperature1, min humidity1, max humidity1, 
+            //  min temperature2, max temperature2, min humidity2, max humidity2, 
+            //  min temperature3, max temperature3, min humidity3, max humidity3]
+            let ar: string[] = [];
+            let temp: string[] = [];
+            let tempary: number[] = [];
+            let humary: number[] = [];
 
             responseData.list.forEach(weatherinfo => {
                 if (dateIndex < 4) {
@@ -422,28 +422,65 @@ function getApiPrognosisWeatherInformation(): void {
                         ar.push(Math.min.apply(null, humary));
                         ar.push(Math.max.apply(null, humary));
 
-                date.setDate(new Date().getDate() + dateIndex);
-                dateIndex++;
-                tempary = [];
-                humary = [];
-            }
-        }
+                        date.setDate(new Date().getDate() + dateIndex);
+                        dateIndex++;
+                        tempary = [];
+                        humary = [];
+                    }
+                }
 
-            for (let i = 0; i < ar.length; i++) {
-                temp[i] = toNumberToFixed(ar[i]);
-            }
+                for (let i = 0; i < ar.length; i++) {
+                    temp[i] = toNumberToFixed(ar[i]);
+                }
+                
+                ar = temp;
+                
+                prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
+                prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
+                prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+
+                var annotation: String;
+
+                if (temperatureAnnotation === "Celsius") annotation = "<sup>°C</sup>";
+                else if (temperatureAnnotation === "Fahrenheit") annotation = "<sup>°F</sup>";
+
+                prognosisTemperatureOutputElement1.innerHTML = toNumberToFixed(ar[0]) + " " + annotation + " | " + ar[1] + " " + annotation;
+                prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
+                prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+            });
+        })
+        .catch((error: AxiosError) => {
+            console.log(error.message);
+            console.log(error.code);
+            console.log(error.response);
+        });
+}
+
+function fillDropDown() {
+    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"]
+    let apiNames: string[] = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"]
+
+    for (let index = 0; index < cities.length; index++) {
+        let option: HTMLOptionElement = document.createElement('option');
+        option.value = apiNames[index]
+        option.text = cities[index];
+
+        cityDropDownElement.add(option, 0);
+    }
+    cityDropDownElement.value = currentCity;
+}
+
+function loadData(): void {
+    getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
+    getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    //loadApiData();
+}
 
 //
 // Helper functions
 //
-            ar = temp;
-
-            prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
-            prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
-            prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
 
 function generateUrl(method: string): string {
-            var annotation: String;
 
     let Url: string = thirdPartApiBaseUri;
     Url += method;
@@ -452,29 +489,17 @@ function generateUrl(method: string): string {
     Url += ",DK";
     Url += temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
     Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
-            if (temperatureAnnotation === "Celsius") annotation = "<sup>°C</sup>";
-            else if (temperatureAnnotation === "Fahrenheit") annotation = "<sup>°F</sup>";
 
     return Url;
-            prognosisTemperatureOutputElement1.innerHTML = toNumberToFixed(ar[0]) + " " + annotation + " | " + ar[1] + " " + annotation;
-            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
-        });
-    })
-    .catch((error: AxiosError) =>{
-        console.log(error.message);
-        console.log(error.code);
-        console.log(error.response);
-    });
 }
 
 function toNumberToFixed(num: string): string {
     return Number(num).toFixed(1);
 }
 
-function compareDates(firstDate: Date, secondDate: Date): boolean{
-    return firstDate.getFullYear() == secondDate.getFullYear() 
-        && firstDate.getMonth() == secondDate.getMonth() 
+function compareDates(firstDate: Date, secondDate: Date): boolean {
+    return firstDate.getFullYear() == secondDate.getFullYear()
+        && firstDate.getMonth() == secondDate.getMonth()
         && firstDate.getDate() == secondDate.getDate();
 }
 
@@ -503,7 +528,7 @@ function openRaspberryIdPopup() {
     popupElement.style.display = "block";
 }
 
-function closeRaspberryIdPopup(){
+function closeRaspberryIdPopup() {
     popupElement.style.display = "none";
 }
 
