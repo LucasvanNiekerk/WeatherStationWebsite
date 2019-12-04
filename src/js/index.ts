@@ -182,6 +182,8 @@ var myChart = new Chart(chart, {
         }
     }
 });
+
+Chart.defaults.global.defaultFontColor = "#fff";
 /*
 let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
 inputButton.addEventListener("click", function(){getRangeOfDay(date)})

@@ -36009,6 +36009,7 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
+_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 /*
 let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
 inputButton.addEventListener("click", function(){getRangeOfDay(date)})
