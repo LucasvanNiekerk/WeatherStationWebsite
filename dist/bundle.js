@@ -36168,6 +36168,7 @@ function getApiPrognosisWeatherInformation() {
         //  min temperature2, max temperature2, min humidity2, max humidity2, 
         //  min temperature3, max temperature3, min humidity3, max humidity3]
         var ar = [];
+        var temp = [];
         var tempary = [];
         var humary = [];
         responseData.list.forEach(function (weatherinfo) {
@@ -36188,17 +36189,21 @@ function getApiPrognosisWeatherInformation() {
                     humary = [];
                 }
             }
+            for (var i = 0; i < ar.length; i++) {
+                temp[i] = toNumberToFixed(ar[i]);
+            }
+            ar = temp;
             prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
             prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
             prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
-            var anno;
+            var annotation;
             if (temperatureAnnotation === "Celsius")
-                anno = "<sup>°C</sup>";
+                annotation = "<sup>°C</sup>";
             else if (temperatureAnnotation === "Fahrenheit")
-                anno = "<sup>°F</sup>";
-            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + anno + " | " + ar[1] + " " + anno;
-            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + anno + " | " + ar[5] + " " + anno;
-            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + anno + " | " + ar[9] + " " + anno;
+                annotation = "<sup>°F</sup>";
+            prognosisTemperatureOutputElement1.innerHTML = toNumberToFixed(ar[0]) + " " + annotation + " | " + ar[1] + " " + annotation;
+            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
+            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
         });
     })
         .catch(function (error) {
@@ -36206,6 +36211,9 @@ function getApiPrognosisWeatherInformation() {
         console.log(error.code);
         console.log(error.response);
     });
+}
+function toNumberToFixed(num) {
+    return Number(num).toFixed(1);
 }
 function compareDates(firstDate, secondDate) {
     return firstDate.getFullYear() == secondDate.getFullYear()
