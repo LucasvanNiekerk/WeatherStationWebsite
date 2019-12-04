@@ -5,7 +5,7 @@ import axios, {
 import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js';
 
 //
-// Interfaces
+// Interfaces 
 //
 
 interface IWeather {
@@ -14,18 +14,6 @@ interface IWeather {
     temperature: string;
     humidity: string;
     timeStamp: string;
-}
-
-interface IApiWeather{
-    LocationName: string;
-    CurrentData: ICurrentData;
-}
-
-interface ICurrentData{
-    temperature: number;
-    skyText: string;
-    humidity: number;
-    windText: string;
 }
 
 //
@@ -50,6 +38,10 @@ function onloadMethods(): void{
         browserStorage(); 
         fillDropDown();
         loadData();
+
+
+        gettemp();
+
     }, 10)
 }
 
@@ -70,6 +62,7 @@ function browserStorage(): void{
         }
         else{
             temperatureAnnotation = "Celsius";
+            localStorage.setItem("temperatureType", temperatureAnnotation);
         }
         //Change the name of the button to the annotion currently shown.
         changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
@@ -77,9 +70,12 @@ function browserStorage(): void{
         //To check what city the user wants to see information from.
         if(localStorage.getItem("currentCity") != null){
             currentCity = localStorage.getItem("currentCity");
+            console.log("localstorage current city");
+            console.log("current city:" + currentCity);
         }
         else{
             currentCity = "Roskilde";
+            localStorage.setItem("currentCity", currentCity)
         }
     }
     //If localStorage is not supported we tell the client. 
@@ -88,6 +84,9 @@ function browserStorage(): void{
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
     }
     console.log(localStorage.getItem("raspId"));
+    console.log(localStorage.getItem("temperatureType"));
+    console.log(localStorage.getItem("currentCity"));
+
 }
 
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
@@ -123,9 +122,9 @@ let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementByI
 
 let cityDropDownElement: HTMLSelectElement = <HTMLSelectElement>document.getElementById("cityDropDown");
 cityDropDownElement.addEventListener("change", ()=>{
-    displayFrontpage();
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
+    console.log(localStorage.getItem("currentCity"));
     loadApiData();
 });
 
@@ -291,49 +290,86 @@ function sumbitRaspberryId(): void{
 
 
 
-function getAPIWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void{
-    let Url: string = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+function getAPIWeatherInformation(): void{
 
-    axios.get<IApiWeather>(Url)
-    .then((response: AxiosResponse<IApiWeather>) =>{
-        console.log(response.data.CurrentData.humidity);
-        if(typeOfInfo === "Temperature"){
-            if(temperatureAnnotation === "Celsius"){
-                divElement.innerHTML = response.data.CurrentData.temperature + "°";
-            }
-            else if(temperatureAnnotation === "Fahrenheit"){
-                divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
-            }
-        } 
-        else if(typeOfInfo === "Humidity"){
-            divElement.innerHTML = response.data.CurrentData.humidity + "%";
-        }  
+    let annotion: string = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+
+    let city: string = cityDropDownElement.value;
+
+    let Url: string =  "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+
+    console.log(Url);
+
+    axios.get(Url)
+    .then((response: AxiosResponse) =>{
+
+        let responseData: string = JSON.stringify(response.data);
+
+        let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
+        let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
+
+        externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "°";    
+        externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
     })
     .catch((error: AxiosError) =>{
         console.log(error.message);
         console.log(error.code);
         console.log(error.response);
     });
+    
 }
+
+function gettemp(): void{
+    
+    let annotion: string = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+
+    let city: string = cityDropDownElement.value;
+
+    let Url: string =  "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+
+    console.log(Url);
+    let today: Date = new Date();
+    let date: string = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + " 12:00:00";
+    console.log(date);
+
+
+    /*
+    axios.get<bulResonse>(Url)
+    .then((response: AxiosResponse<bulResonse>) =>{
+        
+        
+        
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
+    */
+}
+
+
 
 
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp: string): string{
     // tF = tC * 9/5 + 32
-    return  (Number(temp) * (9/5) + 32).toFixed(1);
+    return (Number(temp) * (9/5) + 32).toFixed(1);
+}
+
+function convertToCelcius(temp: string): string{
+    return ((Number(temp) - 32) / (9/5)).toFixed(1);
 }
 
 function loadData(): void{
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+    //loadApiData();
 }
 
 function loadApiData(): void{
-    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation();
 }
 
 function openRaspberryIdPopup(){
@@ -341,13 +377,89 @@ function openRaspberryIdPopup(){
 }
 
 function fillDropDown(){
-    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense", ]
+    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"]
+    let apiNames: string[] = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"]
     
     for (let index = 0; index < cities.length; index++) {
         let option: HTMLOptionElement = document.createElement('option');
-        option.text = option.value = cities[index].toLowerCase();
+        option.value = apiNames[index]
+        option.text = cities[index];
+        
         cityDropDownElement.add(option, 0);
     }
-    
     cityDropDownElement.value = currentCity;
+}
+
+
+
+interface Coord
+{
+    lon: number;
+    lat: number;
+}
+
+interface Weather
+{
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+}
+
+interface Main
+{
+    temp: number;
+    pressure: number;
+    humidity: number;
+    temp_min: number;
+    temp_max: number;
+}
+
+interface Wind
+{
+    speed: number;
+    deg: number;
+}
+
+interface Clouds
+{
+    all: number;
+}
+
+interface Sys
+{
+    type: number;
+    id: number;
+    message: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+}
+
+interface ResponseWeather
+{
+    coord: Coord;
+    weather: Weather[];
+    base: string;
+    main: Main;
+    visibility: number;
+    wind: Wind;
+    clouds: Clouds;
+    dt: number;
+    sys: Sys;
+    id: number;
+    name: string;
+    cod: number;
+}
+
+
+
+interface bulResonse{
+    list: Ilist[];
+}
+
+interface Ilist{
+    dt: number;
+    main: Main;
+    dt_txt: string;
 }
