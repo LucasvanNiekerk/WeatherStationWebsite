@@ -35883,6 +35883,10 @@ var raspberryId = "";
 var currentCity = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
+// Runs following functions 10 milliseconds after the page / window has loaded.
+// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
+// We fill our dropdown dynamically.
+// We get the data from our api and openweathermap api.
 function onloadMethods() {
     setTimeout(function () {
         browserStorage();
@@ -36118,6 +36122,7 @@ function sumbitRaspberryId() {
         _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
             .then(function (response) {
             if (response.data) {
+                // Since we now know that the id is valid we save it.
                 raspberryId = tempId;
                 // We save the id in local storage, so the user does not have to enter it everytime they visit the website. Afterwards we close the popup.
                 localStorage.setItem("raspId", raspberryId);
@@ -36125,6 +36130,8 @@ function sumbitRaspberryId() {
                 loadData();
                 // Close the popup.
                 closeRaspberryIdPopup();
+                //Since we now know that the id is valid we save it.
+                raspberryId = tempId;
             }
             else {
                 raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
@@ -36265,7 +36272,7 @@ interface Coord
 
 interface Weather {
     id: number;
-    main: string;
+    main: string;s
     description: string;
     icon: string;
 }
