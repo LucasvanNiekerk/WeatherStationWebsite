@@ -35957,7 +35957,7 @@ cityDropDownElement.addEventListener("change", function () {
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
-    loadApiData();
+    //loadApiData();
 });
 //
 // Chart
@@ -36011,29 +36011,39 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
-/*
-let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
-inputButton.addEventListener("click", function(){getRangeOfDay(date)})
- ​
- ​
- ​
-function getRangeOfDay(date: Date): void{
- ​
-    let Url: string = baseUri + raspberryId + "/";
-    axios.get<IWeather[]>(Url)
-    .then((response: AxiosResponse) =>{
-        if(response.data){
- ​
-        }})
+var inputButton = document.getElementById("inputButton");
+inputButton.addEventListener("click", get7Days);
+function getRangeOfDay(date) {
+    var i = 0;
+    var resultTemperature = 0;
+    var resultHumidity = 0;
+    var avgTemperature = 0;
+    var avgHumidity = 0;
+    var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        console.log(response.data);
+        response.data.forEach(function (weatherInfo) {
+            i++;
+            resultTemperature += Number(weatherInfo.temperature);
+            resultHumidity += Number(weatherInfo.humidity);
+        });
+        if (i > 0) {
+            avgTemperature = resultTemperature / i;
+            avgHumidity = resultHumidity / i;
+        }
+        console.log("temp: " + avgTemperature);
+        console.log("hum: " + avgHumidity);
+    });
 }
- ​
-function get7Days(): void{
-    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
-    let date: Date = new Date(dayInputField.value);
-    let dateList: string[]
+function get7Days() {
+    var dayInputField = document.getElementById("dayInputField");
+    var date = new Date(dayInputField.value);
+    for (var i = 0; i < 7; i++) {
+        getRangeOfDay(date);
+        date.setDate(date.getDate() - 1);
+    }
 }
- ​
-*/
 //
 // Buttons
 //
