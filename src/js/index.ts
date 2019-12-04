@@ -229,6 +229,7 @@ function getRangeOfDay(date: Date, index: number): void {
     let avgTemperature: number = 0;
     let avgHumidity: number = 0;
     let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    console.log(Url);
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
 
@@ -245,25 +246,28 @@ function getRangeOfDay(date: Date, index: number): void {
 
             }
             
-            console.log("temp: " + avgTemperature);
-            console.log("hum: " + avgHumidity);
-            //myChart.data.labels[index] = date.toLocaleString('default' );
+            //console.log("temp: " + avgTemperature);
+            //console.log("hum: " + avgHumidity);
+            //console.log(index);
             myChart.data.datasets[0].data[index] = avgTemperature;  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
-
+            
         });        
+        var options = { year: 'numeric', month: 'short', day: '2-digit' };
+        myChart.data.labels[index] = date.toLocaleString('da-DK', options);
+        myChart.update();
 }
 
 function get7Days(): void {
     let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
     let date: Date = new Date(dayInputField.value);
-   
+    date.setDate(date.getDate() - 6);
 
     for (let i = 0; i < 7; i++) {
         getRangeOfDay(date, i);
   
-        date.setDate(date.getDate() - 1);
+        date.setDate(date.getDate() + 1);
     }
 }
 
