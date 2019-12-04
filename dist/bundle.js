@@ -35969,6 +35969,9 @@ cityDropDownElement.addEventListener("change", function () {
     console.log(localStorage.getItem("currentCity"));
     loadApiData();
 });
+var prognosisday1 = document.getElementById("prognosisDay1");
+var prognosisday2 = document.getElementById("prognosisDay2");
+var prognosisday3 = document.getElementById("prognosisDay3");
 //
 // Chart
 //
@@ -36149,6 +36152,7 @@ function sumbitRaspberryId() {
 }
 function getAPIWeatherInformation() {
     var Url = generateUrl("weather");
+    console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         var responseData = JSON.stringify(response.data);
@@ -36164,7 +36168,7 @@ function getAPIWeatherInformation() {
     })
         .catch(errorMessage);
 }
-function getApiPrognosisWeatherInformation() {
+function getApiPrognosisWeatherInformation(daysToGet) {
     var Url = generateUrl("forecast");
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
@@ -36177,49 +36181,51 @@ function getApiPrognosisWeatherInformation() {
         //  min temperature2, max temperature2, min humidity2, max humidity2, 
         //  min temperature3, max temperature3, min humidity3, max humidity3]
         var ar = [];
-        var temp = [];
         var tempary = [];
         var humary = [];
+        var dates = [];
         responseData.list.forEach(function (weatherinfo) {
-            if (dateIndex < 4) {
+            if (dateIndex <= daysToGet) {
                 var currentDate = new Date(weatherinfo.dt_txt);
                 if (compareDates(currentDate, date)) {
                     tempary.push(weatherinfo.main.temp);
                     humary.push(weatherinfo.main.humidity);
                 }
                 else {
-                    ar.push(Math.min.apply(null, tempary));
-                    ar.push(Math.max.apply(null, tempary));
-                    ar.push(Math.min.apply(null, humary));
-                    ar.push(Math.max.apply(null, humary));
-                    date.setDate(new Date().getDate() + dateIndex);
-                    dateIndex++;
-                    tempary = [];
-                    humary = [];
+                    if (tempary.length > 0) {
+                        ar.push(Math.min.apply(null, tempary));
+                        ar.push(Math.max.apply(null, tempary));
+                        ar.push(Math.min.apply(null, humary));
+                        ar.push(Math.max.apply(null, humary));
+                        dates.push(currentDate);
+                        date.setDate(new Date().getDate() + dateIndex);
+                        dateIndex++;
+                        tempary = [];
+                        humary = [];
+                    }
                 }
             }
-            for (var i = 0; i < ar.length; i++) {
-                temp[i] = toNumberToFixed(ar[i]);
-            }
-            ar = temp;
-            prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
-            prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
-            prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
-            var annotation;
-            if (temperatureAnnotation === "Celsius")
-                annotation = "<sup>°C</sup>";
-            else if (temperatureAnnotation === "Fahrenheit")
-                annotation = "<sup>°F</sup>";
-            prognosisTemperatureOutputElement1.innerHTML = toNumberToFixed(ar[0]) + " " + annotation + " | " + ar[1] + " " + annotation;
-            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
         });
+        fillPrognosisElements(ar, dates);
     })
-        .catch(function (error) {
-        console.log(error.message);
-        console.log(error.code);
-        console.log(error.response);
-    });
+        .catch(errorMessage);
+}
+function fillPrognosisElements(ar, dates) {
+    var temp = [];
+    for (var i = 0; i < ar.length; i++) {
+        temp[i] = toNumberToFixed(ar[i], 1);
+    }
+    ar = temp;
+    prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
+    prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
+    prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+    var annotation = getAnnotion();
+    prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+    prognosisday1.innerHTML = formatDate(dates[0]);
+    prognosisday2.innerHTML = formatDate(dates[1]);
+    prognosisday3.innerHTML = formatDate(dates[2]);
 }
 function fillDropDown() {
     var cities = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"];
@@ -36235,11 +36241,29 @@ function fillDropDown() {
 function loadData() {
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-    //loadApiData();
+    loadApiData();
 }
 //
 // Helper functions
 //
+function getAnnotion() {
+    if (temperatureAnnotation === "Celsius")
+        return "<sup>°C</sup>";
+    else if (temperatureAnnotation === "Fahrenheit")
+        return "<sup>°F</sup>";
+}
+function formatDate(date) {
+    var monthNames = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Okt",
+        "Nov", "Dec"
+    ];
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+    return day + '. ' + monthNames[monthIndex] + ' ' + year;
+}
 function generateUrl(method) {
     var Url = thirdPartApiBaseUri;
     Url += method;
@@ -36250,8 +36274,8 @@ function generateUrl(method) {
     Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
     return Url;
 }
-function toNumberToFixed(num) {
-    return Number(num).toFixed(1);
+function toNumberToFixed(num, amountOfDecimals) {
+    return Number(num).toFixed(amountOfDecimals);
 }
 function compareDates(firstDate, secondDate) {
     return firstDate.getFullYear() == secondDate.getFullYear()
@@ -36273,7 +36297,7 @@ function convertToCelcius(temp) {
 }
 function loadApiData() {
     getAPIWeatherInformation();
-    getApiPrognosisWeatherInformation();
+    getApiPrognosisWeatherInformation(3);
 }
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
