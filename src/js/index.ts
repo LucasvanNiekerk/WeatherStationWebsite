@@ -1,7 +1,4 @@
-import axios, {
-    AxiosResponse,
-    AxiosError
-} from "../../node_modules/axios/index";
+import axios, { AxiosResponse, AxiosError } from "../../node_modules/axios/index";
 import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js';
 
 //
@@ -14,6 +11,25 @@ interface IWeather {
     temperature: string;
     humidity: string;
     timeStamp: string;
+}
+
+interface bulkResonse{
+    list: Ilist[];
+}
+
+interface Ilist{
+    dt: number;
+    main: Main;
+    dt_txt: string;
+}
+
+interface Main
+{
+    temp: number;
+    pressure: number;
+    humidity: number;
+    temp_min: number;
+    temp_max: number;
 }
 
 //
@@ -38,9 +54,6 @@ function onloadMethods(): void{
         browserStorage(); 
         fillDropDown();
         loadData();
-
-
-        gettemp();
 
     }, 10)
 }
@@ -125,7 +138,7 @@ cityDropDownElement.addEventListener("change", ()=>{
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
-    loadApiData();
+    //loadApiData();
 });
 
 
@@ -323,7 +336,6 @@ function getAPIWeatherInformation(): void{
 
     let Url: string =  "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
 
-    console.log(Url);
 
     axios.get(Url)
     .then((response: AxiosResponse) =>{
@@ -344,35 +356,72 @@ function getAPIWeatherInformation(): void{
     
 }
 
-function gettemp(): void{
+function getApiPrognosisWeatherInformation(): void{
     
     let annotion: string = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
 
     let city: string = cityDropDownElement.value;
 
-    let Url: string =  "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+    let Url: string =  "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";   
 
-    console.log(Url);
-    let today: Date = new Date();
-    let date: string = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + " 12:00:00";
-    console.log(date);
+    axios.get<bulkResonse>(Url)
+    .then((response: AxiosResponse<bulkResonse>) =>{
+        // Current date used to compare to data from 3rd parti api.
+        let date: Date = new Date();
 
+        // The data we got from 3rd parti api.
+        let responseData: bulkResonse = response.data;
+        let dateIndex: number = 1;
 
-    /*
-    axios.get<bulResonse>(Url)
-    .then((response: AxiosResponse<bulResonse>) =>{
+        // [min temperature1, max temperature1, min humidity1, max humidity1, 
+        //  min temperature2, max temperature2, min humidity2, max humidity2, 
+        //  min temperature3, max temperature3, min humidity3, max humidity3]
+        let ar: string[] = [];
+        let tempary: number[] = [];
+        let humary: number[] = [];
+
+        responseData.list.forEach(weatherinfo => {
+            if(dateIndex < 4){
+            let currentDate: Date = new Date(weatherinfo.dt_txt);
+            
+            if(compareDates(currentDate, date)){
+                tempary.push(weatherinfo.main.temp);
+                humary.push(weatherinfo.main.humidity);
+            }
+            else{
+                ar.push(Math.min.apply(null, tempary));
+                ar.push(Math.max.apply(null, tempary));
+                ar.push(Math.min.apply(null, humary));
+                ar.push(Math.max.apply(null, humary));
+
+                date.setDate(new Date().getDate() + dateIndex);
+                dateIndex++;
+                tempary = [];
+                humary = [];
+            }
+        }
         
-        
-        
+
+        prognosisHumidityOutputElement1.innerHTML = ar[2] + " | " + ar[3];
+        prognosisHumidityOutputElement2.innerHTML = ar[6] + " | " + ar[7];
+        prognosisHumidityOutputElement3.innerHTML = ar[10] + " | " + ar[11];
+        prognosisTemperatureOutputElement1.innerHTML = ar[0] + " | " + ar[1];
+        prognosisTemperatureOutputElement2.innerHTML = ar[4] + " | " + ar[5];
+        prognosisTemperatureOutputElement3.innerHTML = ar[8] + " | " + ar[9];
+        });
     })
     .catch((error: AxiosError) =>{
         console.log(error.message);
         console.log(error.code);
         console.log(error.response);
     });
-    */
 }
 
+function compareDates(firstDate: Date, secondDate: Date): boolean{
+    return firstDate.getFullYear() == secondDate.getFullYear() 
+        && firstDate.getMonth() == secondDate.getMonth() 
+        && firstDate.getDate() == secondDate.getDate();
+}
 
 
 
@@ -395,6 +444,7 @@ function loadData(): void{
 
 function loadApiData(): void{
     getAPIWeatherInformation();
+    getApiPrognosisWeatherInformation();
 }
 
 function openRaspberryIdPopup(){
@@ -416,7 +466,11 @@ function fillDropDown(){
 }
 
 
+//
+// OpenWeatherMap API models. (We only use small part).
+//
 
+/*
 interface Coord
 {
     lon: number;
@@ -461,6 +515,7 @@ interface Sys
     sunset: number;
 }
 
+
 interface ResponseWeather
 {
     coord: Coord;
@@ -476,15 +531,4 @@ interface ResponseWeather
     name: string;
     cod: number;
 }
-
-
-
-interface bulResonse{
-    list: Ilist[];
-}
-
-interface Ilist{
-    dt: number;
-    main: Main;
-    dt_txt: string;
-}
+*/

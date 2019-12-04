@@ -35888,7 +35888,6 @@ function onloadMethods() {
         browserStorage();
         fillDropDown();
         loadData();
-        gettemp();
     }, 10);
 }
 function browserStorage() {
@@ -35957,7 +35956,7 @@ cityDropDownElement.addEventListener("change", function () {
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
-    loadApiData();
+    //loadApiData();
 });
 //
 // Chart
@@ -36126,7 +36125,6 @@ function getAPIWeatherInformation() {
     var annotion = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
     var city = cityDropDownElement.value;
     var Url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
-    console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         var responseData = JSON.stringify(response.data);
@@ -36141,27 +36139,59 @@ function getAPIWeatherInformation() {
         console.log(error.response);
     });
 }
-function gettemp() {
+function getApiPrognosisWeatherInformation() {
     var annotion = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
     var city = cityDropDownElement.value;
     var Url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
-    console.log(Url);
-    var today = new Date();
-    var date = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + " 12:00:00";
-    console.log(date);
-    /*
-    axios.get<bulResonse>(Url)
-    .then((response: AxiosResponse<bulResonse>) =>{
-        
-        
-        
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        // Current date used to compare to data from 3rd parti api.
+        var date = new Date();
+        // The data we got from 3rd parti api.
+        var responseData = response.data;
+        var dateIndex = 1;
+        // [min temperature1, max temperature1, min humidity1, max humidity1, 
+        //  min temperature2, max temperature2, min humidity2, max humidity2, 
+        //  min temperature3, max temperature3, min humidity3, max humidity3]
+        var ar = [];
+        var tempary = [];
+        var humary = [];
+        responseData.list.forEach(function (weatherinfo) {
+            if (dateIndex < 4) {
+                var currentDate = new Date(weatherinfo.dt_txt);
+                if (compareDates(currentDate, date)) {
+                    tempary.push(weatherinfo.main.temp);
+                    humary.push(weatherinfo.main.humidity);
+                }
+                else {
+                    ar.push(Math.min.apply(null, tempary));
+                    ar.push(Math.max.apply(null, tempary));
+                    ar.push(Math.min.apply(null, humary));
+                    ar.push(Math.max.apply(null, humary));
+                    date.setDate(new Date().getDate() + dateIndex);
+                    dateIndex++;
+                    tempary = [];
+                    humary = [];
+                }
+            }
+            prognosisHumidityOutputElement1.innerHTML = ar[2] + " | " + ar[3];
+            prognosisHumidityOutputElement2.innerHTML = ar[6] + " | " + ar[7];
+            prognosisHumidityOutputElement3.innerHTML = ar[10] + " | " + ar[11];
+            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " | " + ar[1];
+            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " | " + ar[5];
+            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " | " + ar[9];
+        });
     })
-    .catch((error: AxiosError) =>{
+        .catch(function (error) {
         console.log(error.message);
         console.log(error.code);
         console.log(error.response);
     });
-    */
+}
+function compareDates(firstDate, secondDate) {
+    return firstDate.getFullYear() == secondDate.getFullYear()
+        && firstDate.getMonth() == secondDate.getMonth()
+        && firstDate.getDate() == secondDate.getDate();
 }
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp) {
@@ -36179,6 +36209,7 @@ function loadData() {
 }
 function loadApiData() {
     getAPIWeatherInformation();
+    getApiPrognosisWeatherInformation();
 }
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
@@ -36194,6 +36225,71 @@ function fillDropDown() {
     }
     cityDropDownElement.value = currentCity;
 }
+//
+// OpenWeatherMap API models. (We only use small part).
+//
+/*
+interface Coord
+{
+    lon: number;
+    lat: number;
+}
+
+interface Weather
+{
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+}
+
+interface Main
+{
+    temp: number;
+    pressure: number;
+    humidity: number;
+    temp_min: number;
+    temp_max: number;
+}
+
+interface Wind
+{
+    speed: number;
+    deg: number;
+}
+
+interface Clouds
+{
+    all: number;
+}
+
+interface Sys
+{
+    type: number;
+    id: number;
+    message: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+}
+
+
+interface ResponseWeather
+{
+    coord: Coord;
+    weather: Weather[];
+    base: string;
+    main: Main;
+    visibility: number;
+    wind: Wind;
+    clouds: Clouds;
+    dt: number;
+    sys: Sys;
+    id: number;
+    name: string;
+    cod: number;
+}
+*/ 
 
 
 /***/ }),
