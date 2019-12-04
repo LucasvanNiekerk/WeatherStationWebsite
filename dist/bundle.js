@@ -35960,7 +35960,7 @@ cityDropDownElement.addEventListener("change", function () {
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
-    //loadApiData();
+    loadApiData();
 });
 //
 // Chart
@@ -36184,12 +36184,17 @@ function getApiPrognosisWeatherInformation() {
                     humary = [];
                 }
             }
-            prognosisHumidityOutputElement1.innerHTML = ar[2] + " | " + ar[3];
-            prognosisHumidityOutputElement2.innerHTML = ar[6] + " | " + ar[7];
-            prognosisHumidityOutputElement3.innerHTML = ar[10] + " | " + ar[11];
-            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " | " + ar[1];
-            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " | " + ar[5];
-            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " | " + ar[9];
+            prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
+            prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
+            prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+            var anno;
+            if (temperatureAnnotation === "Celsius")
+                anno = "<sup>°C</sup>";
+            else if (temperatureAnnotation === "Fahrenheit")
+                anno = "<sup>°F</sup>";
+            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + anno + " | " + ar[1] + " " + anno;
+            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + anno + " | " + ar[5] + " " + anno;
+            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + anno + " | " + ar[9] + " " + anno;
         });
     })
         .catch(function (error) {
@@ -36216,7 +36221,7 @@ function loadData() {
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
     getAPIWeatherInformation();
-    //loadApiData();
+    loadApiData();
 }
 function loadApiData() {
     getAPIWeatherInformation();
