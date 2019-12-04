@@ -102,13 +102,18 @@
 
   <!--Older data opening div-->
   <div id="OlderData" style="display: none; margin: 50px; margin-top: 50px; margin-bottom: 50px;">
-    <input type="date" id="dayInputField">
-    <button id="inputButton">Submit</button>
     <div class='divBox' style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+      
+      <input class="form-control inputStyle" type="date" id="dayInputField">
+      <br>
         <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
             <canvas id="chart"></canvas>
         </div>
+
         <div class='divBox' style=" margin-top: 50px; padding: 10px;">
+
+          <table class="table table-borderless" id="getAllOutputTable"></table>
+
             <table class="table table-borderless">
                 <thead>
                 <tr>

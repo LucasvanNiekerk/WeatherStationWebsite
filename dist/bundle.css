@@ -56,6 +56,14 @@ hr {
   margin-right: 5px;
   max-height: 300px; }
 
+input.inputStyle {
+  color: white;
+  background-color: #0000005e;
+  text-align: center;
+  width: 50%;
+  min-width: 200px;
+  margin: auto; }
+
 table.table-borderless {
   text-align: center;
   color: white;
