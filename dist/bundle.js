@@ -36045,6 +36045,7 @@ function getRangeOfDay(date, index) {
         }
         console.log("temp: " + avgTemperature);
         console.log("hum: " + avgHumidity);
+        //myChart.data.labels[index] = date.toLocaleString('default' );
         myChart.data.datasets[0].data[index] = avgTemperature;
         myChart.data.datasets[1].data[index] = avgHumidity;
         myChart.update();

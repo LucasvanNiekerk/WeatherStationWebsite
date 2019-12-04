@@ -218,8 +218,6 @@ Chart.defaults.global.defaultFontColor = "#fff";
 let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
 inputButton.addEventListener("click", get7Days)
 
-
-
 function getRangeOfDay(date: Date, index: number): void {
     let i: number = 0;
     let resultTemperature: number = 0;
@@ -230,6 +228,7 @@ function getRangeOfDay(date: Date, index: number): void {
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
 
+            
             //console.log(response.data);
             response.data.forEach((weatherInfo: IWeather) => {
                 i++;
@@ -241,16 +240,15 @@ function getRangeOfDay(date: Date, index: number): void {
                 avgHumidity = resultHumidity / i;
 
             }
+            
             console.log("temp: " + avgTemperature);
             console.log("hum: " + avgHumidity);
-            
+            //myChart.data.labels[index] = date.toLocaleString('default' );
             myChart.data.datasets[0].data[index] = avgTemperature;  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
 
-        }) 
-        
-        
+        });        
 }
 
 function get7Days(): void {
@@ -264,6 +262,8 @@ function get7Days(): void {
         date.setDate(date.getDate() - 1);
     }
 }
+
+
 
 
 //
