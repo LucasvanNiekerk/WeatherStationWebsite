@@ -36131,7 +36131,12 @@ function getAPIWeatherInformation() {
         var responseData = JSON.stringify(response.data);
         var temperature = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         var humidity = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
-        externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "°";
+        if (temperatureAnnotation === "Celsius") {
+            externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
+        }
+        else if (temperatureAnnotation === "Fahrenheit") {
+            externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
+        }
         externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
     })
         .catch(function (error) {
@@ -36174,6 +36179,7 @@ function loadData() {
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation();
     //loadApiData();
 }
 function loadApiData() {

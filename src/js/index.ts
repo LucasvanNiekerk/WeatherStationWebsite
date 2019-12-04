@@ -333,7 +333,13 @@ function getAPIWeatherInformation(): void{
         let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
 
-        externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "°";    
+        if (temperatureAnnotation === "Celsius") {
+            externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
+        }
+        else if (temperatureAnnotation === "Fahrenheit") {
+            externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
+        }
+
         externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
     })
     .catch((error: AxiosError) =>{
@@ -390,6 +396,7 @@ function loadData(): void{
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation();
     //loadApiData();
 }
 
