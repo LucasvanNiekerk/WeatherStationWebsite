@@ -411,7 +411,6 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
         .then((response: AxiosResponse<bulkResonse>) => {
             // Current date used to compare to data from 3rd parti api.
             let date: Date = new Date();
-            date.setDate(new Date().getDate());
 
             // The data we got from 3rd parti api.
             let responseData: bulkResonse = response.data;
@@ -421,7 +420,6 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
             //  min temperature2, max temperature2, min humidity2, max humidity2, 
             //  min temperature3, max temperature3, min humidity3, max humidity3]
             let ar: string[] = [];
-            let temp: string[] = [];
             let tempary: number[] = [];
             let humary: number[] = [];
             let dates: Date[] = [];
@@ -451,31 +449,34 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
                 }
             });
 
-
-            for (let i = 0; i < ar.length; i++) {
-                temp[i] = toNumberToFixed(ar[i]);
-            }
-
-            ar = temp;
-
-            prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
-            prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
-            prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
-
-            var annotation: String = getAnnotion();
-
-            
-
-            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
-            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
-
-            prognosisday1.innerHTML = formatDate(dates[0]);
-            prognosisday2.innerHTML = formatDate(dates[1]);
-            prognosisday3.innerHTML = formatDate(dates[2]);
-
+            fillPrognosisElements(ar, dates);
         })
         .catch(errorMessage);
+}
+
+function fillPrognosisElements(ar: string[], dates: Date[]){
+    
+    let temp: string[] = [];
+
+    for (let i = 0; i < ar.length; i++) {
+        temp[i] = toNumberToFixed(ar[i]);
+    }
+
+    ar = temp;
+
+    prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
+    prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
+    prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+
+    let annotation: string = getAnnotion();            
+
+    prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+
+    prognosisday1.innerHTML = formatDate(dates[0]);
+    prognosisday2.innerHTML = formatDate(dates[1]);
+    prognosisday3.innerHTML = formatDate(dates[2]);
 }
 
 function fillDropDown() {
@@ -502,7 +503,7 @@ function loadData(): void {
 // Helper functions
 //
 
-function getAnnotion(): String{
+function getAnnotion(): string{
     if (temperatureAnnotation === "Celsius") return "<sup>°C</sup>";
     else if (temperatureAnnotation === "Fahrenheit") return "<sup>°F</sup>";
 }
