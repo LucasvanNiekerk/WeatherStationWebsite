@@ -155,6 +155,10 @@ cityDropDownElement.addEventListener("change", () => {
     loadApiData();
 });
 
+let prognosisday1: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay1");
+let prognosisday2: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay2");
+let prognosisday3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay3");
+
 
 //
 // Chart
@@ -368,6 +372,9 @@ function sumbitRaspberryId(): void {
 function getAPIWeatherInformation(): void {
     let Url: string = generateUrl("weather");
 
+
+    console.log(Url);
+
     axios.get(Url)
         .then((response: AxiosResponse) => {
 
@@ -388,13 +395,14 @@ function getAPIWeatherInformation(): void {
 }
 
 
-function getApiPrognosisWeatherInformation(): void {
+function getApiPrognosisWeatherInformation(daysToGet: number): void {
     let Url: string = generateUrl("forecast");
 
     axios.get<bulkResonse>(Url)
         .then((response: AxiosResponse<bulkResonse>) => {
             // Current date used to compare to data from 3rd parti api.
             let date: Date = new Date();
+            date.setDate(new Date().getDate());
 
             // The data we got from 3rd parti api.
             let responseData: bulkResonse = response.data;
@@ -407,9 +415,10 @@ function getApiPrognosisWeatherInformation(): void {
             let temp: string[] = [];
             let tempary: number[] = [];
             let humary: number[] = [];
+            let dates: Date[] = [];
 
             responseData.list.forEach(weatherinfo => {
-                if (dateIndex < 4) {
+                if (dateIndex <= daysToGet) {
                     let currentDate: Date = new Date(weatherinfo.dt_txt);
 
                     if (compareDates(currentDate, date)) {
@@ -417,43 +426,47 @@ function getApiPrognosisWeatherInformation(): void {
                         humary.push(weatherinfo.main.humidity);
                     }
                     else {
-                        ar.push(Math.min.apply(null, tempary));
-                        ar.push(Math.max.apply(null, tempary));
-                        ar.push(Math.min.apply(null, humary));
-                        ar.push(Math.max.apply(null, humary));
+                        if (tempary.length > 0) {
+                            ar.push(Math.min.apply(null, tempary));
+                            ar.push(Math.max.apply(null, tempary));
+                            ar.push(Math.min.apply(null, humary));
+                            ar.push(Math.max.apply(null, humary));
+                            dates.push(currentDate);
 
-                        date.setDate(new Date().getDate() + dateIndex);
-                        dateIndex++;
-                        tempary = [];
-                        humary = [];
+                            date.setDate(new Date().getDate() + dateIndex);
+                            dateIndex++;
+                            tempary = [];
+                            humary = [];
+                        }
                     }
                 }
-
-                for (let i = 0; i < ar.length; i++) {
-                    temp[i] = toNumberToFixed(ar[i]);
-                }
-                
-                ar = temp;
-                
-                prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
-                prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
-                prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
-
-                var annotation: String;
-
-                if (temperatureAnnotation === "Celsius") annotation = "<sup>°C</sup>";
-                else if (temperatureAnnotation === "Fahrenheit") annotation = "<sup>°F</sup>";
-
-                prognosisTemperatureOutputElement1.innerHTML = toNumberToFixed(ar[0]) + " " + annotation + " | " + ar[1] + " " + annotation;
-                prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-                prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
             });
+
+
+            for (let i = 0; i < ar.length; i++) {
+                temp[i] = toNumberToFixed(ar[i]);
+            }
+
+            ar = temp;
+
+            prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
+            prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
+            prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+
+            var annotation: String = getAnnotion();
+
+            
+
+            prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
+            prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
+            prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+
+            prognosisday1.innerHTML = formatDate(dates[0]);
+            prognosisday2.innerHTML = formatDate(dates[1]);
+            prognosisday3.innerHTML = formatDate(dates[2]);
+
         })
-        .catch((error: AxiosError) => {
-            console.log(error.message);
-            console.log(error.code);
-            console.log(error.response);
-        });
+        .catch(errorMessage);
 }
 
 function fillDropDown() {
@@ -473,12 +486,33 @@ function fillDropDown() {
 function loadData(): void {
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-    //loadApiData();
+    loadApiData();
 }
 
 //
 // Helper functions
 //
+
+function getAnnotion(): String{
+    if (temperatureAnnotation === "Celsius") return "<sup>°C</sup>";
+    else if (temperatureAnnotation === "Fahrenheit") return "<sup>°F</sup>";
+}
+
+function formatDate(date: Date) {
+    var monthNames = [
+      "Jan", "Feb", "Mar",
+      "Apr", "May", "Jun", "Jul",
+      "Aug", "Sep", "Okt",
+      "Nov", "Dec"
+    ];
+  ​
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+  ​
+    return day + '. ' + monthNames[monthIndex] + ' ' + year;
+}
+  
 
 function generateUrl(method: string): string {
 
@@ -521,7 +555,7 @@ function convertToCelcius(temp: string): string {
 
 function loadApiData(): void {
     getAPIWeatherInformation();
-    getApiPrognosisWeatherInformation();
+    getApiPrognosisWeatherInformation(3);
 }
 
 function openRaspberryIdPopup() {
