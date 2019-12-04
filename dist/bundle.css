@@ -35,6 +35,9 @@ hr {
 .divText {
   font-size: calc(25px + 2.5vw); }
 
+.divText3days {
+  font-size: calc(2px + 2.5vw); }
+
 .divBox {
   background-color: #0000005e;
   display: block;
@@ -100,8 +103,7 @@ table.table-borderless > tbody > tr > td {
 
 sup {
   vertical-align: super;
-  font-size: 20px; }
+  font-size: calc(2px + 1vw); }
 
-/* width */
 ::-webkit-scrollbar {
   display: none; }

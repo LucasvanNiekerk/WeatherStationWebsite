@@ -35883,10 +35883,6 @@ var raspberryId = "";
 var currentCity = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
-// Runs following functions 10 milliseconds after the page / window has loaded.
-// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
-// We fill our dropdown dynamically.
-// We get the data from our api and openweathermap api.
 function onloadMethods() {
     setTimeout(function () {
         browserStorage();
@@ -35967,7 +35963,7 @@ cityDropDownElement.addEventListener("change", function () {
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
-    //loadApiData();
+    loadApiData();
 });
 //
 // Chart
@@ -36022,29 +36018,39 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
     }
 });
 _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
-/*
-let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
-inputButton.addEventListener("click", function(){getRangeOfDay(date)})
- ​
- ​
- ​
-function getRangeOfDay(date: Date): void{
- ​
-    let Url: string = baseUri + raspberryId + "/";
-    axios.get<IWeather[]>(Url)
-    .then((response: AxiosResponse) =>{
-        if(response.data){
- ​
-        }})
+var inputButton = document.getElementById("inputButton");
+inputButton.addEventListener("click", get7Days);
+function getRangeOfDay(date) {
+    var i = 0;
+    var resultTemperature = 0;
+    var resultHumidity = 0;
+    var avgTemperature = 0;
+    var avgHumidity = 0;
+    var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        console.log(response.data);
+        response.data.forEach(function (weatherInfo) {
+            i++;
+            resultTemperature += Number(weatherInfo.temperature);
+            resultHumidity += Number(weatherInfo.humidity);
+        });
+        if (i > 0) {
+            avgTemperature = resultTemperature / i;
+            avgHumidity = resultHumidity / i;
+        }
+        console.log("temp: " + avgTemperature);
+        console.log("hum: " + avgHumidity);
+    });
 }
- ​
-function get7Days(): void{
-    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
-    let date: Date = new Date(dayInputField.value);
-    let dateList: string[]
+function get7Days() {
+    var dayInputField = document.getElementById("dayInputField");
+    var date = new Date(dayInputField.value);
+    for (var i = 0; i < 7; i++) {
+        getRangeOfDay(date);
+        date.setDate(date.getDate() - 1);
+    }
 }
- ​
-*/
 //
 // Buttons
 //
@@ -36112,7 +36118,6 @@ function sumbitRaspberryId() {
         _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
             .then(function (response) {
             if (response.data) {
-                // Since we now know that the id is valid we save it.
                 raspberryId = tempId;
                 // We save the id in local storage, so the user does not have to enter it everytime they visit the website. Afterwards we close the popup.
                 localStorage.setItem("raspId", raspberryId);
@@ -36258,16 +36263,14 @@ interface Coord
     lat: number;
 }
 
-interface Weather
-{
+interface Weather {
     id: number;
     main: string;
     description: string;
     icon: string;
 }
 
-interface Main
-{
+interface Main {
     temp: number;
     pressure: number;
     humidity: number;
@@ -36275,19 +36278,16 @@ interface Main
     temp_max: number;
 }
 
-interface Wind
-{
+interface Wind {
     speed: number;
     deg: number;
 }
 
-interface Clouds
-{
+interface Clouds {
     all: number;
 }
 
-interface Sys
-{
+interface Sys {
     type: number;
     id: number;
     message: number;
@@ -36311,7 +36311,7 @@ interface ResponseWeather
     name: string;
     cod: number;
 }
-*/ 
+*/
 
 
 /***/ }),
