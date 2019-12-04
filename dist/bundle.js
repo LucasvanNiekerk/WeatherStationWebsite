@@ -35888,6 +35888,7 @@ function onloadMethods() {
         browserStorage();
         fillDropDown();
         loadData();
+        gettemp();
     }, 10);
 }
 function browserStorage() {
@@ -35906,13 +35907,17 @@ function browserStorage() {
         }
         else {
             temperatureAnnotation = "Celsius";
+            localStorage.setItem("temperatureType", temperatureAnnotation);
         }
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
             currentCity = localStorage.getItem("currentCity");
+            console.log("localstorage current city");
+            console.log("current city:" + currentCity);
         }
         else {
             currentCity = "Roskilde";
+            localStorage.setItem("currentCity", currentCity);
         }
     }
     //If localStorage is not supported we tell the client. 
@@ -35921,6 +35926,8 @@ function browserStorage() {
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
     }
     console.log(localStorage.getItem("raspId"));
+    console.log(localStorage.getItem("temperatureType"));
+    console.log(localStorage.getItem("currentCity"));
 }
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
 var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
@@ -35945,9 +35952,9 @@ var frontpageDivElement = document.getElementById("Frontpage");
 var olderDataDivElement = document.getElementById("OlderData");
 var cityDropDownElement = document.getElementById("cityDropDown");
 cityDropDownElement.addEventListener("change", function () {
-    displayFrontpage();
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
+    console.log(localStorage.getItem("currentCity"));
     loadApiData();
 });
 //
@@ -36002,16 +36009,29 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
         }
     }
 });
-_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
-var dayInputField = document.getElementById("dayInputField");
-function getRangeOfDay(day) {
-    var Url = baseUri + raspberryId + "/" + day;
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
-        .then(function (response) {
-        if (response.data) {
-        }
-    });
+/*
+let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
+inputButton.addEventListener("click", function(){getRangeOfDay(date)})
+ ​
+ ​
+ ​
+function getRangeOfDay(date: Date): void{
+ ​
+    let Url: string = baseUri + raspberryId + "/";
+    axios.get<IWeather[]>(Url)
+    .then((response: AxiosResponse) =>{
+        if(response.data){
+ ​
+        }})
 }
+ ​
+function get7Days(): void{
+    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+    let date: Date = new Date(dayInputField.value);
+    let dateList: string[]
+}
+ ​
+*/
 //
 // Buttons
 //
@@ -36100,22 +36120,18 @@ function sumbitRaspberryId() {
         raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
     }
 }
-function getAPIWeatherInformation(divElement, typeOfInfo) {
-    var Url = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+function getAPIWeatherInformation() {
+    var annotion = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+    var city = cityDropDownElement.value;
+    var Url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+    console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
-        console.log(response.data.CurrentData.humidity);
-        if (typeOfInfo === "Temperature") {
-            if (temperatureAnnotation === "Celsius") {
-                divElement.innerHTML = response.data.CurrentData.temperature + "°";
-            }
-            else if (temperatureAnnotation === "Fahrenheit") {
-                divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
-            }
-        }
-        else if (typeOfInfo === "Humidity") {
-            divElement.innerHTML = response.data.CurrentData.humidity + "%";
-        }
+        var responseData = JSON.stringify(response.data);
+        var temperature = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
+        var humidity = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
+        externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "°";
+        externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
     })
         .catch(function (error) {
         console.log(error.message);
@@ -36123,30 +36139,55 @@ function getAPIWeatherInformation(divElement, typeOfInfo) {
         console.log(error.response);
     });
 }
+function gettemp() {
+    var annotion = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+    var city = cityDropDownElement.value;
+    var Url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+    console.log(Url);
+    var today = new Date();
+    var date = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + " 12:00:00";
+    console.log(date);
+    /*
+    axios.get<bulResonse>(Url)
+    .then((response: AxiosResponse<bulResonse>) =>{
+        
+        
+        
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
+    */
+}
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp) {
     // tF = tC * 9/5 + 32
     return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
+function convertToCelcius(temp) {
+    return ((Number(temp) - 32) / (9 / 5)).toFixed(1);
+}
 function loadData() {
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+    //loadApiData();
 }
 function loadApiData() {
-    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation();
 }
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
 }
 function fillDropDown() {
-    var cities = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense",];
+    var cities = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"];
+    var apiNames = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"];
     for (var index = 0; index < cities.length; index++) {
         var option = document.createElement('option');
-        option.text = option.value = cities[index].toLowerCase();
+        option.value = apiNames[index];
+        option.text = cities[index];
         cityDropDownElement.add(option, 0);
     }
     cityDropDownElement.value = currentCity;

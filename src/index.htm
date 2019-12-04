@@ -10,7 +10,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="bundle.css">
-</head>
+</head> 
 
 <body>
   <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -115,6 +115,9 @@
 
   <!--Older data opening div-->
   <div id="OlderData" style="display: none; margin: 50px; margin-top: 50px; margin-bottom: 50px;">
+    <input type="datetime" id="dayInputField">
+    <button id="inputButton">Submit</button>
+    <div class='divBox' style="margin: auto; padding: 10px; height: 100%; width: 100%;">
     <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
       <canvas id="chart"></canvas>
     </div>

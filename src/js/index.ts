@@ -5,7 +5,7 @@ import axios, {
 import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js';
 
 //
-// Interfaces
+// Interfaces 
 //
 
 interface IWeather {
@@ -14,18 +14,6 @@ interface IWeather {
     temperature: string;
     humidity: string;
     timeStamp: string;
-}
-
-interface IApiWeather {
-    LocationName: string;
-    CurrentData: ICurrentData;
-}
-
-interface ICurrentData {
-    temperature: number;
-    skyText: string;
-    humidity: number;
-    windText: string;
 }
 
 //
@@ -45,39 +33,47 @@ let currentCity: string = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
-function onloadMethods(): void {
-    setTimeout(() => {
-        browserStorage();
+function onloadMethods(): void{
+    setTimeout(()=>{
+        browserStorage(); 
         fillDropDown();
         loadData();
+
+
+        gettemp();
+
     }, 10)
 }
 
-function browserStorage(): void {
+function browserStorage(): void{
     //Tjek if localStorage is supported.
-    if (typeof (Storage) !== "undefined") {
+    if (typeof(Storage) !== "undefined") {
         // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
-        if (localStorage.getItem("raspId") != null) {
+        if(localStorage.getItem("raspId") != null){
             raspberryId = localStorage.getItem("raspId");
         }
-        else {
+        else{
             openRaspberryIdPopup();
         }
-
+        
         // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
-        if (localStorage.getItem("temperatureType") != null) {
+        if(localStorage.getItem("temperatureType") != null){
             temperatureAnnotation = localStorage.getItem("temperatureType");
         }
-        else {
+        else{
             temperatureAnnotation = "Celsius";
+            localStorage.setItem("temperatureType", temperatureAnnotation);
         }
 
         //To check what city the user wants to see information from.
-        if (localStorage.getItem("currentCity") != null) {
+        if(localStorage.getItem("currentCity") != null){
             currentCity = localStorage.getItem("currentCity");
+            console.log("localstorage current city");
+            console.log("current city:" + currentCity);
         }
-        else {
+        else{
             currentCity = "Roskilde";
+            localStorage.setItem("currentCity", currentCity)
         }
     }
     //If localStorage is not supported we tell the client. 
@@ -86,6 +82,9 @@ function browserStorage(): void {
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
     }
     console.log(localStorage.getItem("raspId"));
+    console.log(localStorage.getItem("temperatureType"));
+    console.log(localStorage.getItem("currentCity"));
+
 }
 
 // The baseUri for our web Api. For more information regarding Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html";
@@ -120,10 +119,10 @@ let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementByI
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
 
 let cityDropDownElement: HTMLSelectElement = <HTMLSelectElement>document.getElementById("cityDropDown");
-cityDropDownElement.addEventListener("change", () => {
-    displayFrontpage();
+cityDropDownElement.addEventListener("change", ()=>{
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
+    console.log(localStorage.getItem("currentCity"));
     loadApiData();
 });
 
@@ -152,7 +151,7 @@ var myChart = new Chart(chart, {
 			backgroundColor: 'rgba(54, 162, 235, 0.2)',
             data: [48, 46.3, 48.2, 43.1, 49, 42.5, 42.3],
             borderWidth: 1
-
+​
         }]
     },
     options: {
@@ -183,21 +182,29 @@ var myChart = new Chart(chart, {
         }
     }
 });
-
-Chart.defaults.global.defaultFontColor = "#fff";
-
-let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField")
-
-function getRangeOfDay(day: string){
-    let Url: string = baseUri + raspberryId + "/" + day;
+/*
+let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
+inputButton.addEventListener("click", function(){getRangeOfDay(date)})
+​
+​
+​
+function getRangeOfDay(date: Date): void{
+​
+    let Url: string = baseUri + raspberryId + "/";
     axios.get<IWeather[]>(Url)
     .then((response: AxiosResponse) =>{
         if(response.data){
-
+​
         }})
 }
-
-
+​
+function get7Days(): void{
+    let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+    let date: Date = new Date(dayInputField.value);
+    let dateList: string[] 
+}
+​
+*/
 //
 // Buttons
 //
@@ -224,12 +231,12 @@ olderDataButton.addEventListener("click", displayOlderData);
 // Functions
 //
 
-function displayFrontpage(): void {
+function displayFrontpage(): void{
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
 }
 
-function displayOlderData(): void {
+function displayOlderData(): void{
     frontpageDivElement.style.display = "none";
     olderDataDivElement.style.display = "block";
 }
@@ -242,129 +249,240 @@ function changeTemperatureAnnotation(): void {
         temperatureAnnotation = "Celsius";
     }
     localStorage.setItem("temperatureType", temperatureAnnotation);
-
+    
     loadData();
 }
 
 // Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
-function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void {
+function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void{
     // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
     let Url: string = baseUri + "latest/" + raspberryId;
-
+    
     axios.get<IWeather>(Url)
-        .then((response: AxiosResponse<IWeather>) => {
-            if (typeOfInfo === "Temperature") {
-                if (temperatureAnnotation === "Celsius") {
-                    divElement.innerHTML = response.data.temperature + "°";
-                }
-                else if (temperatureAnnotation === "Fahrenheit") {
-                    divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
-                }
+    .then((response: AxiosResponse<IWeather>) =>{
+        if(typeOfInfo === "Temperature"){
+            if(temperatureAnnotation === "Celsius"){
+                divElement.innerHTML = response.data.temperature + "°";
             }
-            else if (typeOfInfo === "Humidity") {
-                divElement.innerHTML = response.data.humidity + "%";
+            else if(temperatureAnnotation === "Fahrenheit"){
+                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
             }
-        })
-        .catch((error: AxiosError) => {
-            console.log(error.message);
-        });
+        } 
+        else if(typeOfInfo === "Humidity"){
+            divElement.innerHTML = response.data.humidity + "%";
+        }   
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+    });
 }
 
-function sumbitRaspberryId(): void {
+function sumbitRaspberryId(): void{
     //We save the raspberry Id from our user input as a temp string.
     let tempId: string = raspberryIdInputElement.value;
 
     //We check if it has the required length, otherwise there is no point in checking if it exists(since it wont).
-    if (tempId.length == 10) {
+    if(tempId.length == 10){
         // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/checkRaspberryId/78ANBj918k
         let Url: string = baseUri + "checkRaspberryId/" + tempId;
 
         //We tjek our database to see if the raspberry id exists.
         axios.get<IWeather>(Url)
-            .then((response: AxiosResponse) => {
-                if (response.data) {
-                    //Since we now know that the id is valid we save it.
-                    raspberryId = tempId;
+        .then((response: AxiosResponse) =>{
+            if(response.data){
+                //Since we now know that the id is valid we save it.
+                raspberryId = tempId;
 
-                    //We save the id in local storage and close the popup.
-                    localStorage.setItem("raspId", raspberryId);
-                    loadData();
-                    popupElement.style.display = "None";
-                }
-                else {
-                    raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
-                }
-            })
-            .catch((error: AxiosError) => {
-                console.log(error.message);
-            });
+                //We save the id in local storage and close the popup.
+                localStorage.setItem("raspId", raspberryId);
+                loadData();
+                popupElement.style.display = "None";
+            }
+            else{
+                raspberryIdErrorDivOutputElement.innerHTML = "RaspberryPi id does not exist.";
+            }   
+        })
+        .catch((error: AxiosError) =>{
+            console.log(error.message);
+        });
     }
-    else {
+    else{
         raspberryIdErrorDivOutputElement.innerHTML = "Not a valid raspberryPi id (Raspberry id must be 10 characters long).";
     }
 }
 
 
 
-function getAPIWeatherInformation(divElement: HTMLDivElement, typeOfInfo: string): void {
-    let Url: string = "https://cors-anywhere.herokuapp.com/" + "https://vejr.eu/api.php?location=" + currentCity + "&degree=C";
+function getAPIWeatherInformation(): void{
 
-    axios.get<IApiWeather>(Url)
-        .then((response: AxiosResponse<IApiWeather>) => {
-            console.log(response.data.CurrentData.humidity);
-            if (typeOfInfo === "Temperature") {
-                if (temperatureAnnotation === "Celsius") {
-                    divElement.innerHTML = response.data.CurrentData.temperature + "°";
-                }
-                else if (temperatureAnnotation === "Fahrenheit") {
-                    divElement.innerHTML = convertToFahrenheit(response.data.CurrentData.temperature.toString()) + "°";
-                }
-            }
-            else if (typeOfInfo === "Humidity") {
-                divElement.innerHTML = response.data.CurrentData.humidity + "%";
-            }
-        })
-        .catch((error: AxiosError) => {
-            console.log(error.message);
-            console.log(error.code);
-            console.log(error.response);
-        });
+    let annotion: string = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+
+    let city: string = cityDropDownElement.value;
+
+    let Url: string =  "http://api.openweathermap.org/data/2.5/weather?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+
+    console.log(Url);
+
+    axios.get(Url)
+    .then((response: AxiosResponse) =>{
+
+        let responseData: string = JSON.stringify(response.data);
+
+        let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
+        let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
+
+        externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "°";    
+        externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
+    
 }
+
+function gettemp(): void{
+    
+    let annotion: string = temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+
+    let city: string = cityDropDownElement.value;
+
+    let Url: string =  "http://api.openweathermap.org/data/2.5/forecast?q=" + city + ",DK" + annotion + "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+
+    console.log(Url);
+    let today: Date = new Date();
+    let date: string = today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate() + " 12:00:00";
+    console.log(date);
+
+
+    /*
+    axios.get<bulResonse>(Url)
+    .then((response: AxiosResponse<bulResonse>) =>{
+        
+        
+        
+    })
+    .catch((error: AxiosError) =>{
+        console.log(error.message);
+        console.log(error.code);
+        console.log(error.response);
+    });
+    */
+}
+
+
 
 
 //Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
-function convertToFahrenheit(temp: string): string {
+function convertToFahrenheit(temp: string): string{
     // tF = tC * 9/5 + 32
-    return (Number(temp) * (9 / 5) + 32).toFixed(1);
+    return (Number(temp) * (9/5) + 32).toFixed(1);
 }
 
-function loadData(): void {
+function convertToCelcius(temp: string): string{
+    return ((Number(temp) - 32) / (9/5)).toFixed(1);
+}
+
+function loadData(): void{
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
-    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+    //loadApiData();
 }
 
-function loadApiData(): void {
-    getAPIWeatherInformation(externalAPITemperatureOutputElement, "Temperature");
-    getAPIWeatherInformation(externalAPIHumidityOutputElement, "Humidity");
+function loadApiData(): void{
+    getAPIWeatherInformation();
 }
 
-function openRaspberryIdPopup() {
+function openRaspberryIdPopup(){
     popupElement.style.display = "block";
 }
 
-function fillDropDown() {
-    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Køge", "Odense",]
-
+function fillDropDown(){
+    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"]
+    let apiNames: string[] = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"]
+    
     for (let index = 0; index < cities.length; index++) {
         let option: HTMLOptionElement = document.createElement('option');
-        option.text = option.value = cities[index].toLowerCase();
+        option.value = apiNames[index]
+        option.text = cities[index];
+        
         cityDropDownElement.add(option, 0);
     }
-
     cityDropDownElement.value = currentCity;
 }
 
 
+
+interface Coord
+{
+    lon: number;
+    lat: number;
+}
+
+interface Weather
+{
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+}
+
+interface Main
+{
+    temp: number;
+    pressure: number;
+    humidity: number;
+    temp_min: number;
+    temp_max: number;
+}
+
+interface Wind
+{
+    speed: number;
+    deg: number;
+}
+
+interface Clouds
+{
+    all: number;
+}
+
+interface Sys
+{
+    type: number;
+    id: number;
+    message: number;
+    country: string;
+    sunrise: number;
+    sunset: number;
+}
+
+interface ResponseWeather
+{
+    coord: Coord;
+    weather: Weather[];
+    base: string;
+    main: Main;
+    visibility: number;
+    wind: Wind;
+    clouds: Clouds;
+    dt: number;
+    sys: Sys;
+    id: number;
+    name: string;
+    cod: number;
+}
+
+
+
+interface bulResonse{
+    list: Ilist[];
+}
+
+interface Ilist{
+    dt: number;
+    main: Main;
+    dt_txt: string;
+}
