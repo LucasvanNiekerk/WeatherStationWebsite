@@ -110,3 +110,13 @@ table.table-borderless > tbody > tr > td{
     width: calc(20% + 300px);
     
   }
+
+sup {
+    vertical-align: super;
+    font-size: 20px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    display: none;
+}

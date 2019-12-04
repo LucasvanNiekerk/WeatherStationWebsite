@@ -77,8 +77,6 @@ function browserStorage(): void{
             temperatureAnnotation = "Celsius";
             localStorage.setItem("temperatureType", temperatureAnnotation);
         }
-        //Change the name of the button to the annotion currently shown.
-        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
 
         //To check what city the user wants to see information from.
         if(localStorage.getItem("currentCity") != null){
@@ -129,6 +127,12 @@ let popupElement: HTMLDivElement = <HTMLDivElement>document.getElementById("rasp
 let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdErrorOutput");
 
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
+raspberryIdInputElement.addEventListener("keyup", function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        rasberryIdSubmitButton.click();
+    }
+});
 
 let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
@@ -156,7 +160,7 @@ var myChart = new Chart(chart, {
             label: 'Temperatur',
             borderColor: 'rgba(255, 99, 132, 1)',
 			backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            data: [101, 12, 19, 20, 5, 2, 3],
+            data: [23.4, 25.1, 22.4, 21.1, 29.6, 22.3, 28.1],
             borderWidth: 1
             
         },
@@ -164,7 +168,7 @@ var myChart = new Chart(chart, {
             label: 'Luftfugtighed',
             borderColor: 'rgba(54, 162, 235, 1)',
 			backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            data: [11, 112, 129, 37, 51, 212, 33],
+            data: [48, 46.3, 48.2, 43.1, 49, 42.5, 42.3],
             borderWidth: 1
 ​
         }]
@@ -197,6 +201,8 @@ var myChart = new Chart(chart, {
         }
     }
 });
+
+Chart.defaults.global.defaultFontColor = "#fff";
 /*
 let inputButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("inputButton")
 inputButton.addEventListener("click", function(){getRangeOfDay(date)})
@@ -230,8 +236,10 @@ rasberryIdSubmitButton.addEventListener("click", sumbitRaspberryId);
 let changeRaspberryIdButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("resetRaspberryId");
 changeRaspberryIdButton.addEventListener("click", openRaspberryIdPopup);
 
-let changeTemperatureAnnotationButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("changeTemperatureAnnotation");
-changeTemperatureAnnotationButton.addEventListener("click", changeTemperatureAnnotation);
+let annotationOption1: HTMLInputElement = <HTMLInputElement>document.getElementById("annotationOption1");
+annotationOption1.onchange = changeTemperatureAnnotation;
+let annotationOption2: HTMLInputElement = <HTMLInputElement>document.getElementById("annotationOption2");
+annotationOption2.onchange = changeTemperatureAnnotation;
 
 let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
 frontpageButton.addEventListener("click", displayFrontpage);
@@ -254,14 +262,12 @@ function displayOlderData(): void{
     olderDataDivElement.style.display = "block";
 }
 
-function changeTemperatureAnnotation(): void{
-    if(temperatureAnnotation === "Celsius"){
+function changeTemperatureAnnotation(): void {
+    if (annotationOption2.checked) {
         temperatureAnnotation = "Fahrenheit";
-        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
-    else if(temperatureAnnotation === "Fahrenheit"){
+    else if (annotationOption1.checked) {
         temperatureAnnotation = "Celsius";
-        changeTemperatureAnnotationButton.innerHTML = temperatureAnnotation;
     }
     localStorage.setItem("temperatureType", temperatureAnnotation);
     
@@ -277,10 +283,10 @@ function getLatestWeatherInformation(divElement: HTMLDivElement, typeOfInfo: str
     .then((response: AxiosResponse<IWeather>) =>{
         if(typeOfInfo === "Temperature"){
             if(temperatureAnnotation === "Celsius"){
-                divElement.innerHTML = response.data.temperature + "°";
+                divElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
             }
             else if(temperatureAnnotation === "Fahrenheit"){
-                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "°";
+                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "<sup>°F</sup>";
             }
         } 
         else if(typeOfInfo === "Humidity"){
@@ -345,7 +351,13 @@ function getAPIWeatherInformation(): void{
         let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
 
-        externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "°";    
+        if (temperatureAnnotation === "Celsius") {
+            externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
+        }
+        else if (temperatureAnnotation === "Fahrenheit") {
+            externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
+        }
+
         externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
     })
     .catch((error: AxiosError) =>{
@@ -439,6 +451,7 @@ function loadData(): void{
     //Todo insert rest of div
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    getAPIWeatherInformation();
     //loadApiData();
 }
 

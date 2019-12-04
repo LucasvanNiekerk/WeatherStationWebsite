@@ -97,3 +97,11 @@ table.table-borderless > tbody > tr > td {
   padding: 20px;
   border: 1px solid #888;
   width: calc(20% + 300px); }
+
+sup {
+  vertical-align: super;
+  font-size: 20px; }
+
+/* width */
+::-webkit-scrollbar {
+  display: none; }
