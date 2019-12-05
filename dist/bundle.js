@@ -35894,45 +35894,6 @@ function onloadMethods() {
         loadData();
     }, 10);
 }
-function browserStorage() {
-    //Tjek if localStorage is supported.
-    if (typeof (Storage) !== "undefined") {
-        // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
-        if (localStorage.getItem("raspId") != null) {
-            raspberryId = localStorage.getItem("raspId");
-        }
-        else {
-            openRaspberryIdPopup();
-        }
-        // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
-        if (localStorage.getItem("temperatureType") != null) {
-            temperatureAnnotation = localStorage.getItem("temperatureType");
-        }
-        else {
-            temperatureAnnotation = "Celsius";
-            localStorage.setItem("temperatureType", temperatureAnnotation);
-        }
-        //To check what city the user wants to see information from.
-        if (localStorage.getItem("currentCity") != null) {
-            currentCity = localStorage.getItem("currentCity");
-        }
-        else {
-            currentCity = "Roskilde";
-            localStorage.setItem("currentCity", currentCity);
-        }
-        console.log("RaspberryId: " + raspberryId);
-        console.log("Temperature annotion: " + temperatureAnnotation);
-        console.log("current city:" + currentCity);
-        console.log("Local storage raspberry id: " + localStorage.getItem("raspId"));
-        console.log("Local storage temperature annotation: " + localStorage.getItem("temperatureType"));
-        console.log("Local storage current city: " + localStorage.getItem("currentCity"));
-    }
-    //If localStorage is not supported we tell the client. 
-    else {
-        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
-        console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
-    }
-}
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
 var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 // The baseUri for the third parti web api we use. For more information regarding the Api visit "https://openweathermap.org/api".
@@ -35963,12 +35924,7 @@ raspberryIdInputElement.addEventListener("keyup", function (event) {
 var frontpageDivElement = document.getElementById("Frontpage");
 var olderDataDivElement = document.getElementById("OlderData");
 var cityDropDownElement = document.getElementById("cityDropDown");
-cityDropDownElement.addEventListener("change", function () {
-    currentCity = cityDropDownElement.value;
-    localStorage.setItem("currentCity", currentCity);
-    console.log(localStorage.getItem("currentCity"));
-    loadApiData();
-});
+cityDropDownElement.addEventListener("change", changeCity);
 var prognosisday1 = document.getElementById("prognosisDay1");
 var prognosisday2 = document.getElementById("prognosisDay2");
 var prognosisday3 = document.getElementById("prognosisDay3");
@@ -36098,6 +36054,46 @@ olderDataButton.addEventListener("click", displayOlderData);
 //
 // Functions
 //
+function browserStorage() {
+    //Tjek if localStorage is supported.
+    if (typeof (Storage) !== "undefined") {
+        // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
+        if (localStorage.getItem("raspId") != null) {
+            raspberryId = localStorage.getItem("raspId");
+        }
+        else {
+            openRaspberryIdPopup();
+        }
+        // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
+        if (localStorage.getItem("temperatureType") != null) {
+            temperatureAnnotation = localStorage.getItem("temperatureType");
+        }
+        else {
+            temperatureAnnotation = "Celsius";
+            localStorage.setItem("temperatureType", temperatureAnnotation);
+        }
+        //To check what city the user wants to see information from.
+        if (localStorage.getItem("currentCity") != null) {
+            currentCity = localStorage.getItem("currentCity");
+        }
+        else {
+            currentCity = "Roskilde";
+            cityDropDownElement.value = currentCity;
+            localStorage.setItem("currentCity", currentCity);
+        }
+        console.log("RaspberryId: " + raspberryId);
+        console.log("Temperature annotion: " + temperatureAnnotation);
+        console.log("current city:" + currentCity);
+        console.log("Local storage raspberry id: " + localStorage.getItem("raspId"));
+        console.log("Local storage temperature annotation: " + localStorage.getItem("temperatureType"));
+        console.log("Local storage current city: " + localStorage.getItem("currentCity"));
+    }
+    //If localStorage is not supported we tell the client. 
+    else {
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
+        console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
+    }
+}
 function displayFrontpage() {
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
@@ -36259,6 +36255,12 @@ function fillDropDown() {
 function loadData() {
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
     getLatestWeatherInformation(internalHumidityOutputElement, "Humidity");
+    loadApiData();
+}
+function changeCity() {
+    currentCity = cityDropDownElement.value;
+    localStorage.setItem("currentCity", currentCity);
+    console.log(localStorage.getItem("currentCity"));
     loadApiData();
 }
 //
