@@ -46,9 +46,6 @@ let raspberryId: string = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
 
-// boolean wether the popup is active or not
-let popupActive: boolean = false;
-
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
@@ -229,10 +226,6 @@ function getRangeOfDay(date: Date, index: number): void {
 }
 
 
-
-
-
-
 //
 // Buttons
 //
@@ -322,7 +315,7 @@ function fixMortensbuttons(){
         label1.className += " active";
         label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g , '');
     }
-    else{
+    else if(temperatureAnnotation === "Fahrenheit"){
         label2.className += " active";
         label1.className = label1.className.replace( /(?:^|\s)active(?!\S)/g , '' );
     }
@@ -547,8 +540,12 @@ function changeCity(){
 //
 
 function getAnnotion(): string{
-    if (temperatureAnnotation === "Celsius") return "<sup3days>°C</sup3days>";
-    else if (temperatureAnnotation === "Fahrenheit") return "<sup3days>°F</sup3days>";
+    if (temperatureAnnotation === "Celsius"){
+         return "<sup3days>°C</sup3days>";
+        }
+    else if (temperatureAnnotation === "Fahrenheit") {
+        return "<sup3days>°F</sup3days>";
+    }
 }
 
 function formatDate(date: Date) {
@@ -593,15 +590,15 @@ function compareDates(firstDate: Date, secondDate: Date): boolean {
 function errorMessage(error: AxiosError) {
     console.log(error.message);
     console.log(error.code);
-    console.log(error.response);
 }
 
-//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
+//Converts from celcius to fahrenheit. Takes a string and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp: string): string {
     // tF = tC * 9/5 + 32
     return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
 
+//Converts from fahrenheit to celcius. Takes a string and converts it to fahrenheit and returns it as a string.
 function convertToCelcius(temp: string): string {
     // tC = (tF -32) / (9 / 5) 
     return ((Number(temp) - 32) / (9 / 5)).toFixed(1);
@@ -614,12 +611,10 @@ function loadApiData(): void {
 
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
-    popupActive = true;
 }
 
 function closeRaspberryIdPopup() {
     popupElement.style.display = "none";
-    popupActive = false;
 }
 
 //
