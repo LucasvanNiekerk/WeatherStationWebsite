@@ -49,19 +49,6 @@ let currentCity: string = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
-// Runs following functions 10 milliseconds after the page / window has loaded.
-// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
-// We fill our dropdown dynamically.
-// We get the data from our api and openweathermap api.
-function onloadMethods(): void {
-    setTimeout(() => {
-        browserStorage();
-        fillDropDown();
-        loadData();
-
-    }, 10)
-}
-
 
 
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
@@ -268,6 +255,19 @@ olderDataButton.addEventListener("click", displayOlderData);
 //
 // Functions
 //
+
+// Runs following functions 10 milliseconds after the page / window has loaded.
+// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
+// We fill our dropdown dynamically.
+// We get the data from our api and openweathermap api.
+function onloadMethods(): void {
+    setTimeout(() => {
+        browserStorage();
+        fillDropDown();
+        loadData();
+
+    }, 10)
+}
 
 function browserStorage(): void {
     //Tjek if localStorage is supported.

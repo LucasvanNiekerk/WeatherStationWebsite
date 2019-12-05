@@ -35883,17 +35883,6 @@ var raspberryId = "";
 var currentCity = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
-// Runs following functions 10 milliseconds after the page / window has loaded.
-// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
-// We fill our dropdown dynamically.
-// We get the data from our api and openweathermap api.
-function onloadMethods() {
-    setTimeout(function () {
-        browserStorage();
-        fillDropDown();
-        loadData();
-    }, 10);
-}
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
 var baseUri = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 // The baseUri for the third parti web api we use. For more information regarding the Api visit "https://openweathermap.org/api".
@@ -36054,6 +36043,17 @@ olderDataButton.addEventListener("click", displayOlderData);
 //
 // Functions
 //
+// Runs following functions 10 milliseconds after the page / window has loaded.
+// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
+// We fill our dropdown dynamically.
+// We get the data from our api and openweathermap api.
+function onloadMethods() {
+    setTimeout(function () {
+        browserStorage();
+        fillDropDown();
+        loadData();
+    }, 10);
+}
 function browserStorage() {
     //Tjek if localStorage is supported.
     if (typeof (Storage) !== "undefined") {
