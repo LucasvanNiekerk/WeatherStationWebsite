@@ -30,6 +30,28 @@
             </label>
         </div>
     </nav>
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <button class="btn btn-dark" id="FrontpageButton">Forside</button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-dark" id="OlderDataButton">Gamle data</button>
+        </li>
+      </ul>
+    </div>
+    <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
+    <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Skift sensor</button>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary" id="label1">
+          <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
+        </label>
+        <label class="btn btn-secondary" id="label2">
+          <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
+        </label>
+      </div>
+  </nav>
 
   <!--Frontpage div opening div-->
   <div id="Frontpage">
@@ -45,7 +67,7 @@
         </div>
 
         <div class="col divBox divLatestSize">
-          <h3>Udendørs(DMI)</h3>
+          <h3>Udendørs(OWM)</h3>
           <div class="divText" id="externalAPITemperature">↺</div>
           <div class="divText" id="externalAPIHumidity">↺</div>
           <br>
@@ -58,21 +80,21 @@
       <h2>3 dags prognose</h2>
       <div class="row">
         <div class="col divBox div3dagsPrognoseSize">
-          <div style="border-bottom: 1px solid white;" id="prognosisDay1">I dag</div>
+          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay1">I dag</div>
           <div class="divText3days" id="prognosisTemperature1">↺</div>
           <div class="divText3days" id="prognosisHumidity1">↺</div>
           <br>
 
         </div>
         <div class="col divBox div3dagsPrognoseSize">
-          <div style="border-bottom: 1px solid white;" id="prognosisDay2">I morgen</div>
+          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay2">I morgen</div>
           <div class="divText3days" id="prognosisTemperature2">↺</div>
           <div class="divText3days" id="prognosisHumidity2">↺</div>
           <br>
 
         </div>
         <div class="col divBox div3dagsPrognoseSize">
-          <div style="border-bottom: 1px solid white;" id="prognosisDay3">I Overmorgen</div>
+          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay3">I Overmorgen</div>
           <div class="divText3days" id="prognosisTemperature3">↺</div>
           <div class="divText3days" id="prognosisHumidity3">↺</div>
           <br>

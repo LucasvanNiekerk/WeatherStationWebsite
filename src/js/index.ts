@@ -46,9 +46,11 @@ let raspberryId: string = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
 
+// boolean wether the popup is active or not
+let popupActive: boolean = false;
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
-
 
 
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
@@ -98,6 +100,8 @@ let prognosisday1: HTMLDivElement = <HTMLDivElement>document.getElementById("pro
 let prognosisday2: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay2");
 let prognosisday3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay3");
 
+let label1: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label1");
+let label2: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label2");
 
 //
 // Chart
@@ -201,19 +205,19 @@ function getRangeOfDay(date: Date, index: number): void {
                 avgHumidity = resultHumidity / i;
 
             }
+            console.log("before: " + tempDate)
             let tType: string = " °C";
-            tableStringArray[index + 1] = "<tr> <td>" + tempDate + "</td><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
+            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
 
             if(index > 5){
                 tableStringArray[8] = "</tbody>";
-                console.log(tableStringArray.join(""));
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
             //console.log("temp: " + avgTemperature);
             //console.log("hum: " + avgHumidity);
             //console.log(index);
-            //console.log(tempDate);
+            console.log(tempDate);
             myChart.data.datasets[0].data[index] = avgTemperature;  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
@@ -245,6 +249,7 @@ annotationOption1.onchange = changeTemperatureAnnotation;
 let annotationOption2: HTMLInputElement = <HTMLInputElement>document.getElementById("annotationOption2");
 annotationOption2.onchange = changeTemperatureAnnotation;
 
+
 let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
 frontpageButton.addEventListener("click", displayFrontpage);
 
@@ -263,9 +268,11 @@ olderDataButton.addEventListener("click", displayOlderData);
 function onloadMethods(): void {
     setTimeout(() => {
         //localStorage.clear();
-        fillDropDown();
         browserStorage();
-        loadData();
+        fillDropDown();
+        if(localStorage.getItem("raspId") != null){
+            loadData();
+        }
 
     }, 10)
 }
@@ -281,6 +288,7 @@ function browserStorage(): void {
             openRaspberryIdPopup();
         }
 
+
         // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
         if (localStorage.getItem("temperatureType") != null) {
             temperatureAnnotation = localStorage.getItem("temperatureType");
@@ -290,28 +298,33 @@ function browserStorage(): void {
             localStorage.setItem("temperatureType", temperatureAnnotation);
         }
 
+        fixMortensbuttons();
+
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
             currentCity = localStorage.getItem("currentCity");
+            
         }
         else {
             currentCity = "Roskilde%20Kommune";
-            cityDropDownElement.options[0].selected = true;
             localStorage.setItem("currentCity", currentCity)
         }
-
-        console.log("RaspberryId: " + raspberryId);
-        console.log("Temperature annotion: " + temperatureAnnotation);
-        console.log("current city:" + currentCity);
-
-        console.log("Local storage raspberry id: " + localStorage.getItem("raspId"));
-        console.log("Local storage temperature annotation: " + localStorage.getItem("temperatureType"));
-        console.log("Local storage current city: " + localStorage.getItem("currentCity"));
     }
     //If localStorage is not supported we tell the client. 
     else {
         NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
+    }
+}
+
+function fixMortensbuttons(){
+    if(temperatureAnnotation === "Celsius"){
+        label1.className += " active";
+        label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g , '');
+    }
+    else{
+        label2.className += " active";
+        label1.className = label1.className.replace( /(?:^|\s)active(?!\S)/g , '' );
     }
 }
 
@@ -327,7 +340,7 @@ function displayOlderData(): void {
 
 function changeTemperatureAnnotation(): void {
     if (annotationOption2.checked) {
-        temperatureAnnotation = "Fahrenheit";
+        temperatureAnnotation = "Fahrenheit";        
     }
     else if (annotationOption1.checked) {
         temperatureAnnotation = "Celsius";
@@ -398,8 +411,6 @@ function sumbitRaspberryId(): void {
 
 function getAPIWeatherInformation(): void {
     let Url: string = generateUrl("weather");
-
-
     console.log(Url);
 
     axios.get(Url)
@@ -510,6 +521,12 @@ function fillDropDown() {
 
         cityDropDownElement.add(option);
     }
+    
+    for (let index = 0; index < apiNames.length; index++) {
+        if(apiNames[index] === currentCity){
+            cityDropDownElement.selectedIndex = index;
+        }
+    }    
 }
 
 function loadData(): void {
@@ -586,6 +603,7 @@ function convertToFahrenheit(temp: string): string {
 }
 
 function convertToCelcius(temp: string): string {
+    // tC = (tF -32) / (9 / 5) 
     return ((Number(temp) - 32) / (9 / 5)).toFixed(1);
 }
 
@@ -596,10 +614,12 @@ function loadApiData(): void {
 
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
+    popupActive = true;
 }
 
 function closeRaspberryIdPopup() {
     popupElement.style.display = "none";
+    popupActive = false;
 }
 
 //
