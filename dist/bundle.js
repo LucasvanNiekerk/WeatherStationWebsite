@@ -36049,8 +36049,9 @@ olderDataButton.addEventListener("click", displayOlderData);
 // We get the data from our api and openweathermap api.
 function onloadMethods() {
     setTimeout(function () {
-        browserStorage();
+        localStorage.clear();
         fillDropDown();
+        browserStorage();
         loadData();
     }, 10);
 }
@@ -36077,8 +36078,8 @@ function browserStorage() {
             currentCity = localStorage.getItem("currentCity");
         }
         else {
-            currentCity = "Roskilde";
-            cityDropDownElement.value = currentCity;
+            currentCity = "Roskilde%20Kommune";
+            cityDropDownElement.options[0].selected = true;
             localStorage.setItem("currentCity", currentCity);
         }
         console.log("RaspberryId: " + raspberryId);
@@ -36194,7 +36195,7 @@ function getApiPrognosisWeatherInformation(daysToGet) {
         // [min temperature1, max temperature1, min humidity1, max humidity1, 
         //  min temperature2, max temperature2, min humidity2, max humidity2, 
         //  min temperature3, max temperature3, min humidity3, max humidity3]
-        var ar = [];
+        var dataArray = [];
         var tempary = [];
         var humary = [];
         var dates = [];
@@ -36207,36 +36208,38 @@ function getApiPrognosisWeatherInformation(daysToGet) {
                 }
                 else {
                     if (tempary.length > 0) {
-                        ar.push(Math.min.apply(null, tempary));
-                        ar.push(Math.max.apply(null, tempary));
-                        ar.push(Math.min.apply(null, humary));
-                        ar.push(Math.max.apply(null, humary));
+                        dataArray.push(Math.min.apply(null, tempary));
+                        dataArray.push(Math.max.apply(null, tempary));
+                        dataArray.push(Math.min.apply(null, humary));
+                        dataArray.push(Math.max.apply(null, humary));
                         dates.push(currentDate);
                         date.setDate(new Date().getDate() + dateIndex);
                         dateIndex++;
                         tempary = [];
                         humary = [];
+                        if (compareDates(currentDate, date)) {
+                            tempary.push(weatherinfo.main.temp);
+                            humary.push(weatherinfo.main.humidity);
+                        }
                     }
                 }
             }
         });
-        fillPrognosisElements(ar, dates);
+        fillPrognosisElements(dataArray, dates);
     })
         .catch(errorMessage);
 }
-function fillPrognosisElements(ar, dates) {
-    var temp = [];
-    for (var i = 0; i < ar.length; i++) {
-        temp[i] = toNumberToFixed(ar[i], 1);
+function fillPrognosisElements(dataArray, dates) {
+    for (var i = 0; i < dataArray.length; i++) {
+        dataArray[i] = toNumberToFixed(dataArray[i], 1);
     }
-    ar = temp;
-    prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
-    prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
-    prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+    prognosisHumidityOutputElement1.innerHTML = dataArray[2] + "% | " + dataArray[3] + "%";
+    prognosisHumidityOutputElement2.innerHTML = dataArray[6] + "% | " + dataArray[7] + "%";
+    prognosisHumidityOutputElement3.innerHTML = dataArray[10] + "% | " + dataArray[11] + "%";
     var annotation = getAnnotion();
-    prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
-    prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-    prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+    prognosisTemperatureOutputElement1.innerHTML = dataArray[0] + " " + annotation + " | " + dataArray[1] + " " + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = dataArray[4] + " " + annotation + " | " + dataArray[5] + " " + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = dataArray[8] + " " + annotation + " | " + dataArray[9] + " " + annotation;
     prognosisday1.innerHTML = formatDate(dates[0]);
     prognosisday2.innerHTML = formatDate(dates[1]);
     prognosisday3.innerHTML = formatDate(dates[2]);
@@ -36248,9 +36251,9 @@ function fillDropDown() {
         var option = document.createElement('option');
         option.value = apiNames[index];
         option.text = cities[index];
-        cityDropDownElement.add(option, 0);
+        cityDropDownElement.add(option);
     }
-    cityDropDownElement.value = currentCity;
+    cityDropDownElement.options[0].selected = true;
 }
 function loadData() {
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
