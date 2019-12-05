@@ -36245,9 +36245,9 @@ function fillPrognosisElements(dataArray, dates) {
     prognosisHumidityOutputElement2.innerHTML = dataArray[6] + "% | " + dataArray[7] + "%";
     prognosisHumidityOutputElement3.innerHTML = dataArray[10] + "% | " + dataArray[11] + "%";
     var annotation = getAnnotion();
-    prognosisTemperatureOutputElement1.innerHTML = ar[0] + annotation + " | " + ar[1] + annotation;
-    prognosisTemperatureOutputElement2.innerHTML = ar[4] + annotation + " | " + ar[5] + annotation;
-    prognosisTemperatureOutputElement3.innerHTML = ar[8] + annotation + " | " + ar[9] + annotation;
+    prognosisTemperatureOutputElement1.innerHTML = dataArray[0] + annotation + " | " + dataArray[1] + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = dataArray[4] + annotation + " | " + dataArray[5] + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = dataArray[8] + annotation + " | " + dataArray[9] + annotation;
     prognosisday1.innerHTML = formatDate(dates[0]);
     prognosisday2.innerHTML = formatDate(dates[1]);
     prognosisday3.innerHTML = formatDate(dates[2]);
