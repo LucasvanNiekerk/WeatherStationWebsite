@@ -111,6 +111,10 @@ table.table-borderless > tbody > tr > td {
 
 sup {
   vertical-align: super;
+  font-size: calc(10px + 1vw); }
+
+sup3days {
+  vertical-align: super;
   font-size: calc(2px + 1vw); }
 
 ::-webkit-scrollbar {
