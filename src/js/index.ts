@@ -470,9 +470,9 @@ function fillPrognosisElements(ar: string[], dates: Date[]){
 
     let annotation: string = getAnnotion();            
 
-    prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
-    prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-    prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+    prognosisTemperatureOutputElement1.innerHTML = ar[0] + annotation + " | " + ar[1] + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = ar[4] + annotation + " | " + ar[5] + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = ar[8] + annotation + " | " + ar[9] + annotation;
 
     prognosisday1.innerHTML = formatDate(dates[0]);
     prognosisday2.innerHTML = formatDate(dates[1]);
@@ -504,8 +504,8 @@ function loadData(): void {
 //
 
 function getAnnotion(): string{
-    if (temperatureAnnotation === "Celsius") return "<sup>°C</sup>";
-    else if (temperatureAnnotation === "Fahrenheit") return "<sup>°F</sup>";
+    if (temperatureAnnotation === "Celsius") return "<sup3days>°C</sup3days>";
+    else if (temperatureAnnotation === "Fahrenheit") return "<sup3days>°F</sup3days>";
 }
 
 function formatDate(date: Date) {

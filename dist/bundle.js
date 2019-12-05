@@ -36219,9 +36219,9 @@ function fillPrognosisElements(ar, dates) {
     prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
     prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
     var annotation = getAnnotion();
-    prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
-    prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-    prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+    prognosisTemperatureOutputElement1.innerHTML = ar[0] + annotation + " | " + ar[1] + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = ar[4] + annotation + " | " + ar[5] + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = ar[8] + annotation + " | " + ar[9] + annotation;
     prognosisday1.innerHTML = formatDate(dates[0]);
     prognosisday2.innerHTML = formatDate(dates[1]);
     prognosisday3.innerHTML = formatDate(dates[2]);
@@ -36247,9 +36247,9 @@ function loadData() {
 //
 function getAnnotion() {
     if (temperatureAnnotation === "Celsius")
-        return "<sup>°C</sup>";
+        return "<sup3days>°C</sup3days>";
     else if (temperatureAnnotation === "Fahrenheit")
-        return "<sup>°F</sup>";
+        return "<sup3days>°F</sup3days>";
 }
 function formatDate(date) {
     var monthNames = [
