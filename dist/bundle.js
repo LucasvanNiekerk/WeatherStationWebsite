@@ -36056,7 +36056,9 @@ function onloadMethods() {
         //localStorage.clear();
         browserStorage();
         fillDropDown();
-        loadData();
+        if (localStorage.getItem("raspId") != null) {
+            loadData();
+        }
     }, 10);
 }
 function browserStorage() {

@@ -53,7 +53,6 @@ let popupActive: boolean = false;
 window.onload = onloadMethods;
 
 
-
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
 let baseUri: string = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 
@@ -271,7 +270,9 @@ function onloadMethods(): void {
         //localStorage.clear();
         browserStorage();
         fillDropDown();
-        loadData();
+        if(localStorage.getItem("raspId") != null){
+            loadData();
+        }
 
     }, 10)
 }
