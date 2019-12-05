@@ -46,67 +46,13 @@ let raspberryId: string = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
 
+// boolean wether the popup is active or not
+let popupActive: boolean = false;
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
-// Runs following functions 10 milliseconds after the page / window has loaded.
-// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
-// We fill our dropdown dynamically.
-// We get the data from our api and openweathermap api.
-function onloadMethods(): void {
-    setTimeout(() => {
-        browserStorage();
-        fillDropDown();
-        loadData();
 
-    }, 10)
-}
-
-function browserStorage(): void {
-    //Tjek if localStorage is supported.
-    if (typeof (Storage) !== "undefined") {
-        // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
-        if (localStorage.getItem("raspId") != null) {
-            raspberryId = localStorage.getItem("raspId");
-        }
-        else {
-            openRaspberryIdPopup();
-        }
-
-        // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
-        if (localStorage.getItem("temperatureType") != null) {
-            temperatureAnnotation = localStorage.getItem("temperatureType");
-        }
-        else {
-            temperatureAnnotation = "Celsius";
-            localStorage.setItem("temperatureType", temperatureAnnotation);
-        }
-
-        //To check what city the user wants to see information from.
-        if (localStorage.getItem("currentCity") != null) {
-            currentCity = localStorage.getItem("currentCity");
-
-        }
-        else {
-            currentCity = "Roskilde";
-            localStorage.setItem("currentCity", currentCity)
-        }
-
-        console.log("RaspberryId: " + raspberryId);
-        console.log("Temperature annotion: " + temperatureAnnotation);
-        console.log("current city:" + currentCity);
-
-        console.log("Local storage raspberry id: " + localStorage.getItem("raspId"));
-        console.log("Local storage temperature annotation: " + localStorage.getItem("temperatureType"));
-        console.log("Local storage current city: " + localStorage.getItem("currentCity"));
-
-    }
-    //If localStorage is not supported we tell the client. 
-    else {
-        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
-        console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
-    }
-}
 
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
 let baseUri: string = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
@@ -149,12 +95,7 @@ let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementByI
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
 
 let cityDropDownElement: HTMLSelectElement = <HTMLSelectElement>document.getElementById("cityDropDown");
-cityDropDownElement.addEventListener("change", () => {
-    currentCity = cityDropDownElement.value;
-    localStorage.setItem("currentCity", currentCity);
-    console.log(localStorage.getItem("currentCity"));
-    loadApiData();
-});
+cityDropDownElement.addEventListener("change", changeCity);
 
 let prognosisday1: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay1");
 let prognosisday2: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay2");
@@ -318,6 +259,72 @@ olderDataButton.addEventListener("click", displayOlderData);
 // Functions
 //
 
+// Runs following functions 10 milliseconds after the page / window has loaded.
+// We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
+// We fill our dropdown dynamically.
+// We get the data from our api and openweathermap api.
+function onloadMethods(): void {
+    setTimeout(() => {
+        //localStorage.clear();
+        browserStorage();
+        fillDropDown();
+        loadData();
+
+    }, 10)
+}
+
+function browserStorage(): void {
+    //Tjek if localStorage is supported.
+    if (typeof (Storage) !== "undefined") {
+        // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
+        if (localStorage.getItem("raspId") != null) {
+            raspberryId = localStorage.getItem("raspId");
+            console.log("Raspberry Id exists");
+        }
+        else {
+            openRaspberryIdPopup();
+        }
+
+
+        // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
+        if (localStorage.getItem("temperatureType") != null) {
+            temperatureAnnotation = localStorage.getItem("temperatureType");
+            console.log("Temperature exists");
+        }
+        else {
+            temperatureAnnotation = "Celsius";
+            localStorage.setItem("temperatureType", temperatureAnnotation);
+        }
+
+        //To check what city the user wants to see information from.
+        if (localStorage.getItem("currentCity") != null) {
+            currentCity = localStorage.getItem("currentCity");
+            console.log("currentcity exists");
+            
+        }
+        else {
+            console.log("You shouldnt be here!");
+            currentCity = "Roskilde%20Kommune";
+            localStorage.setItem("currentCity", currentCity)
+        }
+
+        /*
+        console.log("RaspberryId: " + raspberryId);
+        console.log("Temperature annotion: " + temperatureAnnotation);
+        console.log("current city:" + currentCity);
+
+        console.log("Local storage raspberry id: " + localStorage.getItem("raspId"));
+        console.log("Local storage temperature annotation: " + localStorage.getItem("temperatureType"));
+        console.log("Local storage current city: " + localStorage.getItem("currentCity"));
+        */
+    }
+    //If localStorage is not supported we tell the client. 
+    else {
+        NoLocalStorageOutputElement.innerHTML = "Your browser does not support local storage (inspect page for more information).";
+        console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5")
+    }
+}
+
 function displayFrontpage(): void {
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
@@ -440,7 +447,7 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
             // [min temperature1, max temperature1, min humidity1, max humidity1, 
             //  min temperature2, max temperature2, min humidity2, max humidity2, 
             //  min temperature3, max temperature3, min humidity3, max humidity3]
-            let ar: string[] = [];
+            let dataArray: string[] = [];
             let tempary: number[] = [];
             let humary: number[] = [];
             let dates: Date[] = [];
@@ -455,45 +462,47 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
                     }
                     else {
                         if (tempary.length > 0) {
-                            ar.push(Math.min.apply(null, tempary));
-                            ar.push(Math.max.apply(null, tempary));
-                            ar.push(Math.min.apply(null, humary));
-                            ar.push(Math.max.apply(null, humary));
+                            dataArray.push(Math.min.apply(null, tempary));
+                            dataArray.push(Math.max.apply(null, tempary));
+                            dataArray.push(Math.min.apply(null, humary));
+                            dataArray.push(Math.max.apply(null, humary));
                             dates.push(currentDate);
 
                             date.setDate(new Date().getDate() + dateIndex);
                             dateIndex++;
                             tempary = [];
                             humary = [];
+
+                            if (compareDates(currentDate, date)) {
+                                tempary.push(weatherinfo.main.temp);
+                                humary.push(weatherinfo.main.humidity);
+                            }
                         }
                     }
                 }
+                
             });
 
-            fillPrognosisElements(ar, dates);
+            fillPrognosisElements(dataArray, dates);
         })
         .catch(errorMessage);
 }
 
-function fillPrognosisElements(ar: string[], dates: Date[]){
+function fillPrognosisElements(dataArray: string[], dates: Date[]){
     
-    let temp: string[] = [];
-
-    for (let i = 0; i < ar.length; i++) {
-        temp[i] = toNumberToFixed(ar[i], 1);
+    for (let i = 0; i < dataArray.length; i++) {
+        dataArray[i] = toNumberToFixed(dataArray[i], 1);
     }
 
-    ar = temp;
-
-    prognosisHumidityOutputElement1.innerHTML = ar[2] + "% | " + ar[3] + "%";
-    prognosisHumidityOutputElement2.innerHTML = ar[6] + "% | " + ar[7] + "%";
-    prognosisHumidityOutputElement3.innerHTML = ar[10] + "% | " + ar[11] + "%";
+    prognosisHumidityOutputElement1.innerHTML = dataArray[2] + "% | " + dataArray[3] + "%";
+    prognosisHumidityOutputElement2.innerHTML = dataArray[6] + "% | " + dataArray[7] + "%";
+    prognosisHumidityOutputElement3.innerHTML = dataArray[10] + "% | " + dataArray[11] + "%";
 
     let annotation: string = getAnnotion();            
 
-    prognosisTemperatureOutputElement1.innerHTML = ar[0] + " " + annotation + " | " + ar[1] + " " + annotation;
-    prognosisTemperatureOutputElement2.innerHTML = ar[4] + " " + annotation + " | " + ar[5] + " " + annotation;
-    prognosisTemperatureOutputElement3.innerHTML = ar[8] + " " + annotation + " | " + ar[9] + " " + annotation;
+    prognosisTemperatureOutputElement1.innerHTML = dataArray[0] + annotation + " | " + dataArray[1] + annotation;
+    prognosisTemperatureOutputElement2.innerHTML = dataArray[4] + annotation + " | " + dataArray[5] + annotation;
+    prognosisTemperatureOutputElement3.innerHTML = dataArray[8] + annotation + " | " + dataArray[9] + annotation;
 
     prognosisday1.innerHTML = formatDate(dates[0]);
     prognosisday2.innerHTML = formatDate(dates[1]);
@@ -509,9 +518,14 @@ function fillDropDown() {
         option.value = apiNames[index]
         option.text = cities[index];
 
-        cityDropDownElement.add(option, 0);
+        cityDropDownElement.add(option);
     }
-    cityDropDownElement.value = currentCity;
+    
+    for (let index = 0; index < apiNames.length; index++) {
+        if(apiNames[index] === currentCity){
+            cityDropDownElement.selectedIndex = index;
+        }
+    }    
 }
 
 function loadData(): void {
@@ -520,13 +534,20 @@ function loadData(): void {
     loadApiData();
 }
 
+function changeCity(){
+    currentCity = cityDropDownElement.value;
+    localStorage.setItem("currentCity", currentCity);
+    console.log(localStorage.getItem("currentCity"));
+    loadApiData();
+}
+
 //
 // Helper functions
 //
 
 function getAnnotion(): string{
-    if (temperatureAnnotation === "Celsius") return "<sup>°C</sup>";
-    else if (temperatureAnnotation === "Fahrenheit") return "<sup>°F</sup>";
+    if (temperatureAnnotation === "Celsius") return "<sup3days>°C</sup3days>";
+    else if (temperatureAnnotation === "Fahrenheit") return "<sup3days>°F</sup3days>";
 }
 
 function formatDate(date: Date) {
@@ -591,10 +612,12 @@ function loadApiData(): void {
 
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
+    popupActive = true;
 }
 
 function closeRaspberryIdPopup() {
     popupElement.style.display = "none";
+    popupActive = false;
 }
 
 //
