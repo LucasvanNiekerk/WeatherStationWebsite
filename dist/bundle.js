@@ -36010,17 +36010,17 @@ function getRangeOfDay(date, index) {
             avgTemperature = resultTemperature / i;
             avgHumidity = resultHumidity / i;
         }
+        console.log("before: " + tempDate);
         var tType = " °C";
-        tableStringArray[index + 1] = "<tr> <td>" + tempDate + "</td><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
+        tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
         if (index > 5) {
             tableStringArray[8] = "</tbody>";
-            console.log(tableStringArray.join(""));
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
         //console.log("temp: " + avgTemperature);
         //console.log("hum: " + avgHumidity);
         //console.log(index);
-        //console.log(tempDate);
+        console.log(tempDate);
         myChart.data.datasets[0].data[index] = avgTemperature;
         myChart.data.datasets[1].data[index] = avgHumidity;
         myChart.update();
