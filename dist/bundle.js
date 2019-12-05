@@ -36049,7 +36049,7 @@ olderDataButton.addEventListener("click", displayOlderData);
 // We get the data from our api and openweathermap api.
 function onloadMethods() {
     setTimeout(function () {
-        localStorage.clear();
+        //localStorage.clear();
         fillDropDown();
         browserStorage();
         loadData();
@@ -36253,7 +36253,6 @@ function fillDropDown() {
         option.text = cities[index];
         cityDropDownElement.add(option);
     }
-    cityDropDownElement.options[0].selected = true;
 }
 function loadData() {
     getLatestWeatherInformation(internalTemperatureOutputElement, "Temperature");
