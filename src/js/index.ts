@@ -46,6 +46,9 @@ let raspberryId: string = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
 
+// boolean wether the popup is active or not
+let popupActive: boolean = false;
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
@@ -263,8 +266,8 @@ olderDataButton.addEventListener("click", displayOlderData);
 function onloadMethods(): void {
     setTimeout(() => {
         //localStorage.clear();
-        fillDropDown();
         browserStorage();
+        fillDropDown();
         loadData();
 
     }, 10)
@@ -276,14 +279,17 @@ function browserStorage(): void {
         // Tjek if there is a raspberry id saved, otherwise we ask the client to enter one.
         if (localStorage.getItem("raspId") != null) {
             raspberryId = localStorage.getItem("raspId");
+            console.log("Raspberry Id exists");
         }
         else {
             openRaspberryIdPopup();
         }
 
+
         // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
         if (localStorage.getItem("temperatureType") != null) {
             temperatureAnnotation = localStorage.getItem("temperatureType");
+            console.log("Temperature exists");
         }
         else {
             temperatureAnnotation = "Celsius";
@@ -293,13 +299,16 @@ function browserStorage(): void {
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
             currentCity = localStorage.getItem("currentCity");
+            console.log("currentcity exists");
+            
         }
         else {
+            console.log("You shouldnt be here!");
             currentCity = "Roskilde%20Kommune";
-            cityDropDownElement.options[0].selected = true;
             localStorage.setItem("currentCity", currentCity)
         }
 
+        /*
         console.log("RaspberryId: " + raspberryId);
         console.log("Temperature annotion: " + temperatureAnnotation);
         console.log("current city:" + currentCity);
@@ -307,6 +316,7 @@ function browserStorage(): void {
         console.log("Local storage raspberry id: " + localStorage.getItem("raspId"));
         console.log("Local storage temperature annotation: " + localStorage.getItem("temperatureType"));
         console.log("Local storage current city: " + localStorage.getItem("currentCity"));
+        */
     }
     //If localStorage is not supported we tell the client. 
     else {
@@ -510,6 +520,12 @@ function fillDropDown() {
 
         cityDropDownElement.add(option);
     }
+    
+    for (let index = 0; index < apiNames.length; index++) {
+        if(apiNames[index] === currentCity){
+            cityDropDownElement.selectedIndex = index;
+        }
+    }    
 }
 
 function loadData(): void {
@@ -596,10 +612,12 @@ function loadApiData(): void {
 
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
+    popupActive = true;
 }
 
 function closeRaspberryIdPopup() {
     popupElement.style.display = "none";
+    popupActive = false;
 }
 
 //
