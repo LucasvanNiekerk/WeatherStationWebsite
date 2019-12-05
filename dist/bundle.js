@@ -35881,8 +35881,6 @@ var temperatureAnnotation;
 var raspberryId = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 var currentCity = "";
-// boolean wether the popup is active or not
-var popupActive = false;
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
@@ -36100,7 +36098,7 @@ function fixMortensbuttons() {
         label1.className += " active";
         label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g, '');
     }
-    else {
+    else if (temperatureAnnotation === "Fahrenheit") {
         label2.className += " active";
         label1.className = label1.className.replace(/(?:^|\s)active(?!\S)/g, '');
     }
@@ -36284,10 +36282,12 @@ function changeCity() {
 // Helper functions
 //
 function getAnnotion() {
-    if (temperatureAnnotation === "Celsius")
+    if (temperatureAnnotation === "Celsius") {
         return "<sup3days>°C</sup3days>";
-    else if (temperatureAnnotation === "Fahrenheit")
+    }
+    else if (temperatureAnnotation === "Fahrenheit") {
         return "<sup3days>°F</sup3days>";
+    }
 }
 function formatDate(date) {
     var monthNames = [
@@ -36322,13 +36322,13 @@ function compareDates(firstDate, secondDate) {
 function errorMessage(error) {
     console.log(error.message);
     console.log(error.code);
-    console.log(error.response);
 }
-//Converts from celcius to fahrenheit. Takes a string (temperature from our web api is a string) and converts it to fahrenheit and returns it as a string.
+//Converts from celcius to fahrenheit. Takes a string and converts it to fahrenheit and returns it as a string.
 function convertToFahrenheit(temp) {
     // tF = tC * 9/5 + 32
     return (Number(temp) * (9 / 5) + 32).toFixed(1);
 }
+//Converts from fahrenheit to celcius. Takes a string and converts it to fahrenheit and returns it as a string.
 function convertToCelcius(temp) {
     // tC = (tF -32) / (9 / 5) 
     return ((Number(temp) - 32) / (9 / 5)).toFixed(1);
@@ -36339,11 +36339,9 @@ function loadApiData() {
 }
 function openRaspberryIdPopup() {
     popupElement.style.display = "block";
-    popupActive = true;
 }
 function closeRaspberryIdPopup() {
     popupElement.style.display = "none";
-    popupActive = false;
 }
 //
 // OpenWeatherMap API models. (We only use small part).
