@@ -13,37 +13,23 @@
 </head> 
 
 <body>
-  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
-    <a class="navbar-brand" href="">PiVejr</a>
+    <nav class="navbar bg-dark navbar-dark">
 
-    <!-- Toggler/collapsibe Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="btn btn-dark" id="FrontpageButton"><img height="30" width="35" src="home.png" alt="Home"></button>
+        <button class="btn btn-dark" id="OlderDataButton"><img height="30" width="35" src="graph.png" alt="Graph"></button>
 
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <button class="btn btn-dark" id="FrontpageButton">Forside</button>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-dark" id="OlderDataButton">Gamle data</button>
-        </li>
-      </ul>
-    </div>
-    <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
-    <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId">Skift sensor</button>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-secondary active">
-          <input type="radio" name="options" id="annotationOption1" autocomplete="off" checked> °C
-        </label>
-        <label class="btn btn-secondary">
-          <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
-        </label>
-      </div>
-  </nav>
+        <button class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img width="25px" height="30px" src="ShiftPi.png" alt="ShiftPi"></button>
+
+        <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options" id="annotationOption1" autocomplete="off" checked> °C
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
+            </label>
+        </div>
+    </nav>
 
   <!--Frontpage div opening div-->
   <div id="Frontpage">
