@@ -162,10 +162,17 @@ Chart.defaults.global.defaultFontColor = "#fff";
 
 
 let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+let D: Date = new Date();
+let s: string = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
+dayInputField.value = s;
+console.log(s);
 dayInputField.addEventListener("change", get7Days);
 let tableStringArray: string[] = ["","","","","","","","",""];
+let arrayIndex: number = 0;
 
 function get7Days(): void {
+    console.log(tableStringArray.join(""));
+    arrayIndex = 0;
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
     
     let date: Date = new Date(dayInputField.value);
@@ -176,7 +183,6 @@ function get7Days(): void {
   
         date.setDate(date.getDate() + 1);
     }
-    date.setDate(8);
 }
 
 function getRangeOfDay(date: Date, index: number): void {
@@ -189,6 +195,7 @@ function getRangeOfDay(date: Date, index: number): void {
     let avgHumidity: number = 0;
     let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
     let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
+    console.log(raspberryId);
     console.log(Url);
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
@@ -199,24 +206,25 @@ function getRangeOfDay(date: Date, index: number): void {
                 resultTemperature += Number(weatherInfo.temperature);
                 resultHumidity += Number(weatherInfo.humidity);
             });
+            
             if (i > 0) {
                 avgTemperature = resultTemperature / i;
                 avgHumidity = resultHumidity / i;
 
             }
-            console.log("before: " + tempDate)
+            arrayIndex += 1;
+            console.log(index + 1);
+            console.log(tempDate);
             let tType: string = " °C";
             tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
 
-            if(index > 5){
+            if(arrayIndex > 5){
                 tableStringArray[8] = "</tbody>";
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
             //console.log("temp: " + avgTemperature);
             //console.log("hum: " + avgHumidity);
-            //console.log(index);
-            console.log(tempDate);
             myChart.data.datasets[0].data[index] = avgTemperature;  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
@@ -269,6 +277,7 @@ function onloadMethods(): void {
         browserStorage();
         fillDropDown();
         loadData();
+        get7Days();
 
     }, 10)
 }
