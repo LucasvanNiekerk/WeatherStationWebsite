@@ -72,6 +72,16 @@ hr{
     max-height: 300px;
 }
 
+//InputColor
+input.inputStyle{
+    color: white;
+    background-color: #0000005e;
+    text-align: center;
+    width: 50%;
+    min-width: 200px;
+    margin: auto;
+}
+
 //borderless
 table.table-borderless{
     text-align: center;
