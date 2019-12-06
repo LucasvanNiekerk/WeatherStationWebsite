@@ -35870,7 +35870,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/chart.js */ "./node_modules/chart.js/dist/Chart.js");
 /* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__);
 
-
+ //Ignore me I do work
 //
 // Browser data / local storage.
 //
@@ -35973,67 +35973,8 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
 });
 _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 var dayInputField = document.getElementById("dayInputField");
-var D = new Date();
-var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
-dayInputField.value = s;
-console.log(s);
 dayInputField.addEventListener("change", get7Days);
 var tableStringArray = ["", "", "", "", "", "", "", "", ""];
-var arrayIndex = 0;
-function get7Days() {
-    console.log(tableStringArray.join(""));
-    arrayIndex = 0;
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
-    var date = new Date(dayInputField.value);
-    date.setDate(date.getDate() - 6);
-    for (var i = 0; i < 7; i++) {
-        getRangeOfDay(date, i);
-        date.setDate(date.getDate() + 1);
-    }
-}
-function getRangeOfDay(date, index) {
-    var i = 0;
-    var options = { year: 'numeric', month: 'short', day: '2-digit' };
-    var tempDate = date.toLocaleString('da-DK', options);
-    var resultTemperature = 0;
-    var resultHumidity = 0;
-    var avgTemperature = 0;
-    var avgHumidity = 0;
-    var getAllOutputTable = document.getElementById("getAllOutputTable");
-    var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
-    console.log(raspberryId);
-    console.log(Url);
-    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
-        .then(function (response) {
-        //console.log(response.data);
-        response.data.forEach(function (weatherInfo) {
-            i++;
-            resultTemperature += Number(weatherInfo.temperature);
-            resultHumidity += Number(weatherInfo.humidity);
-        });
-        if (i > 0) {
-            avgTemperature = resultTemperature / i;
-            avgHumidity = resultHumidity / i;
-        }
-        arrayIndex += 1;
-        console.log(index + 1);
-        console.log(tempDate);
-        var tType = " °C";
-        tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
-        if (arrayIndex > 5) {
-            tableStringArray[8] = "</tbody>";
-            getAllOutputTable.innerHTML = tableStringArray.join("");
-        }
-        //console.log("temp: " + avgTemperature);
-        //console.log("hum: " + avgHumidity);
-        myChart.data.datasets[0].data[index] = avgTemperature;
-        myChart.data.datasets[1].data[index] = avgHumidity;
-        myChart.update();
-    });
-    myChart.data.labels[index] = date.toLocaleString('da-DK', options);
-    myChart.update();
-    //console.log(date.getDate());
-}
 //
 // Buttons
 //
@@ -36064,7 +36005,6 @@ function onloadMethods() {
         if (localStorage.getItem("raspId") != null) {
             loadData();
         }
-        get7Days();
     }, 10);
 }
 function browserStorage() {
@@ -36246,6 +36186,7 @@ function getApiPrognosisWeatherInformation(daysToGet) {
         .catch(errorMessage);
 }
 function fillPrognosisElements(dataArray, dates) {
+    //Change all the information to 1 decimal.
     for (var i = 0; i < dataArray.length; i++) {
         dataArray[i] = toNumberToFixed(dataArray[i], 1);
     }
@@ -36261,14 +36202,18 @@ function fillPrognosisElements(dataArray, dates) {
     prognosisday3.innerHTML = formatDate(dates[2]);
 }
 function fillDropDown() {
+    //The names of the cities avaible in openweathermap.
     var cities = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"];
+    //The names of the cities in the api and the ones we use to GET the information. 
     var apiNames = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"];
+    //We will our dropdown with the cities, since it's easier and faster than to manually add them.
     for (var index = 0; index < cities.length; index++) {
         var option = document.createElement('option');
         option.value = apiNames[index];
         option.text = cities[index];
         cityDropDownElement.add(option);
     }
+    // We find out which city the user has last used and set the current selected one to the one saved.    
     for (var index = 0; index < apiNames.length; index++) {
         if (apiNames[index] === currentCity) {
             cityDropDownElement.selectedIndex = index;
@@ -36285,6 +36230,58 @@ function changeCity() {
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
     loadApiData();
+}
+function get7Days() {
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
+    var date = new Date(dayInputField.value);
+    date.setDate(date.getDate() - 6);
+    for (var i = 0; i < 7; i++) {
+        getRangeOfDay(date, i);
+        date.setDate(date.getDate() + 1);
+    }
+    date.setDate(8);
+}
+function getRangeOfDay(date, index) {
+    var i = 0;
+    var options = { year: 'numeric', month: 'short', day: '2-digit' };
+    var tempDate = date.toLocaleString('da-DK', options);
+    var resultTemperature = 0;
+    var resultHumidity = 0;
+    var avgTemperature = 0;
+    var avgHumidity = 0;
+    var getAllOutputTable = document.getElementById("getAllOutputTable");
+    var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
+    console.log(Url);
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        //console.log(response.data);
+        response.data.forEach(function (weatherInfo) {
+            i++;
+            resultTemperature += Number(weatherInfo.temperature);
+            resultHumidity += Number(weatherInfo.humidity);
+        });
+        if (i > 0) {
+            avgTemperature = resultTemperature / i;
+            avgHumidity = resultHumidity / i;
+        }
+        console.log("before: " + tempDate);
+        var tType = " °C";
+        tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
+        if (index > 5) {
+            tableStringArray[8] = "</tbody>";
+            getAllOutputTable.innerHTML = tableStringArray.join("");
+        }
+        //console.log("temp: " + avgTemperature);
+        //console.log("hum: " + avgHumidity);
+        //console.log(index);
+        console.log(tempDate);
+        myChart.data.datasets[0].data[index] = avgTemperature;
+        myChart.data.datasets[1].data[index] = avgHumidity;
+        myChart.update();
+    });
+    myChart.data.labels[index] = date.toLocaleString('da-DK', options);
+    myChart.update();
+    //console.log(date.getDate());
 }
 //
 // Helper functions
