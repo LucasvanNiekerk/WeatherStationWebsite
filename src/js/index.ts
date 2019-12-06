@@ -540,7 +540,7 @@ function getRangeOfDay(date: Date, index: number): void {
                 tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
             }
             else if(temperatureAnnotation === "Fahrenheit"){
-                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + convertToFahrenheit(avgTemperature.toString()) + tType + "</td><td>" + convertToFahrenheit(avgHumidity.toString()) + "%" + "</td> </tr>";
+                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + convertToFahrenheit(avgTemperature.toString()) + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
             }
 
 
