@@ -36250,11 +36250,11 @@ dayInputField.value = s;
 var arrayIndex = 0;
 arrayIndex = 0;
 function get7Days() {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Tmp</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
     var date = new Date(dayInputField.value);
     date.setDate(date.getDate() - 6);
-    for (var i = 0; i < 7; i++) {
+    for (var i = 7; i > 0; i--) {
         getRangeOfDay(date, i);
         date.setDate(date.getDate() + 1);
     }

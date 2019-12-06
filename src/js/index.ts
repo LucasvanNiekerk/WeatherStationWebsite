@@ -495,12 +495,12 @@ var arrayIndex = 0;
 arrayIndex = 0;
 
 function get7Days(): void {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Tmp</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
     let date: Date = new Date(dayInputField.value);
     date.setDate(date.getDate() - 6);
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 7; i > 0; i--) {
         getRangeOfDay(date, i);
   
         date.setDate(date.getDate() + 1);
