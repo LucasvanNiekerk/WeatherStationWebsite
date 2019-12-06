@@ -59,9 +59,11 @@ let thirdPartApiBaseUri: string = "http://api.openweathermap.org/data/2.5/";
 // Diverse elemenets
 //
 
+//Div elements to display the data from our own api.
 let internalTemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("internalTemperature");
 let internalHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("internalHumidity");
 
+//Div elements to display the data from the third party api we use.
 let externalAPITemperatureOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalAPITemperature");
 let externalAPIHumidityOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("externalAPIHumidity");
 
@@ -72,30 +74,40 @@ let prognosisHumidityOutputElement2: HTMLDivElement = <HTMLDivElement>document.g
 let prognosisTemperatureOutputElement3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisTemperature3");
 let prognosisHumidityOutputElement3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisHumidity3");
 
+//Div element to display an error if the browser does not support local storage.
 let NoLocalStorageOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("NoLocalStorage");
 
+//Div element that pops up on first time launch to request an raspberry id.
 let popupElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdPopup");
 
+//Div element inside the popup element that displays error messages.
 let raspberryIdErrorDivOutputElement: HTMLDivElement = <HTMLDivElement>document.getElementById("raspberryIdErrorOutput");
 
+//Input element inside the popup element that takes the users raspberry id.
 let raspberryIdInputElement: HTMLInputElement = <HTMLInputElement>document.getElementById("raspberryIdInput");
 raspberryIdInputElement.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13) {  //keyCode 13 = Enter.
         event.preventDefault();
         rasberryIdSubmitButton.click();
     }
 });
 
+//Div element that contains everything from the frontpage. (We use this to hide and show it depending on which "page" the user is on).
 let frontpageDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("Frontpage");
+
+//Div element that contains everything from the older data page. (We use this to hide and show it depending on which "page" the user is on).
 let olderDataDivElement: HTMLDivElement = <HTMLDivElement>document.getElementById("OlderData");
 
+//Select element to pick which city that data displayed should come from.
 let cityDropDownElement: HTMLSelectElement = <HTMLSelectElement>document.getElementById("cityDropDown");
 cityDropDownElement.addEventListener("change", changeCity);
 
+//Div elements to display a 3 day prognosis from the third parti api we use.
 let prognosisday1: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay1");
 let prognosisday2: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay2");
 let prognosisday3: HTMLDivElement = <HTMLDivElement>document.getElementById("prognosisDay3");
 
+//Label elements to highlight the selected temperature annotation.
 let label1: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label1");
 let label2: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label2");
 
@@ -103,6 +115,7 @@ let label2: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label2
 // Chart
 //
 
+//Canvas element to display a chart of the last seven days of weather information from our own api.
 let chart: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById("chart");
 var myChart = new Chart(chart, {
     type: 'line',
@@ -200,9 +213,8 @@ function onloadMethods(): void {
         //localStorage.clear();
         browserStorage();
         fillDropDown();
-        if(localStorage.getItem("raspId") != null){
-            loadData();
-        }
+        if(localStorage.getItem("raspId") != null) loadData();
+        get7Days();
 
     }, 10)
 }
@@ -228,7 +240,8 @@ function browserStorage(): void {
             localStorage.setItem("temperatureType", temperatureAnnotation);
         }
 
-        fixMortensbuttons();
+        //Shows which button is selected in radio buttons for temperature annotion.
+        displaySelectedRadioButton();
 
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
@@ -247,7 +260,7 @@ function browserStorage(): void {
     }
 }
 
-function fixMortensbuttons(){
+function displaySelectedRadioButton(){
     if(temperatureAnnotation === "Celsius"){
         label1.className += " active";
         label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g , '');
@@ -475,9 +488,15 @@ function changeCity(){
     loadApiData();
 }
 
+var D = new Date();
+var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
+dayInputField.value = s;
+var arrayIndex = 0;
+arrayIndex = 0;
+
 function get7Days(): void {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
-    
+    arrayIndex = 0;
     let date: Date = new Date(dayInputField.value);
     date.setDate(date.getDate() - 6);
 
@@ -486,7 +505,6 @@ function get7Days(): void {
   
         date.setDate(date.getDate() + 1);
     }
-    date.setDate(8);
 }
 
 function getRangeOfDay(date: Date, index: number): void {
@@ -518,15 +536,13 @@ function getRangeOfDay(date: Date, index: number): void {
             let tType: string = " °C";
             tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
 
-            if(index > 5){
+            arrayIndex += 1;
+
+            if(arrayIndex > 5){
                 tableStringArray[8] = "</tbody>";
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
-            //console.log("temp: " + avgTemperature);
-            //console.log("hum: " + avgHumidity);
-            //console.log(index);
-            console.log(tempDate);
             myChart.data.datasets[0].data[index] = avgTemperature;  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
