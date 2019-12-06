@@ -35870,7 +35870,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../node_modules/chart.js */ "./node_modules/chart.js/dist/Chart.js");
 /* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__);
 
-
+ //Ignore me I do work
 //
 // Browser data / local storage.
 //
@@ -36238,6 +36238,7 @@ function getApiPrognosisWeatherInformation(daysToGet) {
         .catch(errorMessage);
 }
 function fillPrognosisElements(dataArray, dates) {
+    //Change all the information to 1 decimal.
     for (var i = 0; i < dataArray.length; i++) {
         dataArray[i] = toNumberToFixed(dataArray[i], 1);
     }
@@ -36253,14 +36254,18 @@ function fillPrognosisElements(dataArray, dates) {
     prognosisday3.innerHTML = formatDate(dates[2]);
 }
 function fillDropDown() {
+    //The names of the cities avaible in openweathermap.
     var cities = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"];
+    //The names of the cities in the api and the ones we use to GET the information. 
     var apiNames = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"];
+    //We will our dropdown with the cities, since it's easier and faster than to manually add them.
     for (var index = 0; index < cities.length; index++) {
         var option = document.createElement('option');
         option.value = apiNames[index];
         option.text = cities[index];
         cityDropDownElement.add(option);
     }
+    // We find out which city the user has last used and set the current selected one to the one saved.    
     for (var index = 0; index < apiNames.length; index++) {
         if (apiNames[index] === currentCity) {
             cityDropDownElement.selectedIndex = index;
