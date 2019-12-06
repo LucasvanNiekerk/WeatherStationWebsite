@@ -35890,8 +35890,10 @@ var thirdPartApiBaseUri = "http://api.openweathermap.org/data/2.5/";
 //
 // Diverse elemenets
 //
+//Div elements to display the data from our own api.
 var internalTemperatureOutputElement = document.getElementById("internalTemperature");
 var internalHumidityOutputElement = document.getElementById("internalHumidity");
+//Div elements to display the data from the third party api we use.
 var externalAPITemperatureOutputElement = document.getElementById("externalAPITemperature");
 var externalAPIHumidityOutputElement = document.getElementById("externalAPIHumidity");
 var prognosisTemperatureOutputElement1 = document.getElementById("prognosisTemperature1");
@@ -35900,28 +35902,38 @@ var prognosisTemperatureOutputElement2 = document.getElementById("prognosisTempe
 var prognosisHumidityOutputElement2 = document.getElementById("prognosisHumidity2");
 var prognosisTemperatureOutputElement3 = document.getElementById("prognosisTemperature3");
 var prognosisHumidityOutputElement3 = document.getElementById("prognosisHumidity3");
+//Div element to display an error if the browser does not support local storage.
 var NoLocalStorageOutputElement = document.getElementById("NoLocalStorage");
+//Div element that pops up on first time launch to request an raspberry id.
 var popupElement = document.getElementById("raspberryIdPopup");
+//Div element inside the popup element that displays error messages.
 var raspberryIdErrorDivOutputElement = document.getElementById("raspberryIdErrorOutput");
+//Input element inside the popup element that takes the users raspberry id.
 var raspberryIdInputElement = document.getElementById("raspberryIdInput");
 raspberryIdInputElement.addEventListener("keyup", function (event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === 13) { //keyCode 13 = Enter.
         event.preventDefault();
         rasberryIdSubmitButton.click();
     }
 });
+//Div element that contains everything from the frontpage. (We use this to hide and show it depending on which "page" the user is on).
 var frontpageDivElement = document.getElementById("Frontpage");
+//Div element that contains everything from the older data page. (We use this to hide and show it depending on which "page" the user is on).
 var olderDataDivElement = document.getElementById("OlderData");
+//Select element to pick which city that data displayed should come from.
 var cityDropDownElement = document.getElementById("cityDropDown");
 cityDropDownElement.addEventListener("change", changeCity);
+//Div elements to display a 3 day prognosis from the third parti api we use.
 var prognosisday1 = document.getElementById("prognosisDay1");
 var prognosisday2 = document.getElementById("prognosisDay2");
 var prognosisday3 = document.getElementById("prognosisDay3");
+//Label elements to highlight the selected temperature annotation.
 var label1 = document.getElementById("label1");
 var label2 = document.getElementById("label2");
 //
 // Chart
 //
+//Canvas element to display a chart of the last seven days of weather information from our own api.
 var chart = document.getElementById("chart");
 var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](chart, {
     type: 'line',
@@ -36002,9 +36014,8 @@ function onloadMethods() {
         //localStorage.clear();
         browserStorage();
         fillDropDown();
-        if (localStorage.getItem("raspId") != null) {
+        if (localStorage.getItem("raspId") != null)
             loadData();
-        }
     }, 10);
 }
 function browserStorage() {
@@ -36025,7 +36036,8 @@ function browserStorage() {
             temperatureAnnotation = "Celsius";
             localStorage.setItem("temperatureType", temperatureAnnotation);
         }
-        fixMortensbuttons();
+        //Shows which button is selected in radio buttons for temperature annotion.
+        displaySelectedRadioButton();
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
             currentCity = localStorage.getItem("currentCity");
@@ -36041,7 +36053,7 @@ function browserStorage() {
         console.log("Webstorage is supported by (minimun version): Google Chrome v4.0, Microsoft Edge v8.0, Firefox v3.5, Safari v4.0 and Opera v11.5");
     }
 }
-function fixMortensbuttons() {
+function displaySelectedRadioButton() {
     if (temperatureAnnotation === "Celsius") {
         label1.className += " active";
         label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g, '');
