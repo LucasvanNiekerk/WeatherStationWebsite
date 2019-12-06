@@ -35973,9 +35973,16 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
 });
 _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
 var dayInputField = document.getElementById("dayInputField");
+var D = new Date();
+var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
+dayInputField.value = s;
+console.log(s);
 dayInputField.addEventListener("change", get7Days);
 var tableStringArray = ["", "", "", "", "", "", "", "", ""];
+var arrayIndex = 0;
 function get7Days() {
+    console.log(tableStringArray.join(""));
+    arrayIndex = 0;
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
     var date = new Date(dayInputField.value);
     date.setDate(date.getDate() - 6);
@@ -35983,7 +35990,6 @@ function get7Days() {
         getRangeOfDay(date, i);
         date.setDate(date.getDate() + 1);
     }
-    date.setDate(8);
 }
 function getRangeOfDay(date, index) {
     var i = 0;
@@ -35995,6 +36001,7 @@ function getRangeOfDay(date, index) {
     var avgHumidity = 0;
     var getAllOutputTable = document.getElementById("getAllOutputTable");
     var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
+    console.log(raspberryId);
     console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
@@ -36008,17 +36015,17 @@ function getRangeOfDay(date, index) {
             avgTemperature = resultTemperature / i;
             avgHumidity = resultHumidity / i;
         }
-        console.log("before: " + tempDate);
+        arrayIndex += 1;
+        console.log(index + 1);
+        console.log(tempDate);
         var tType = " °C";
         tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
-        if (index > 5) {
+        if (arrayIndex > 5) {
             tableStringArray[8] = "</tbody>";
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
         //console.log("temp: " + avgTemperature);
         //console.log("hum: " + avgHumidity);
-        //console.log(index);
-        console.log(tempDate);
         myChart.data.datasets[0].data[index] = avgTemperature;
         myChart.data.datasets[1].data[index] = avgHumidity;
         myChart.update();
@@ -36057,6 +36064,7 @@ function onloadMethods() {
         if (localStorage.getItem("raspId") != null) {
             loadData();
         }
+        get7Days();
     }, 10);
 }
 function browserStorage() {
