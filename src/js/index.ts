@@ -49,7 +49,6 @@ let currentCity: string = "";
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
-
 // The baseUri for our web Api. For more information regarding the Api visit "https://weatherstationrest2019.azurewebsites.net/api/help/index.html".
 let baseUri: string = "https://weatherstationrest2019.azurewebsites.net/api/wi/";
 
@@ -158,72 +157,10 @@ var myChart = new Chart(chart, {
 
 Chart.defaults.global.defaultFontColor = "#fff";
 
-
 let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
 dayInputField.addEventListener("change", get7Days);
+
 let tableStringArray: string[] = ["","","","","","","","",""];
-
-function get7Days(): void {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
-    
-    let date: Date = new Date(dayInputField.value);
-    date.setDate(date.getDate() - 6);
-
-    for (let i = 0; i < 7; i++) {
-        getRangeOfDay(date, i);
-  
-        date.setDate(date.getDate() + 1);
-    }
-    date.setDate(8);
-}
-
-function getRangeOfDay(date: Date, index: number): void {
-    let i: number = 0;
-    var options = { year: 'numeric', month: 'short', day: '2-digit' };
-    let tempDate: string = date.toLocaleString('da-DK', options);
-    let resultTemperature: number = 0;
-    let resultHumidity: number = 0;
-    let avgTemperature: number = 0;
-    let avgHumidity: number = 0;
-    let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
-    let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
-    console.log(Url);
-    axios.get<IWeather[]>(Url)
-        .then(function (response: AxiosResponse<IWeather[]>): void {
-           
-            //console.log(response.data);
-            response.data.forEach((weatherInfo: IWeather) => {
-                i++;
-                resultTemperature += Number(weatherInfo.temperature);
-                resultHumidity += Number(weatherInfo.humidity);
-            });
-            if (i > 0) {
-                avgTemperature = resultTemperature / i;
-                avgHumidity = resultHumidity / i;
-
-            }
-            console.log("before: " + tempDate)
-            let tType: string = " °C";
-            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
-
-            if(index > 5){
-                tableStringArray[8] = "</tbody>";
-                getAllOutputTable.innerHTML = tableStringArray.join("");
-            }
-
-            //console.log("temp: " + avgTemperature);
-            //console.log("hum: " + avgHumidity);
-            //console.log(index);
-            console.log(tempDate);
-            myChart.data.datasets[0].data[index] = avgTemperature;  
-            myChart.data.datasets[1].data[index] = avgHumidity;   
-            myChart.update(); 
-            
-        });        
-        myChart.data.labels[index] = date.toLocaleString('da-DK', options);
-        myChart.update();
-        //console.log(date.getDate());
-}
 
 
 //
@@ -536,6 +473,68 @@ function changeCity(){
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
     loadApiData();
+}
+
+function get7Days(): void {
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
+    
+    let date: Date = new Date(dayInputField.value);
+    date.setDate(date.getDate() - 6);
+
+    for (let i = 0; i < 7; i++) {
+        getRangeOfDay(date, i);
+  
+        date.setDate(date.getDate() + 1);
+    }
+    date.setDate(8);
+}
+
+function getRangeOfDay(date: Date, index: number): void {
+    let i: number = 0;
+    var options = { year: 'numeric', month: 'short', day: '2-digit' };
+    let tempDate: string = date.toLocaleString('da-DK', options);
+    let resultTemperature: number = 0;
+    let resultHumidity: number = 0;
+    let avgTemperature: number = 0;
+    let avgHumidity: number = 0;
+    let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
+    let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
+    console.log(Url);
+    axios.get<IWeather[]>(Url)
+        .then(function (response: AxiosResponse<IWeather[]>): void {
+           
+            //console.log(response.data);
+            response.data.forEach((weatherInfo: IWeather) => {
+                i++;
+                resultTemperature += Number(weatherInfo.temperature);
+                resultHumidity += Number(weatherInfo.humidity);
+            });
+            if (i > 0) {
+                avgTemperature = resultTemperature / i;
+                avgHumidity = resultHumidity / i;
+
+            }
+            console.log("before: " + tempDate)
+            let tType: string = " °C";
+            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
+
+            if(index > 5){
+                tableStringArray[8] = "</tbody>";
+                getAllOutputTable.innerHTML = tableStringArray.join("");
+            }
+
+            //console.log("temp: " + avgTemperature);
+            //console.log("hum: " + avgHumidity);
+            //console.log(index);
+            console.log(tempDate);
+            myChart.data.datasets[0].data[index] = avgTemperature;  
+            myChart.data.datasets[1].data[index] = avgHumidity;   
+            myChart.update(); 
+            
+        });        
+        myChart.data.labels[index] = date.toLocaleString('da-DK', options);
+        myChart.update();
+        //console.log(date.getDate());
 }
 
 //
