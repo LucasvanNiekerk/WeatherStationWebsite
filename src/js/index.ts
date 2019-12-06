@@ -1,5 +1,5 @@
 import axios, { AxiosResponse, AxiosError } from "../../node_modules/axios/index";
-import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js';
+import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js'; //Ignore me I do work
 
 //
 // Interfaces 
@@ -160,17 +160,10 @@ Chart.defaults.global.defaultFontColor = "#fff";
 
 
 let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
-let D: Date = new Date();
-let s: string = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
-dayInputField.value = s;
-console.log(s);
 dayInputField.addEventListener("change", get7Days);
 let tableStringArray: string[] = ["","","","","","","","",""];
-let arrayIndex: number = 0;
 
 function get7Days(): void {
-    console.log(tableStringArray.join(""));
-    arrayIndex = 0;
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
     
     let date: Date = new Date(dayInputField.value);
@@ -181,6 +174,7 @@ function get7Days(): void {
   
         date.setDate(date.getDate() + 1);
     }
+    date.setDate(8);
 }
 
 function getRangeOfDay(date: Date, index: number): void {
@@ -193,7 +187,6 @@ function getRangeOfDay(date: Date, index: number): void {
     let avgHumidity: number = 0;
     let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
     let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
-    console.log(raspberryId);
     console.log(Url);
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
@@ -204,25 +197,24 @@ function getRangeOfDay(date: Date, index: number): void {
                 resultTemperature += Number(weatherInfo.temperature);
                 resultHumidity += Number(weatherInfo.humidity);
             });
-            
             if (i > 0) {
                 avgTemperature = resultTemperature / i;
                 avgHumidity = resultHumidity / i;
 
             }
-            arrayIndex += 1;
-            console.log(index + 1);
-            console.log(tempDate);
+            console.log("before: " + tempDate)
             let tType: string = " °C";
             tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
 
-            if(arrayIndex > 5){
+            if(index > 5){
                 tableStringArray[8] = "</tbody>";
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
             //console.log("temp: " + avgTemperature);
             //console.log("hum: " + avgHumidity);
+            //console.log(index);
+            console.log(tempDate);
             myChart.data.datasets[0].data[index] = avgTemperature;  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
@@ -274,7 +266,6 @@ function onloadMethods(): void {
         if(localStorage.getItem("raspId") != null){
             loadData();
         }
-        get7Days();
 
     }, 10)
 }
@@ -483,7 +474,6 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
                         }
                     }
                 }
-                
             });
 
             fillPrognosisElements(dataArray, dates);
@@ -492,7 +482,7 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
 }
 
 function fillPrognosisElements(dataArray: string[], dates: Date[]){
-    
+    //Change all the information to 1 decimal.
     for (let i = 0; i < dataArray.length; i++) {
         dataArray[i] = toNumberToFixed(dataArray[i], 1);
     }
@@ -513,17 +503,21 @@ function fillPrognosisElements(dataArray: string[], dates: Date[]){
 }
 
 function fillDropDown() {
+    //The names of the cities avaible in openweathermap.
     let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"]
+    //The names of the cities in the api and the ones we use to GET the information. 
     let apiNames: string[] = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"]
 
+    //We will our dropdown with the cities, since it's easier and faster than to manually add them.
     for (let index = 0; index < cities.length; index++) {
         let option: HTMLOptionElement = document.createElement('option');
-        option.value = apiNames[index]
+        option.value = apiNames[index];
         option.text = cities[index];
 
         cityDropDownElement.add(option);
     }
     
+    // We find out which city the user has last used and set the current selected one to the one saved.    
     for (let index = 0; index < apiNames.length; index++) {
         if(apiNames[index] === currentCity){
             cityDropDownElement.selectedIndex = index;
