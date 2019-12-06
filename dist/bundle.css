@@ -36,7 +36,7 @@ hr {
   font-size: calc(25px + 2.5vw); }
 
 .divText3days {
-  font-size: calc(2px + 2.5vw); }
+  font-size: calc(10px + 2vw); }
 
 .divBox {
   background-color: #0000005e;
@@ -115,7 +115,7 @@ sup {
 
 sup3days {
   vertical-align: super;
-  font-size: calc(2px + 1vw); }
+  font-size: calc(7px + 1vw); }
 
 ::-webkit-scrollbar {
   display: none; }
