@@ -36348,9 +36348,9 @@ function toNumberToFixed(num, amountOfDecimals) {
     return Number(num).toFixed(amountOfDecimals);
 }
 function compareDates(firstDate, secondDate) {
-    return firstDate.getFullYear() == secondDate.getFullYear()
-        && firstDate.getMonth() == secondDate.getMonth()
-        && firstDate.getDate() == secondDate.getDate();
+    return firstDate.getFullYear() === secondDate.getFullYear()
+        && firstDate.getMonth() === secondDate.getMonth()
+        && firstDate.getDate() === secondDate.getDate();
 }
 function errorMessage(error) {
     console.log(error.message);

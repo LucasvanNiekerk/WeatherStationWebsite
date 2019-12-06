@@ -615,9 +615,9 @@ function toNumberToFixed(num: string, amountOfDecimals: number): string {
 }
 
 function compareDates(firstDate: Date, secondDate: Date): boolean {
-    return firstDate.getFullYear() == secondDate.getFullYear()
-        && firstDate.getMonth() == secondDate.getMonth()
-        && firstDate.getDate() == secondDate.getDate();
+    return firstDate.getFullYear() === secondDate.getFullYear()
+        && firstDate.getMonth() === secondDate.getMonth()
+        && firstDate.getDate() === secondDate.getDate();
 }
 
 function errorMessage(error: AxiosError) {
