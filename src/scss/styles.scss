@@ -138,32 +138,3 @@ sup3days {
 ::-webkit-scrollbar {
     display: none;
 }
-
-
-//Change image on hover effect
-.card {
-    position: relative;
-    background-color:transparent;
-    border:none;
-}
-
-.card .img-top {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 99;
-}
-
-.card:hover .img-top {
-    display: inline;
-}
-
-.transparentBtn {
-    background-color: Transparent;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
-}
