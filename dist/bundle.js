@@ -36016,6 +36016,7 @@ function onloadMethods() {
         fillDropDown();
         if (localStorage.getItem("raspId") != null)
             loadData();
+        get7Days();
     }, 10);
 }
 function browserStorage() {
@@ -36243,15 +36244,20 @@ function changeCity() {
     console.log(localStorage.getItem("currentCity"));
     loadApiData();
 }
+var D = new Date();
+var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
+dayInputField.value = s;
+var arrayIndex = 0;
+arrayIndex = 0;
 function get7Days() {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugtighed</th> </tr> </thead> <tbody>";
+    arrayIndex = 0;
     var date = new Date(dayInputField.value);
     date.setDate(date.getDate() - 6);
     for (var i = 0; i < 7; i++) {
         getRangeOfDay(date, i);
         date.setDate(date.getDate() + 1);
     }
-    date.setDate(8);
 }
 function getRangeOfDay(date, index) {
     var i = 0;
@@ -36279,14 +36285,11 @@ function getRangeOfDay(date, index) {
         console.log("before: " + tempDate);
         var tType = " °C";
         tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
-        if (index > 5) {
+        arrayIndex += 1;
+        if (arrayIndex > 5) {
             tableStringArray[8] = "</tbody>";
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
-        //console.log("temp: " + avgTemperature);
-        //console.log("hum: " + avgHumidity);
-        //console.log(index);
-        console.log(tempDate);
         myChart.data.datasets[0].data[index] = avgTemperature;
         myChart.data.datasets[1].data[index] = avgHumidity;
         myChart.update();
