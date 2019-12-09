@@ -35874,7 +35874,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 // Browser data / local storage.
 //
-// Determines whether celcius or fahrenheit is used. This information is saved in localStorage with the key "temperatureType".
+// Determines whether celsius or fahrenheit is used. This information is saved in localStorage with the key "temperatureType".
 var temperatureAnnotation;
 // The raspberryPi where the data is comming from. Raspberry id is a string and has to be exactly 10 characters long.
 //This information is saved in localStorage with the key "raspId".
@@ -36029,12 +36029,12 @@ function browserStorage() {
         else {
             openRaspberryIdPopup();
         }
-        // Tjek if temperature annotion preference is saved, otherwise we assume it's celcius.
+        // Tjek if temperature annotion preference is saved, otherwise we assume it's celsius.
         if (localStorage.getItem("temperatureType") != null) {
             temperatureAnnotation = localStorage.getItem("temperatureType");
         }
         else {
-            temperatureAnnotation = "Celsius";
+            temperatureAnnotation = "celsius";
             localStorage.setItem("temperatureType", temperatureAnnotation);
         }
         //Shows which button is selected in radio buttons for temperature annotion.
@@ -36055,11 +36055,11 @@ function browserStorage() {
     }
 }
 function displaySelectedRadioButton() {
-    if (temperatureAnnotation === "Celsius") {
+    if (temperatureAnnotation === "celsius") {
         label1.className += " active";
         label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g, '');
     }
-    else if (temperatureAnnotation === "Fahrenheit") {
+    else if (temperatureAnnotation === "fahrenheit") {
         label2.className += " active";
         label1.className = label1.className.replace(/(?:^|\s)active(?!\S)/g, '');
     }
@@ -36074,10 +36074,10 @@ function displayOlderData() {
 }
 function changeTemperatureAnnotation() {
     if (annotationOption2.checked) {
-        temperatureAnnotation = "Fahrenheit";
+        temperatureAnnotation = "fahrenheit";
     }
     else if (annotationOption1.checked) {
-        temperatureAnnotation = "Celsius";
+        temperatureAnnotation = "celsius";
     }
     localStorage.setItem("temperatureType", temperatureAnnotation);
     get7Days();
@@ -36086,15 +36086,15 @@ function changeTemperatureAnnotation() {
 // Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
 function getLatestWeatherInformation(divElement, typeOfInfo) {
     // eg. https://weatherstationrest2019.azurewebsites.net/api/wi/latest/78ANBj918k
-    var Url = baseUri + "latest/" + raspberryId;
+    var Url = baseUri + "latest/" + raspberryId + "/" + temperatureAnnotation;
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         if (typeOfInfo === "Temperature") {
-            if (temperatureAnnotation === "Celsius") {
+            if (temperatureAnnotation === "celsius") {
                 divElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
             }
-            else if (temperatureAnnotation === "Fahrenheit") {
-                divElement.innerHTML = convertToFahrenheit(response.data.temperature) + "<sup>°F</sup>";
+            else if (temperatureAnnotation === "fahrenheit") {
+                divElement.innerHTML = response.data.temperature + "<sup>°F</sup>";
             }
         }
         else if (typeOfInfo === "Humidity") {
@@ -36143,10 +36143,10 @@ function getAPIWeatherInformation() {
         var responseData = JSON.stringify(response.data);
         var temperature = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         var humidity = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
-        if (temperatureAnnotation === "Celsius") {
+        if (temperatureAnnotation === "celsius") {
             externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
         }
-        else if (temperatureAnnotation === "Fahrenheit") {
+        else if (temperatureAnnotation === "fahrenheit") {
             externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
         }
         externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
@@ -36269,7 +36269,7 @@ function getRangeOfDay(date, index) {
     var avgTemperature = 0;
     var avgHumidity = 0;
     var getAllOutputTable = document.getElementById("getAllOutputTable");
-    var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2);
+    var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2) + "/" + temperatureAnnotation;
     console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
@@ -36284,26 +36284,20 @@ function getRangeOfDay(date, index) {
             avgHumidity = resultHumidity / i;
         }
         console.log("before: " + tempDate);
-        var tType = temperatureAnnotation === "Celsius" ? " °C" : " °F";
-        if (temperatureAnnotation === "Celsius") {
+        var tType = temperatureAnnotation === "celsius" ? " °C" : " °F";
+        if (temperatureAnnotation === "celsius") {
             //Then please do this. OKTHXBY
             tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
         }
-        else if (temperatureAnnotation === "Fahrenheit") {
-            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + convertToFahrenheit(avgTemperature.toString()) + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
+        else if (temperatureAnnotation === "fahrenheit") {
+            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toString() + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
         }
         arrayIndex += 1;
         if (arrayIndex > 5) {
             tableStringArray[8] = "</tbody>";
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
-        if (temperatureAnnotation === "Celsius") {
-            //Then please do this. OKTHXBY
-            myChart.data.datasets[0].data[index] = avgTemperature;
-        }
-        else if (temperatureAnnotation === "Fahrenheit") {
-            myChart.data.datasets[0].data[index] = convertToFahrenheit(avgTemperature.toString());
-        }
+        myChart.data.datasets[0].data[index] = avgTemperature;
         myChart.data.datasets[1].data[index] = avgHumidity;
         myChart.update();
     });
@@ -36315,10 +36309,10 @@ function getRangeOfDay(date, index) {
 // Helper functions
 //
 function getAnnotion() {
-    if (temperatureAnnotation === "Celsius") {
+    if (temperatureAnnotation === "celsius") {
         return "<sup3days>°C</sup3days>";
     }
-    else if (temperatureAnnotation === "Fahrenheit") {
+    else if (temperatureAnnotation === "fahrenheit") {
         return "<sup3days>°F</sup3days>";
     }
 }
@@ -36340,7 +36334,7 @@ function generateUrl(method) {
     Url += "?q=";
     Url += cityDropDownElement.value;
     Url += ",DK";
-    Url += temperatureAnnotation === "Celsius" ? "&units=metric" : "&units=imperial";
+    Url += temperatureAnnotation === "celsius" ? "&units=metric" : "&units=imperial";
     Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
     return Url;
 }
@@ -36355,16 +36349,6 @@ function compareDates(firstDate, secondDate) {
 function errorMessage(error) {
     console.log(error.message);
     console.log(error.code);
-}
-//Converts from celcius to fahrenheit. Takes a string and converts it to fahrenheit and returns it as a string.
-function convertToFahrenheit(temp) {
-    // tF = tC * 9/5 + 32
-    return (Number(temp) * (9 / 5) + 32).toFixed(1);
-}
-//Converts from fahrenheit to celcius. Takes a string and converts it to fahrenheit and returns it as a string.
-function convertToCelcius(temp) {
-    // tC = (tF -32) / (9 / 5) 
-    return ((Number(temp) - 32) / (9 / 5)).toFixed(1);
 }
 function loadApiData() {
     getAPIWeatherInformation();
