@@ -36254,7 +36254,7 @@ function setDayInputValue() {
 }
 var arrayIndex = 0;
 function get7Days() {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temp</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
     var forthIndex = 0; //It just works ehh
     var date = new Date(dayInputField.value);

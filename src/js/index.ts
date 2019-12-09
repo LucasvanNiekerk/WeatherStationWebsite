@@ -502,7 +502,7 @@ function setDayInputValue(): void{
 let arrayIndex: number = 0;
 
 function get7Days(): void {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temp</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
     let forthIndex: number = 0; //It just works ehh
     let date: Date = new Date(dayInputField.value);
