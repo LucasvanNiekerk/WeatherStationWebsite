@@ -283,13 +283,14 @@ function displayOlderData(): void {
 
 function changeTemperatureAnnotation(): void {
     if (annotationOption2.checked) {
-        temperatureAnnotation = "Fahrenheit";        
+        temperatureAnnotation = "Fahrenheit";   
+             
     }
     else if (annotationOption1.checked) {
         temperatureAnnotation = "Celsius";
     }
     localStorage.setItem("temperatureType", temperatureAnnotation);
-
+    get7Days();
     loadData();
 }
 
@@ -533,8 +534,15 @@ function getRangeOfDay(date: Date, index: number): void {
 
             }
             console.log("before: " + tempDate)
-            let tType: string = " °C";
-            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10)/10) + tType + "</td><td>" + (Math.round(avgHumidity * 10)/10) + "%" + "</td> </tr>";
+            let tType: string = temperatureAnnotation === "Celsius" ? " °C" : " °F";
+            if(temperatureAnnotation === "Celsius"){
+                //Then please do this. OKTHXBY
+                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
+            }
+            else if(temperatureAnnotation === "Fahrenheit"){
+                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + convertToFahrenheit(avgTemperature.toString()) + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
+            }
+
 
             arrayIndex += 1;
 
@@ -543,7 +551,14 @@ function getRangeOfDay(date: Date, index: number): void {
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
-            myChart.data.datasets[0].data[index] = avgTemperature;  
+            if(temperatureAnnotation === "Celsius"){
+                //Then please do this. OKTHXBY
+                myChart.data.datasets[0].data[index] = avgTemperature;
+            }
+            else if(temperatureAnnotation === "Fahrenheit"){
+                myChart.data.datasets[0].data[index] = convertToFahrenheit(avgTemperature.toString());
+            }
+  
             myChart.data.datasets[1].data[index] = avgHumidity;   
             myChart.update(); 
             
@@ -600,9 +615,9 @@ function toNumberToFixed(num: string, amountOfDecimals: number): string {
 }
 
 function compareDates(firstDate: Date, secondDate: Date): boolean {
-    return firstDate.getFullYear() == secondDate.getFullYear()
-        && firstDate.getMonth() == secondDate.getMonth()
-        && firstDate.getDate() == secondDate.getDate();
+    return firstDate.getFullYear() === secondDate.getFullYear()
+        && firstDate.getMonth() === secondDate.getMonth()
+        && firstDate.getDate() === secondDate.getDate();
 }
 
 function errorMessage(error: AxiosError) {

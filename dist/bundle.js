@@ -36080,6 +36080,7 @@ function changeTemperatureAnnotation() {
         temperatureAnnotation = "Celsius";
     }
     localStorage.setItem("temperatureType", temperatureAnnotation);
+    get7Days();
     loadData();
 }
 // Takes a div element to fillout and which type of information it uses (temperature og humidity (since it only uses 1 type of information)).
@@ -36283,14 +36284,26 @@ function getRangeOfDay(date, index) {
             avgHumidity = resultHumidity / i;
         }
         console.log("before: " + tempDate);
-        var tType = " °C";
-        tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + (Math.round(avgTemperature * 10) / 10) + tType + "</td><td>" + (Math.round(avgHumidity * 10) / 10) + "%" + "</td> </tr>";
+        var tType = temperatureAnnotation === "Celsius" ? " °C" : " °F";
+        if (temperatureAnnotation === "Celsius") {
+            //Then please do this. OKTHXBY
+            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
+        }
+        else if (temperatureAnnotation === "Fahrenheit") {
+            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + convertToFahrenheit(avgTemperature.toString()) + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
+        }
         arrayIndex += 1;
         if (arrayIndex > 5) {
             tableStringArray[8] = "</tbody>";
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
-        myChart.data.datasets[0].data[index] = avgTemperature;
+        if (temperatureAnnotation === "Celsius") {
+            //Then please do this. OKTHXBY
+            myChart.data.datasets[0].data[index] = avgTemperature;
+        }
+        else if (temperatureAnnotation === "Fahrenheit") {
+            myChart.data.datasets[0].data[index] = convertToFahrenheit(avgTemperature.toString());
+        }
         myChart.data.datasets[1].data[index] = avgHumidity;
         myChart.update();
     });
@@ -36335,9 +36348,9 @@ function toNumberToFixed(num, amountOfDecimals) {
     return Number(num).toFixed(amountOfDecimals);
 }
 function compareDates(firstDate, secondDate) {
-    return firstDate.getFullYear() == secondDate.getFullYear()
-        && firstDate.getMonth() == secondDate.getMonth()
-        && firstDate.getDate() == secondDate.getDate();
+    return firstDate.getFullYear() === secondDate.getFullYear()
+        && firstDate.getMonth() === secondDate.getMonth()
+        && firstDate.getDate() === secondDate.getDate();
 }
 function errorMessage(error) {
     console.log(error.message);
