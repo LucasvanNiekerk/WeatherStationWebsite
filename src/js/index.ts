@@ -539,7 +539,7 @@ function getRangeOfDay(date: Date, index: number): void {
                 tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
             }
             else if(temperatureAnnotation === "fahrenheit"){
-                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toString() + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
+                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
             }
 
 
@@ -551,10 +551,10 @@ function getRangeOfDay(date: Date, index: number): void {
             }
 
 
-            myChart.data.datasets[0].data[index] = avgTemperature;
+            myChart.data.datasets[0].data[index] = avgTemperature.toFixed(1);
             
   
-            myChart.data.datasets[1].data[index] = avgHumidity;   
+            myChart.data.datasets[1].data[index] = avgHumidity.toFixed(1);   
             myChart.update(); 
             
         });        
