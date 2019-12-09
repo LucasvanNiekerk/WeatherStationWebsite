@@ -36290,15 +36290,15 @@ function getRangeOfDay(date, index) {
             tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
         }
         else if (temperatureAnnotation === "fahrenheit") {
-            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toString() + tType + "</td><td>" + avgHumidity.toFixed() + "%" + "</td> </tr>";
+            tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
         }
         arrayIndex += 1;
         if (arrayIndex > 5) {
             tableStringArray[8] = "</tbody>";
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
-        myChart.data.datasets[0].data[index] = avgTemperature;
-        myChart.data.datasets[1].data[index] = avgHumidity;
+        myChart.data.datasets[0].data[index] = avgTemperature.toFixed(1);
+        myChart.data.datasets[1].data[index] = avgHumidity.toFixed(1);
         myChart.update();
     });
     myChart.data.labels[index] = date.toLocaleString('da-DK', options);
