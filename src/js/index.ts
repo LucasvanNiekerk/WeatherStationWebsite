@@ -495,8 +495,8 @@ var arrayIndex = 0;
 arrayIndex = 0;
 
 function get7Days(): void {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Tmp</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
-    arrayIndex = 0;
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
+        arrayIndex = 0;
     let date: Date = new Date(dayInputField.value);
     date.setDate(date.getDate() - 6);
 
