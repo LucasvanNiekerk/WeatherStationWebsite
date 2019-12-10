@@ -18,27 +18,48 @@ h2 {
   color: #ffffff;
   text-align: center; }
 
-.container .row h3 {
+h3, .divTextHeader {
   border-bottom: 1px solid white;
+  line-height: calc(3vw + 15px);
   margin: 5px 0px;
   font-size: calc(7px + 1.5vw);
+  text-align: center;
+  font-weight: bold; }
+
+h4 {
+  font-size: calc(15px + 1vw);
+  padding-bottom: 10px; }
+
+.container {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  max-width: 70%;
   text-align: center; }
 
 hr {
   border-color: white;
-  width: 90%; }
+  width: 90%;
+  margin-bottom: 0px;
+  margin-top: 0px; }
 
 .divText {
-  font-size: calc(25px + 2.5vw); }
+  font-size: calc(25px + 2.5vw);
+  font-weight: lighter; }
 
 .divText3days {
-  font-size: calc(10px + 2vw); }
+  font-size: calc(10px + 2vw);
+  font-weight: lighter; }
 
 .divBox {
   background-color: #0000005e;
   display: block;
   margin: auto;
   border-radius: 20px; }
+
+.oldDataContainer {
+  margin: auto;
+  height: 100%;
+  width: 80%; }
 
 .divLatestSize {
   max-width: 45%;
@@ -116,11 +137,10 @@ sup3days {
 ::-webkit-scrollbar {
   display: none; }
 
-.short-text {
-  display: none; }
-
 @media (max-width: 1200px) {
-  .short-text {
-    display: inline-block; }
-  .full-text {
-    display: none; } }
+  .container {
+    max-width: 100%; } }
+
+@media (max-width: 800px) {
+  .oldDataContainer {
+    width: 95%; } }

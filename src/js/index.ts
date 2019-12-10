@@ -145,7 +145,7 @@ var myChart = new Chart(chart, {
     options: {
         title: {
             display: true,
-            text: 'Tidligere data'
+            text: 'Tidligere data (Indendørs)'
         },
         scaleLabel: {
             display: true,
