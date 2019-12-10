@@ -16,35 +16,25 @@
 </head>
 
 <body>
-  <nav class="navbar bg-dark navbar-dark">
 
-    <button title="Hjem" class="btn btn-dark" id="FrontpageButton"><img height="30" width="35" src="home.png"
-        alt="Home"></button>
-    <button title="Gamle data" class="btn btn-dark" id="OlderDataButton"><img height="30" width="35" src="graph.png"
-        alt="Graph"></button>
 
-    <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;"
-      id="resetRaspberryId"><img width="25" height="30" src="ShiftPi.png" alt="ShiftPi"></button>
+    <nav class="navbar bg-dark navbar-dark">
 
-    <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;"
-      name="By" id="cityDropDown"></select>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary" id="label1">
-        <input type="radio" name="options" id="annotationOption1"> °C
-      </label>
-      <label class="btn btn-secondary" id="label2">
-        <input type="radio" name="options" id="annotationOption2"> °F
-      </label>
-    </div>
-  </nav>
-  <!--- <div class="grid-stack">
-      <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="4" data-gs-height="2">
-        <div class="grid-stack-item-content">my first widget</div>
-      </div>
-      <div class="grid-stack-item" data-gs-x="4" data-gs-y="0" data-gs-width="4" data-gs-height="4">
-        <div class="grid-stack-item-content">another widget!</div>
-      </div>
-    </div>-->
+        <button title="Hjem" class="btn btn-dark" id="FrontpageButton"><img height="30" width="35" src="home.png" alt="Home"></button>
+        <button title="Gamle data" class="btn btn-dark" id="OlderDataButton"><img height="30" width="35" src="graph.png" alt="Graph"></button>
+
+        <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img width="25px" height="30px" src="ShiftPi.png" alt="ShiftPi"></button>
+
+        <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary" id="label1">
+                <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
+            </label>
+            <label class="btn btn-secondary" id="label2">
+                <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
+            </label>
+        </div>
+    </nav>
 
 
   <!--Frontpage div opening div-->
@@ -119,9 +109,9 @@
   <!--Older data opening div-->
   <div id="OlderData" style="display: none; margin: 50px; margin-top: 50px; margin-bottom: 50px;">
     <div style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+      
+      <input class="form-control inputStyle" type="date" id="dayInputField">
 
-      <input class="form-control inputStyle" type="text" id="dayInputField" onfocus="(this.type='date')"
-        onblur="{this.type='text'}" />
       <br>
       <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
         <canvas id="chart"></canvas>

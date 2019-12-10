@@ -111,6 +111,9 @@ let prognosisday3: HTMLDivElement = <HTMLDivElement>document.getElementById("pro
 let label1: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label1");
 let label2: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label2");
 
+
+let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
+
 //
 // Chart
 //
@@ -214,7 +217,9 @@ function onloadMethods(): void {
         browserStorage();
         fillDropDown();
         if(localStorage.getItem("raspId") != null) loadData();
+        setDayInputValue();
         get7Days();
+
 
     }, 10)
 }
@@ -454,9 +459,9 @@ function fillPrognosisElements(dataArray: string[], dates: Date[]){
 
 function fillDropDown() {
     //The names of the cities avaible in openweathermap.
-    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"]
+    let cities: string[] = ["Roskilde", "Taastrup", "Vordingborg", "Aarhus"]
     //The names of the cities in the api and the ones we use to GET the information. 
-    let apiNames: string[] = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"]
+    let apiNames: string[] = ["Roskilde%20Kommune", "Taastrup", "Vordingborg", "Århus%20Kommune"]
 
     //We will our dropdown with the cities, since it's easier and faster than to manually add them.
     for (let index = 0; index < cities.length; index++) {
@@ -488,26 +493,29 @@ function changeCity(){
     loadApiData();
 }
 
-var D = new Date();
-var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
-dayInputField.value = s;
-var arrayIndex = 0;
-arrayIndex = 0;
+function setDayInputValue(): void{
+    let D: Date = new Date();
+    let s: string = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
+    dayInputField.value = s;
+}
+
+let arrayIndex: number = 0;
 
 function get7Days(): void {
-    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Tmp</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
+    tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
+    let forthIndex: number = 0; //It just works ehh
     let date: Date = new Date(dayInputField.value);
-    date.setDate(date.getDate() - 6);
 
-    for (let i = 7; i > 0; i--) {
-        getRangeOfDay(date, i);
-  
-        date.setDate(date.getDate() + 1);
+    for (let i = 6; i >= 0; i--) {
+        getRangeOfDay(date, i, forthIndex);
+        console.log(i);
+        forthIndex++;
+        date.setDate(date.getDate() - 1);
     }
 }
 
-function getRangeOfDay(date: Date, index: number): void {
+function getRangeOfDay(date: Date, index: number, forthIndex: number): void {
     let i: number = 0;
     var options = { year: 'numeric', month: 'short', day: '2-digit' };
     let tempDate: string = date.toLocaleString('da-DK', options);
@@ -515,13 +523,10 @@ function getRangeOfDay(date: Date, index: number): void {
     let resultHumidity: number = 0;
     let avgTemperature: number = 0;
     let avgHumidity: number = 0;
-    let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
     let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2) + "/" + temperatureAnnotation;
     console.log(Url);
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
-           
-            //console.log(response.data);
             response.data.forEach((weatherInfo: IWeather) => {
                 i++;
                 resultTemperature += Number(weatherInfo.temperature);
@@ -530,19 +535,11 @@ function getRangeOfDay(date: Date, index: number): void {
             if (i > 0) {
                 avgTemperature = resultTemperature / i;
                 avgHumidity = resultHumidity / i;
-
             }
-            console.log("before: " + tempDate)
+
             let tType: string = temperatureAnnotation === "celsius" ? " °C" : " °F";
-            if(temperatureAnnotation === "celsius"){
-                //Then please do this. OKTHXBY
-                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
-            }
-            else if(temperatureAnnotation === "fahrenheit"){
-                tableStringArray[index + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
-            }
-
-
+            tableStringArray[forthIndex + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
+            
             arrayIndex += 1;
 
             if(arrayIndex > 5){
@@ -551,16 +548,17 @@ function getRangeOfDay(date: Date, index: number): void {
             }
 
 
-            myChart.data.datasets[0].data[index] = avgTemperature.toFixed(1);
+            myChart.data.datasets[0].data[index] = Number(avgTemperature.toFixed(1));
             
   
-            myChart.data.datasets[1].data[index] = avgHumidity.toFixed(1);   
+            myChart.data.datasets[1].data[index] = Number(avgHumidity.toFixed(1));   
             myChart.update(); 
             
-        });        
+            
+        }).catch(errorMessage);   
+        
         myChart.data.labels[index] = date.toLocaleString('da-DK', options);
-        myChart.update();
-        //console.log(date.getDate());
+        myChart.update();     
 }
 
 //
