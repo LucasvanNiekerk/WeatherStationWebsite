@@ -35959,7 +35959,7 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
     options: {
         title: {
             display: true,
-            text: 'Tidligere data'
+            text: 'Tidligere data (Indendørs)'
         },
         scaleLabel: {
             display: true,

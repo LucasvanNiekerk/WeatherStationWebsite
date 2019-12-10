@@ -21,30 +21,59 @@ h2
     text-align: center;
 }
 
-.container .row h3 {
+h3 {
     border-bottom: 1px solid white; 
+    line-height: calc(3vw + 15px);
     margin: 5px 0px;
     font-size: calc(7px + 1.5vw);
     text-align: center;
+    font-weight: bold;
 }
 
-hr{
-    border-color: white; width: 90%;
+h4 {
+    font-size: calc(15px + 1vw);
+    padding-bottom: 10px;
+}
+
+.container {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    max-width: 70%;
+    text-align: center;
+}
+
+hr {
+    border-color: white;
+    width: 90%;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 .divText{
-    font-size: calc(25px + 2.5vw);    
+    font-size: calc(25px + 2.5vw);
+    font-weight: lighter;
+}
+
+.divTextHeader {
+    @extend h3;
 }
 
 .divText3days {
     font-size: calc(10px + 2vw);
+    font-weight: lighter;
 }
 
-.divBox{
+.divBox {
     background-color: #0000005e;
     display: block;
     margin: auto;
-    border-radius: 20px;    
+    border-radius: 20px;
+}
+
+.oldDataContainer {
+    margin: auto;
+    height: 100%;
+    width: 80%;
 }
 
 .divLatestSize{
@@ -131,18 +160,15 @@ sup3days {
     display: none;
 }
 
-// Hide short text by default (resolution > 1200px)
-.short-text {
-    display: none;
-}
-
 // When resolution <= 1200px, hide full text and show short text
 @media (max-width: 1200px) {
-    .short-text {
-        display: inline-block;
+    .container {
+        max-width: 100%;
     }
+}
 
-    .full-text {
-        display: none;
+@media (max-width: 800px) {
+    .oldDataContainer {
+        width: 95%;
     }
 }

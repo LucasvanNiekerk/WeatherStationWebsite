@@ -34,8 +34,7 @@
   <!--Frontpage div opening div-->
   <div id="Frontpage">
 
-    <div class="container" style="text-align: center;  max-width: 1000px;">
-      <h2>Målinger</h2> 
+    <div class="container">
       <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">
         <div class="col divBox divLatestSize">
           <h3>Indendørs</h3>
@@ -54,25 +53,25 @@
     </div>
 
     <hr>
-    <div class="container" style="text-align: center;  max-width: 900px;">
-      <h2>3 dags prognose</h2>
+    <div class="container">
+      <h4>3 dags prognose</h4>
       <div class="row">
         <div class="col divBox div3dagsPrognoseSize">
-          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay1">I dag</div>
+          <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay1">I dag</div>
           <div class="divText3days" id="prognosisTemperature1">↺</div>
           <div class="divText3days" id="prognosisHumidity1">↺</div>
           <br>
 
         </div>
         <div class="col divBox div3dagsPrognoseSize">
-          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay2">I morgen</div>
+          <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay2">I morgen</div>
           <div class="divText3days" id="prognosisTemperature2">↺</div>
           <div class="divText3days" id="prognosisHumidity2">↺</div>
           <br>
 
         </div>
         <div class="col divBox div3dagsPrognoseSize">
-          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay3">I Overmorgen</div>
+          <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay3">I Overmorgen</div>
           <div class="divText3days" id="prognosisTemperature3">↺</div>
           <div class="divText3days" id="prognosisHumidity3">↺</div>
           <br>
@@ -87,16 +86,15 @@
   </div>
 
   <!--Older data opening div-->
-  <div id="OlderData" style="display: none; margin: 50px; margin-top: 50px; margin-bottom: 50px;">
-    <div style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+  <div id="OlderData" style="display: none;">
+    <div class="oldDataContainer">
       
-      <input class="form-control inputStyle" type="date" id="dayInputField">
-      <br>
-        <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
+      <input class="form-control inputStyle" type="date" id="dayInputField" style="margin-top: 10px;margin-bottom: 10px;">
+        <div class="divBox" style="padding: 10px; height: 100%; width: 100%;">
             <canvas id="chart"></canvas>
         </div>
 
-        <div class='divBox' style="margin-top: 50px; padding: 10px;">
+        <div class="divBox" style=" margin-top: 50px; padding: 10px;">
             <table class="table table-borderless" id="getAllOutputTable"></table>
         </div>
         <!--Older data closing div-->
