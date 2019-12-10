@@ -36219,9 +36219,9 @@ function fillPrognosisElements(dataArray, dates) {
 }
 function fillDropDown() {
     //The names of the cities avaible in openweathermap.
-    var cities = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"];
+    var cities = ["Roskilde", "Taastrup", "Vordingborg", "Aarhus"];
     //The names of the cities in the api and the ones we use to GET the information. 
-    var apiNames = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"];
+    var apiNames = ["Roskilde%20Kommune", "Taastrup", "Vordingborg", "Århus%20Kommune"];
     //We will our dropdown with the cities, since it's easier and faster than to manually add them.
     for (var index = 0; index < cities.length; index++) {
         var option = document.createElement('option');

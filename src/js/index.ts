@@ -459,9 +459,9 @@ function fillPrognosisElements(dataArray: string[], dates: Date[]){
 
 function fillDropDown() {
     //The names of the cities avaible in openweathermap.
-    let cities: string[] = ["Roskilde", "Lejre", "Næstved", "Slagelse", "Nyborg", "Holbæk"]
+    let cities: string[] = ["Roskilde", "Taastrup", "Vordingborg", "Aarhus"]
     //The names of the cities in the api and the ones we use to GET the information. 
-    let apiNames: string[] = ["Roskilde%20Kommune", "Lejre", "Naestved", "Slagelse%20Kommune", "Nyborg", "Holbæk%20Kommune"]
+    let apiNames: string[] = ["Roskilde%20Kommune", "Taastrup", "Vordingborg", "Århus%20Kommune"]
 
     //We will our dropdown with the cities, since it's easier and faster than to manually add them.
     for (let index = 0; index < cities.length; index++) {

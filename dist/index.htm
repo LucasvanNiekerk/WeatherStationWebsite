@@ -18,108 +18,105 @@
         <button title="Hjem" class="btn btn-dark" id="FrontpageButton"><img height="30" width="35" src="home.png" alt="Home"></button>
         <button title="Gamle data" class="btn btn-dark" id="OlderDataButton"><img height="30" width="35" src="graph.png" alt="Graph"></button>
 
-        <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img width="25" height="30" src="ShiftPi.png" alt="ShiftPi"></button>
+        <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img width="25px" height="30px" src="ShiftPi.png" alt="ShiftPi"></button>
 
-        <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown"></select>
+        <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary" id="label1">
-                <input type="radio" name="options" id="annotationOption1"> °C
+                <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
             </label>
             <label class="btn btn-secondary" id="label2">
-                <input type="radio" name="options" id="annotationOption2"> °F
+                <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
             </label>
         </div>
     </nav>
 
-    <!--Frontpage div opening div-->
-    <div id="Frontpage">
+  <!--Frontpage div opening div-->
+  <div id="Frontpage">
 
-        <div class="container" style="text-align: center;  max-width: 1000px;">
-            <h2>Målinger</h2>
-            <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">
-                <div class="col divBox divLatestSize">
-                    <h3>Indendørs</h3>
-                    <div class="divText" id="internalTemperature">↺</div>
-                    <div class="divText" id="internalHumidity">↺</div>
-                    <br>
-                </div>
-
-                <div class="col divBox divLatestSize">
-                    <h3>Udendørs</h3>
-                    <div class="divText" id="externalAPITemperature">↺</div>
-                    <div class="divText" id="externalAPIHumidity">↺</div>
-                    <br>
-                </div>
-            </div>
+    <div class="container" style="text-align: center;  max-width: 1000px;">
+      <h2>Målinger</h2> 
+      <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">
+        <div class="col divBox divLatestSize">
+          <h3>Indendørs</h3>
+          <div class="divText" id="internalTemperature">↺</div>
+          <div class="divText" id="internalHumidity">↺</div>
+          <br>
         </div>
 
-        <hr>
-        <div class="container" style="text-align: center;  max-width: 900px;">
-            <h2>3 dags prognose</h2>
-            <div class="row">
-                <div class="col divBox div3dagsPrognoseSize">
-                    <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay1">I dag</div>
-                    <div class="divText3days" id="prognosisTemperature1">↺</div>
-                    <div class="divText3days" id="prognosisHumidity1">↺</div>
-                    <br>
-
-                </div>
-                <div class="col divBox div3dagsPrognoseSize">
-                    <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay2">I morgen</div>
-                    <div class="divText3days" id="prognosisTemperature2">↺</div>
-                    <div class="divText3days" id="prognosisHumidity2">↺</div>
-                    <br>
-
-                </div>
-                <div class="col divBox div3dagsPrognoseSize">
-                    <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay3">I Overmorgen</div>
-                    <div class="divText3days" id="prognosisTemperature3">↺</div>
-                    <div class="divText3days" id="prognosisHumidity3">↺</div>
-                    <br>
-                </div>
-            </div>
+        <div class="col divBox divLatestSize">
+          <h3>Udendørs</h3>
+          <div class="divText" id="externalAPITemperature">↺</div>
+          <div class="divText" id="externalAPIHumidity">↺</div>
+          <br>
         </div>
-
-        <!--Error text-->
-        <div id="NoLocalStorage"></div>
-
-        <!--Frontpage closing div-->
+      </div>
     </div>
 
-    <!--Older data opening div-->
-    <div id="OlderData" style="display: none; margin: 1vw; margin-top: 50px; margin-bottom: 50px;">
-        <div style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+    <hr>
+    <div class="container" style="text-align: center;  max-width: 900px;">
+      <h2>3 dags prognose</h2>
+      <div class="row">
+        <div class="col divBox div3dagsPrognoseSize">
+          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay1">I dag</div>
+          <div class="divText3days" id="prognosisTemperature1">↺</div>
+          <div class="divText3days" id="prognosisHumidity1">↺</div>
+          <br>
 
-            <input class="form-control inputStyle" type="date" id="dayInputField"/>
-            <!--<input class="form-control inputStyle" type="text" id="dayInputField" onfocus="(this.type='date')" onblur="{this.type='text'}" />-->
-            <br>
-            <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
-                <canvas id="chart"></canvas>
-            </div>
-
-            <div class='divBox' style=" margin-top: 50px; padding: 10px;">
-                <table class="table table-borderless" id="getAllOutputTable"></table>
-            </div>
-            <!--Older data closing div-->
         </div>
+        <div class="col divBox div3dagsPrognoseSize">
+          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay2">I morgen</div>
+          <div class="divText3days" id="prognosisTemperature2">↺</div>
+          <div class="divText3days" id="prognosisHumidity2">↺</div>
+          <br>
+
+        </div>
+        <div class="col divBox div3dagsPrognoseSize">
+          <div class="divText3days" style="border-bottom: 1px solid white; padding-bottom: 5px;" id="prognosisDay3">I Overmorgen</div>
+          <div class="divText3days" id="prognosisTemperature3">↺</div>
+          <div class="divText3days" id="prognosisHumidity3">↺</div>
+          <br>
+        </div>
+      </div>
     </div>
 
+    <!--Error text-->
+    <div id="NoLocalStorage"></div>
 
-    <!--Popup for raspberry pi ID-->
-    <div id="raspberryIdPopup" class="modal">
-        <div class="modal-content">
-            <div style="align-self: center; padding-bottom: 5px;">Indskriv dit RaspberryPi Id:</div>
-            <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
-                   id="raspberryIdInput">
-            <button class="btn btn-primary" style="width: 120px; align-self: center;"
-                    id="rasberryIdSubmitButton">
-                Indsend!
-            </button>
-            <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
+    <!--Frontpage closing div-->
+  </div>
+
+  <!--Older data opening div-->
+  <div id="OlderData" style="display: none; margin: 50px; margin-top: 50px; margin-bottom: 50px;">
+    <div style="margin: auto; padding: 10px; height: 100%; width: 100%;">
+      
+      <input class="form-control inputStyle" type="date" id="dayInputField">
+      <br>
+        <div class='divBox' style="padding: 10px; height: 100%; width: 100%;">
+            <canvas id="chart"></canvas>
         </div>
-    </div>
 
-    <script src="bundle.js"></script>
+        <div class='divBox' style=" margin-top: 50px; padding: 10px;">
+            <table class="table table-borderless" id="getAllOutputTable"></table>
+        </div>
+        <!--Older data closing div-->
+    </div>
+</div>
+    
+
+<!--Popup for raspberry pi ID-->
+<div id="raspberryIdPopup" class="modal">
+    <div class="modal-content">
+        <div style="align-self: center; padding-bottom: 5px;">Indskriv dit RaspberryPi Id:</div>
+        <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
+               id="raspberryIdInput">
+        <button class="btn btn-primary" style="width: 120px; align-self: center;"
+                id="rasberryIdSubmitButton">Indsend!</button>
+        <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
+    </div>
+</div>
+
+<script src="bundle.js"></script>
 </body>
 
 </html>
