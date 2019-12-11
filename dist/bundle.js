@@ -36313,6 +36313,17 @@ function getRangeOfDay(date, index, forthIndex) {
     myChart.data.labels[index] = date.toLocaleString('da-DK', options);
     myChart.update();
 }
+function setTheme() {
+    var now = new Date();
+    var nowMill = now.getMilliseconds();
+    if (sunrise < nowMill && sunset > nowMill) {
+        theme = day;
+    }
+    else if (sunrise > nowMill && sunset < nowMill) {
+        theme = night;
+    }
+}
+setTimeout(function () { alert("It's 10am!"); }, millisTill10);
 //
 // Helper functions
 //
