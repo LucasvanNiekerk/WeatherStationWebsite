@@ -241,7 +241,7 @@ function onloadMethods(): void {
         
         get7Days();
 
-        setTimeout(setTheme, 100);        
+        setTimeout(setTheme, 1000);        
     }, 10);
 }
 
@@ -595,18 +595,18 @@ function getRangeOfDay(date: Date, index: number, forthIndex: number): void {
 
 function setTheme(): void{
     let now: Date = new Date();
-    let nowMill: number = now.getMilliseconds();
+    let nowMill: number = now.getTime();
 
-    let sunriseMill: number = sunrise.getMilliseconds();
-    let sunsetMill: number = sunset.getMilliseconds();
-
-    if(sunriseMill < nowMill && sunsetMill > nowMill){
+    let sunriseMill: number = sunrise.getTime();
+    let sunsetMill: number = sunset.getTime();
+    if(nowMill > sunriseMill && nowMill < sunsetMill){
         setDayTheme();
+        console.log(sunsetMill-nowMill);
         setTimeout(setNightTheme, (sunsetMill - nowMill));
     }
-    else if(sunriseMill > nowMill && sunsetMill < nowMill){
+    else if(nowMill < sunriseMill || nowMill > sunsetMill){
         setNightTheme();
-        setTimeout(setDayTheme, (sunriseMill - nowMill));
+        setTimeout(setDayTheme, (nowMill - sunriseMill));
     }
 }
 

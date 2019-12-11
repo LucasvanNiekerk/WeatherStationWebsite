@@ -36029,7 +36029,7 @@ function onloadMethods() {
             loadData();
         setDayInputValue();
         get7Days();
-        setTimeout(setTheme, 100);
+        setTimeout(setTheme, 1000);
     }, 10);
 }
 function browserStorage() {
@@ -36322,16 +36322,17 @@ function getRangeOfDay(date, index, forthIndex) {
 }
 function setTheme() {
     var now = new Date();
-    var nowMill = now.getMilliseconds();
-    var sunriseMill = sunrise.getMilliseconds();
-    var sunsetMill = sunset.getMilliseconds();
-    if (sunriseMill < nowMill && sunsetMill > nowMill) {
+    var nowMill = now.getTime();
+    var sunriseMill = sunrise.getTime();
+    var sunsetMill = sunset.getTime();
+    if (nowMill > sunriseMill && nowMill < sunsetMill) {
         setDayTheme();
+        console.log(sunsetMill - nowMill);
         setTimeout(setNightTheme, (sunsetMill - nowMill));
     }
-    else if (sunriseMill > nowMill && sunsetMill < nowMill) {
+    else if (nowMill < sunriseMill || nowMill > sunsetMill) {
         setNightTheme();
-        setTimeout(setDayTheme, (sunriseMill - nowMill));
+        setTimeout(setDayTheme, (nowMill - sunriseMill));
     }
 }
 function setDayTheme() {
