@@ -115,6 +115,7 @@ let label2: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label2
 
 let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
 
+
 //
 // Chart
 //
@@ -206,10 +207,10 @@ olderDataButton.addEventListener("click", displayOlderData);
 let isDay: boolean = true;
 
 // Sunrise time saved in unix utc. Used for determening whether it's day or night.
-let sunrise: number = 0;
+let sunrise: Date;
 
 // Sunset time saved in unix utc. Used for determening whether it's day or night.
-let sunset: number = 0;
+let sunset: Date;
 
 
 let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
@@ -240,8 +241,7 @@ function onloadMethods(): void {
         
         get7Days();
 
-        //setTheme();
-
+        setTimeout(setTheme, 100);        
     }, 10);
 }
 
@@ -380,18 +380,18 @@ function sumbitRaspberryId(): void {
 
 function getAPIWeatherInformation(): void {
     let Url: string = generateUrl("weather");
-    console.log(Url);
+    console.log("Api Url: " + Url);
 
     axios.get(Url)
         .then((response: AxiosResponse) => {
-
+            //Since we did not need to use all the information given, we choose to use regex to isolate the data we need.
+            //Therefore we use a json string instead of an object.
             let responseData: string = JSON.stringify(response.data);
 
             let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
             let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
-            let sunrise: string = responseData.match('(?:"sunrise":)\K\d+')[1];
-            let sunset: string = responseData.match('(?:"sunset":)\K\d+')[1];
-            //Todo
+            let sunriseString: string = responseData.match('"sunrise":(\\d+)')[1];
+            let sunsetString: string = responseData.match('"sunset":(\\d+)')[1];
 
             if (temperatureAnnotation === "celsius") {
                 externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
@@ -400,6 +400,12 @@ function getAPIWeatherInformation(): void {
                 externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
             }
             externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
+
+            sunrise = new Date(Number(sunriseString) * 1000);
+            sunset = new Date(Number(sunsetString) * 1000);
+
+            console.log(sunset);
+            console.log(sunrise);
         })
         .catch(errorMessage);
 }
@@ -584,6 +590,39 @@ function getRangeOfDay(date: Date, index: number, forthIndex: number): void {
         myChart.update();     
 }
 
+
+function setTheme(): void{
+    let now: Date = new Date();
+    let nowMill: number = now.getMilliseconds();
+
+    let sunriseMill: number = sunrise.getMilliseconds();
+    let sunsetMill: number = sunset.getMilliseconds();
+
+    if(sunriseMill < nowMill && sunsetMill > nowMill){
+        setDayTheme();
+        setTimeout(setNightTheme, (sunsetMill - nowMill));
+    }
+    else if(sunriseMill > nowMill && sunsetMill < nowMill){
+        setNightTheme();
+        setTimeout(setDayTheme, (sunriseMill - nowMill));
+    }
+}
+
+function setDayTheme(): void{
+    document.documentElement.style.setProperty("--background-col", "#ff7d8d", "important");
+    document.documentElement.style.setProperty("--div-col", "#0000002d"); //Might need important
+    document.documentElement.style.setProperty("--background-img", "linear-gradient(to top right, #ffa873, #ff7d8d)", "important");
+}
+
+function setNightTheme(): void{
+    document.documentElement.style.setProperty("--background-col", "#00558d", "important");
+    document.documentElement.style.setProperty("--div-col", "#0000005e"); //Might need important
+    document.documentElement.style.setProperty("--background-img", "linear-gradient(to top right, #00558d, #00856f)", "important");
+}
+
+
+
+
 //
 // Helper functions
 //
@@ -597,7 +636,7 @@ function getAnnotion(): string{
     }
 }
 
-function formatDate(date: Date) {
+function formatDate(date: Date): string {
     var monthNames = [
       "Jan", "Feb", "Mar",
       "Apr", "May", "Jun", "Jul",
@@ -621,7 +660,7 @@ function generateUrl(method: string): string {
     Url += cityDropDownElement.value;
     Url += ",DK";
     Url += temperatureAnnotation === "celsius" ? "&units=metric" : "&units=imperial";
-    Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+    Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd"; //abab15aaae04e0bfba24f744cc047dd1 //bc20a2ede929b0617feebeb4be3f9efd
 
     return Url;
 }
@@ -636,7 +675,7 @@ function compareDates(firstDate: Date, secondDate: Date): boolean {
         && firstDate.getDate() === secondDate.getDate();
 }
 
-function errorMessage(error: AxiosError) {
+function errorMessage(error: AxiosError): void {
     console.log(error.message);
     console.log(error.code);
 }
@@ -646,11 +685,11 @@ function loadApiData(): void {
     getApiPrognosisWeatherInformation(3);
 }
 
-function openRaspberryIdPopup() {
+function openRaspberryIdPopup(): void {
     popupElement.style.display = "block";
 }
 
-function closeRaspberryIdPopup() {
+function closeRaspberryIdPopup(): void {
     popupElement.style.display = "none";
 }
 

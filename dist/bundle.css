@@ -1,3 +1,8 @@
+:root {
+  --background-col: #ff7d8d;
+  --background-img: linear-gradient(to top right, #ffa873, #ff7d8d);
+  --div-col: #0000002d; }
+
 #content {
   color: #ffffff; }
 
@@ -5,15 +10,24 @@ html {
   min-height: 100%; }
 
 body {
-  background-color: #008585;
+  background-color: var(--background-col);
   /* For browsers that do not support gradients */
-  background-image: linear-gradient(to top right, #00558d, #00856f);
+  background-image: var(--background-img);
   /* Standard syntax (must be last) */
   color: white;
   font-size: large;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-height: 100%; }
 
+/*
+body {
+    background-color: #008585; /* For browsers that do not support gradients 
+    background-image: linear-gradient(to top right, #00558d, #00856f); /* Standard syntax (must be last) 
+    color: white;
+    font-size: large;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    min-height: 100%;
+}*/
 h2 {
   color: #ffffff;
   text-align: center; }
@@ -51,7 +65,7 @@ hr {
   font-weight: lighter; }
 
 .divBox {
-  background-color: #0000005e;
+  background-color: var(--div-col);
   display: block;
   margin: auto;
   border-radius: 20px; }
@@ -77,7 +91,7 @@ hr {
 
 input.inputStyle {
   color: white;
-  background-color: #0000005e;
+  background-color: var(--div-col);
   text-align: center;
   width: 50%;
   min-width: 200px;
