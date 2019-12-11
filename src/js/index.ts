@@ -53,6 +53,7 @@ let raspberryId: string = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
 
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
@@ -121,6 +122,7 @@ let label2: HTMLLabelElement = <HTMLLabelElement>document.getElementById("label2
 
 let getAllOutputTable: HTMLTableElement = <HTMLTableElement>document.getElementById("getAllOutputTable");
 
+
 //
 // Chart
 //
@@ -180,11 +182,6 @@ var myChart = new Chart(chart, {
 
 Chart.defaults.global.defaultFontColor = "#fff";
 
-let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
-dayInputField.addEventListener("change", get7Days);
-
-let tableStringArray: string[] = ["","","","","","","","",""];
-
 
 //
 // Buttons
@@ -209,9 +206,29 @@ frontpageButton.addEventListener("click", displayFrontpage);
 let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
 olderDataButton.addEventListener("click", displayOlderData);
 
+//
+// Global variables
+//
+
+// Whether or not it is day or night, used for website theme.
+let isDay: boolean = true;
+
+// Sunrise time saved in unix utc. Used for determening whether it's day or night.
+let sunrise: Date;
+
+// Sunset time saved in unix utc. Used for determening whether it's day or night.
+let sunset: Date;
+
+
+let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+dayInputField.addEventListener("change", get7Days);
+
+let tableStringArray: string[] = ["", "", "", "", "", "", "", "", ""];
+
+let arrayIndex: number = 0;
 
 //
-// Functions
+// Functions 
 //
 
 // Runs following functions 10 milliseconds after the page / window has loaded.
@@ -222,13 +239,17 @@ function onloadMethods(): void {
     setTimeout(() => {
         //localStorage.clear();
         browserStorage();
-        fillDropDown();
-        if(localStorage.getItem("raspId") != null) loadData();
-        setDayInputValue();
-        get7Days();
-tester();
 
-    }, 10)
+        fillDropDown();
+
+        if (localStorage.getItem("raspId") != null) loadData();
+
+        setDayInputValue();
+
+        get7Days();
+        tester();
+        setTimeout(setTheme, 1000);
+    }, 10);
 }
 
 function browserStorage(): void {
@@ -258,7 +279,7 @@ function browserStorage(): void {
         //To check what city the user wants to see information from.
         if (localStorage.getItem("currentCity") != null) {
             currentCity = localStorage.getItem("currentCity");
-            
+
         }
         else {
             currentCity = "Roskilde%20Kommune";
@@ -272,30 +293,32 @@ function browserStorage(): void {
     }
 }
 
-function displaySelectedRadioButton(){
-    if(temperatureAnnotation === "celsius"){
+function displaySelectedRadioButton() {
+    if (temperatureAnnotation === "celsius") {
         label1.className += " active";
-        label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g , '');
+        label2.className = label2.className.replace(/(?:^|\s)active(?!\S)/g, '');
     }
-    else if(temperatureAnnotation === "fahrenheit"){
+    else if (temperatureAnnotation === "fahrenheit") {
         label2.className += " active";
-        label1.className = label1.className.replace( /(?:^|\s)active(?!\S)/g , '' );
+        label1.className = label1.className.replace(/(?:^|\s)active(?!\S)/g, '');
     }
 }
 
 function displayFrontpage(): void {
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
+    document.title = "Hjem ( ͡° ͜ʖ ͡°)";
 }
 
 function displayOlderData(): void {
     frontpageDivElement.style.display = "none";
     olderDataDivElement.style.display = "block";
+    document.title = "Ældre data"
 }
 
 function changeTemperatureAnnotation(): void {
     if (annotationOption2.checked) {
-        temperatureAnnotation = "fahrenheit";      
+        temperatureAnnotation = "fahrenheit";
     }
     else if (annotationOption1.checked) {
         temperatureAnnotation = "celsius";
@@ -366,15 +389,18 @@ function sumbitRaspberryId(): void {
 
 function getAPIWeatherInformation(): void {
     let Url: string = generateUrl("weather");
-    console.log(Url);
+    console.log("Api Url: " + Url);
 
     axios.get(Url)
         .then((response: AxiosResponse) => {
-
+            //Since we did not need to use all the information given, we choose to use regex to isolate the data we need.
+            //Therefore we use a json string instead of an object.
             let responseData: string = JSON.stringify(response.data);
 
             let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
             let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
+            let sunriseString: string = responseData.match('"sunrise":(\\d+)')[1];
+            let sunsetString: string = responseData.match('"sunset":(\\d+)')[1];
 
             if (temperatureAnnotation === "celsius") {
                 externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
@@ -383,6 +409,12 @@ function getAPIWeatherInformation(): void {
                 externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
             }
             externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
+
+            sunrise = new Date(Number(sunriseString) * 1000);
+            sunset = new Date(Number(sunsetString) * 1000);
+
+            console.log(sunset);
+            console.log(sunrise);
         })
         .catch(errorMessage);
 }
@@ -443,7 +475,7 @@ function getApiPrognosisWeatherInformation(daysToGet: number): void {
         .catch(errorMessage);
 }
 
-function fillPrognosisElements(dataArray: string[], dates: Date[]){
+function fillPrognosisElements(dataArray: string[], dates: Date[]) {
     //Change all the information to 1 decimal.
     for (let i = 0; i < dataArray.length; i++) {
         dataArray[i] = toNumberToFixed(dataArray[i], 1);
@@ -453,7 +485,7 @@ function fillPrognosisElements(dataArray: string[], dates: Date[]){
     prognosisHumidityOutputElement2.innerHTML = dataArray[6] + "% | " + dataArray[7] + "%";
     prognosisHumidityOutputElement3.innerHTML = dataArray[10] + "% | " + dataArray[11] + "%";
 
-    let annotation: string = getAnnotion();            
+    let annotation: string = getAnnotion();
 
     prognosisTemperatureOutputElement1.innerHTML = dataArray[0] + annotation + " | " + dataArray[1] + annotation;
     prognosisTemperatureOutputElement2.innerHTML = dataArray[4] + annotation + " | " + dataArray[5] + annotation;
@@ -478,13 +510,13 @@ function fillDropDown() {
 
         cityDropDownElement.add(option);
     }
-    
+
     // We find out which city the user has last used and set the current selected one to the one saved.    
     for (let index = 0; index < apiNames.length; index++) {
-        if(apiNames[index] === currentCity){
+        if (apiNames[index] === currentCity) {
             cityDropDownElement.selectedIndex = index;
         }
-    }    
+    }
 }
 
 function loadData(): void {
@@ -493,20 +525,19 @@ function loadData(): void {
     loadApiData();
 }
 
-function changeCity(){
+function changeCity() {
     currentCity = cityDropDownElement.value;
     localStorage.setItem("currentCity", currentCity);
     console.log(localStorage.getItem("currentCity"));
     loadApiData();
 }
 
-function setDayInputValue(): void{
+function setDayInputValue(): void {
     let D: Date = new Date();
     let s: string = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
     dayInputField.value = s;
 }
 
-let arrayIndex: number = 0;
 
 function get7Days(): void {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
@@ -546,56 +577,89 @@ function getRangeOfDay(date: Date, index: number, forthIndex: number): void {
 
             let tType: string = temperatureAnnotation === "celsius" ? " °C" : " °F";
             tableStringArray[forthIndex + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
-            
+
             arrayIndex += 1;
 
-            if(arrayIndex > 5){
+            if (arrayIndex > 5) {
                 tableStringArray[8] = "</tbody>";
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
 
             myChart.data.datasets[0].data[index] = Number(avgTemperature.toFixed(1));
-            
-  
-            myChart.data.datasets[1].data[index] = Number(avgHumidity.toFixed(1));   
-            myChart.update(); 
-            
-            
-        }).catch(errorMessage);   
-        
-        myChart.data.labels[index] = date.toLocaleString('da-DK', options);
-        myChart.update();     
+
+
+            myChart.data.datasets[1].data[index] = Number(avgHumidity.toFixed(1));
+            myChart.update();
+
+
+        }).catch(errorMessage);
+
+    myChart.data.labels[index] = date.toLocaleString('da-DK', options);
+    myChart.update();
 }
+
+
+function setTheme(): void {
+    let now: Date = new Date();
+    let nowMill: number = now.getTime();
+
+    let sunriseMill: number = sunrise.getTime();
+    let sunsetMill: number = sunset.getTime();
+    if (nowMill > sunriseMill && nowMill < sunsetMill) {
+        setDayTheme();
+        console.log(sunsetMill - nowMill);
+        setTimeout(setNightTheme, (sunsetMill - nowMill));
+    }
+    else if (nowMill < sunriseMill || nowMill > sunsetMill) {
+        setNightTheme();
+        setTimeout(setDayTheme, (nowMill - sunriseMill));
+    }
+}
+
+function setDayTheme(): void {
+    document.documentElement.style.setProperty("--background-col", "#ff7d8d", "important");
+    document.documentElement.style.setProperty("--div-col", "#0000002d"); //Might need important
+    document.documentElement.style.setProperty("--background-img", "linear-gradient(to top right, #ffa873, #ff7d8d)", "important");
+}
+
+function setNightTheme(): void {
+    document.documentElement.style.setProperty("--background-col", "#00558d", "important");
+    document.documentElement.style.setProperty("--div-col", "#0000005e"); //Might need important
+    document.documentElement.style.setProperty("--background-img", "linear-gradient(to top right, #00558d, #00856f)", "important");
+}
+
+
+
 
 //
 // Helper functions
 //
 
-function getAnnotion(): string{
-    if (temperatureAnnotation === "celsius"){
-         return "<sup3days>°C</sup3days>";
-        }
+function getAnnotion(): string {
+    if (temperatureAnnotation === "celsius") {
+        return "<sup3days>°C</sup3days>";
+    }
     else if (temperatureAnnotation === "fahrenheit") {
         return "<sup3days>°F</sup3days>";
     }
 }
 
-function formatDate(date: Date) {
+function formatDate(date: Date): string {
     var monthNames = [
-      "Jan", "Feb", "Mar",
-      "Apr", "May", "Jun", "Jul",
-      "Aug", "Sep", "Okt",
-      "Nov", "Dec"
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Okt",
+        "Nov", "Dec"
     ];
-  ​
+
     var day = date.getDate();
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
-  ​
+
     return day + '. ' + monthNames[monthIndex] + ' ' + year;
 }
-  
+
 
 function generateUrl(method: string): string {
 
@@ -605,7 +669,7 @@ function generateUrl(method: string): string {
     Url += cityDropDownElement.value;
     Url += ",DK";
     Url += temperatureAnnotation === "celsius" ? "&units=metric" : "&units=imperial";
-    Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+    Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd"; //abab15aaae04e0bfba24f744cc047dd1 //bc20a2ede929b0617feebeb4be3f9efd
 
     return Url;
 }
@@ -620,7 +684,7 @@ function compareDates(firstDate: Date, secondDate: Date): boolean {
         && firstDate.getDate() === secondDate.getDate();
 }
 
-function errorMessage(error: AxiosError) {
+function errorMessage(error: AxiosError): void {
     console.log(error.message);
     console.log(error.code);
 }
@@ -630,11 +694,11 @@ function loadApiData(): void {
     getApiPrognosisWeatherInformation(3);
 }
 
-function openRaspberryIdPopup() {
+function openRaspberryIdPopup(): void {
     popupElement.style.display = "block";
 }
 
-function closeRaspberryIdPopup() {
+function closeRaspberryIdPopup(): void {
     popupElement.style.display = "none";
 }
 
@@ -648,14 +712,12 @@ interface Coord
     lon: number;
     lat: number;
 }
-
 interface Weather {
     id: number;
     main: string;s
     description: string;
     icon: string;
 }
-
 interface Main {
     temp: number;
     pressure: number;
@@ -663,16 +725,13 @@ interface Main {
     temp_min: number;
     temp_max: number;
 }
-
 interface Wind {
     speed: number;
     deg: number;
 }
-
 interface Clouds {
     all: number;
 }
-
 interface Sys {
     type: number;
     id: number;
@@ -681,7 +740,6 @@ interface Sys {
     sunrise: number;
     sunset: number;
 }
-
 interface ResponseWeather
 {
     coord: Coord;
@@ -702,33 +760,116 @@ interface ResponseWeather
 //test moveable
 
 let frontpage: HTMLDivElement = <HTMLDivElement>document.getElementById('Frontpage')
-let DagsPrognongse : HTMLDivElement = <HTMLDivElement>document.getElementById('3dagsPronogse')
+let TreDagsPrognongse : HTMLDivElement = <HTMLDivElement>document.getElementById('3dagsPronogse')
+let DagsPrognongse : HTMLDivElement = <HTMLDivElement>document.getElementById('DagsPrognongse')
 let IndendørsData: HTMLDivElement = <HTMLDivElement>document.getElementById('IndendørsData')
 let UdendørsData: HTMLDivElement = <HTMLDivElement>document.getElementById('UdendørsData')
 let hr : HTMLDivElement = <HTMLDivElement>document.getElementById('hr')
-let indendata: string;
+let oneDagProg : HTMLDivElement = <HTMLDivElement>document.getElementById('oneDagProg')
+let toDagProg : HTMLDivElement = <HTMLDivElement>document.getElementById('toDagProg')
+let treDagProg : HTMLDivElement = <HTMLDivElement>document.getElementById('treDagProg')
+let collaspe : HTMLButtonElement = <HTMLButtonElement>document.getElementById('collapseButton');
+let settingMode : boolean = false;
+collaspe.addEventListener('click', SetingsMode)
 function tester() {
      frontpage.classList.remove('grid-stack-one-column-mode') 
-     console.log(screen.width)
+     //console.log(screen.width)
      if(screen.width < 780){
-         console.log('check')
-        DagsPrognongse.classList.remove('grid-stack-one-column-mode')
+        // console.log('check')
+        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode')
         IndendørsData.setAttribute('data-gs-width', '4')
         IndendørsData.setAttribute('data-gs-height', '3')
         IndendørsData.setAttribute('data-gs-x', '2')
         UdendørsData.setAttribute('data-gs-width', '4')
         UdendørsData.setAttribute('data-gs-height', '3')
+        DagsPrognongse.setAttribute('data-gs-width', '12')
+        DagsPrognongse.setAttribute('data-gs-y', '3')
+        DagsPrognongse.setAttribute('data-gs-x', '0')
         hr.setAttribute('data-gs-y', '3')
+        oneDagProg.setAttribute('data-gs-height', '2')
+        toDagProg.setAttribute('data-gs-height', '2')
+        treDagProg.setAttribute('data-gs-height', '2')
      }
-     
-     
+     else{
+            GetOneSetting(IndendørsData, 'indendata')
+            GetOneSetting(UdendørsData, 'udendata') 
+            GetOneSetting(hr, 'hrdata') 
+            GetOneSetting(DagsPrognongse, 'DagsPrognongse')
+            GetOneSetting(oneDagProg, 'oneDagProg')
+            GetOneSetting(toDagProg, 'toDagProg')
+            GetOneSetting(treDagProg, 'treDagProg')
+         
+     }
      //console.log(test2.getAttribute('data-gs-width')) 
 }
+function SetingsMode(){
+    if(screen.width > 779){
+    if ( settingMode === true){
+        console.log("is on, turning off")
+        //turnOffMove(IndendørsData)
+        SaveAll();
+        settingMode = false;
+    }
+    else{
+       // turnOnMove(IndendørsData)
+        console.log("is off, turning on")
+        settingMode = true;
+    }}
+}
+
+/*function turnOnMove(element: HTMLDivElement){
+    console.log("remove")
+    element.removeAttribute('data-gs-no-move')
+    element.removeAttribute('data-gs-no-resize')
+    element.removeAttribute('data-gs-locked')
+    element.classList.remove('ui-draggable-disabled', 'ui-resizable-disabled', 'ui-resizable-autohide')
+    /*element.setAttribute('movable', 'true')
+    element.setAttribute('resizable', 'true')
+    let handel: HTMLDivElement = <HTMLDivElement>element.lastElementChild;
+    handel.style.display = 'block'
+}
+
+function turnOffMove(element: HTMLDivElement){
+    element.setAttribute('data-gs-no-move', 'yes')
+    element.setAttribute('data-gs-no-resize','yes')
+    element.setAttribute('data-gs-locked', 'yes')
+    //element.setAttribute('movable', 'false')
+    //element.setAttribute('resizable', 'false')
+    
+}*/
 
 
+function SaveAll(){
+    saveOneSetting(IndendørsData, 'indendata')
+    saveOneSetting(UdendørsData, 'udendata') 
+    saveOneSetting(hr, 'hrdata') 
+    saveOneSetting(DagsPrognongse, 'DagsPrognongse')
+    saveOneSetting(oneDagProg, 'oneDagProg')
+    saveOneSetting(toDagProg, 'toDagProg')
+    saveOneSetting(treDagProg, 'treDagProg')
+}
 
-function saveStuff(){
-    let temp: gridLines;
-    temp.width = IndendørsData.getAttribute('data-gs-width')
-    localStorage.setItem(indendata, JSON.stringify())
+function saveOneSetting(element: HTMLDivElement, str : string){
+    //console.log(str)
+    let temp: gridLines=  {width: '0', height : '0', x : '0', y: '0'}
+    temp.width = element.getAttribute('data-gs-width')
+    temp.height = element.getAttribute('data-gs-height')
+    temp.x = element.getAttribute('data-gs-x')
+    temp.y = element.getAttribute('data-gs-y')
+    //console.log(JSON.stringify(temp))
+    localStorage.setItem(str, JSON.stringify(temp))
+}
+
+function GetOneSetting(element: HTMLDivElement, str : string){
+    if (localStorage.getItem(str) != null){
+        let temp: gridLines=  {width: '0', height : '0', x : '0', y: '0'}
+    //console.log("str  " + str)
+    temp = <gridLines>JSON.parse(localStorage.getItem(str))
+    //console.log(JSON.parse(localStorage.getItem(str)));
+    //console.log("temp  " + temp)
+    element.setAttribute('data-gs-width', temp.width)
+    element.setAttribute('data-gs-height', temp.height)
+    element.setAttribute('data-gs-x', temp.x)
+    element.setAttribute('data-gs-y', temp.y)
+    }
 }
