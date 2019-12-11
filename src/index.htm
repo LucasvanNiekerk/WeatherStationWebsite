@@ -15,13 +15,14 @@
 <body>
     <nav class="navbar bg-dark navbar-dark">
 
-        <button title="Hjem" class="btn btn-dark" id="FrontpageButton"><img height="30" width="35" src="home.png" alt="Home"></button>
-        <button title="Gamle data" class="btn btn-dark" id="OlderDataButton"><img height="30" width="35" src="graph.png" alt="Graph"></button>
+        <button title="Hjem" class="btn btn-dark" id="FrontpageButton"><img class="imageInsideButton" src="home.png" alt="Home"></button>
+        <button title="Gamle data" class="btn btn-dark" id="OlderDataButton"><img class="imageInsideButton" src="graph.png" alt="Graph2"></button>
 
-        <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img width="25px" height="30px" src="ShiftPi.png" alt="ShiftPi"></button>
+
+        <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img class="imageInsideButton" src="ShiftPi.png" alt="ShiftPi"></button>
 
         <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;" name="By" id="cityDropDown">by</select>
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <div class="btn-group btn-group-toggle toggleBtn" data-toggle="buttons">
             <label class="btn btn-secondary" id="label1">
                 <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
             </label>
@@ -89,12 +90,12 @@
   <div id="OlderData" style="display: none;">
     <div class="oldDataContainer">
       
-      <input class="form-control inputStyle" type="date" id="dayInputField" style="margin-top: 10px;margin-bottom: 10px;">
+      <input class="form-control inputStyle" type="date" id="dayInputField" style="margin-bottom: 10px;">
         <div class="divBox" style="padding: 10px; height: 100%; width: 100%;">
             <canvas id="chart"></canvas>
         </div>
 
-        <div class="divBox" style=" margin-top: 50px; padding: 10px;">
+        <div class="divBox" style=" margin-top: 20px; padding: 10px;">
             <table class="table table-borderless" id="getAllOutputTable"></table>
         </div>
         <!--Older data closing div-->

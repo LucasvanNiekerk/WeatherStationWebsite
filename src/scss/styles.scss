@@ -64,7 +64,7 @@ hr {
 }
 
 .divText3days {
-    font-size: calc(10px + 2vw);
+    font-size: calc(10px + 1vw);
     font-weight: lighter;
 }
 
@@ -79,6 +79,8 @@ hr {
     margin: auto;
     height: 100%;
     width: 80%;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .divLatestSize{
@@ -165,6 +167,11 @@ sup3days {
     display: none;
 }
 
+.imageInsideButton{
+    height: 30px;
+    width: 35px;
+}
+
 // When resolution <= 1200px, hide full text and show short text
 @media (max-width: 1200px) {
     .container {
@@ -175,5 +182,16 @@ sup3days {
 @media (max-width: 800px) {
     .oldDataContainer {
         width: 95%;
+    }
+}
+
+@media (max-width: 400px) {
+    .imageInsideButton {
+        height: 25px;
+        width: 29px;
+    }
+
+    .toggleBtn {
+        width: 70px;
     }
 }
