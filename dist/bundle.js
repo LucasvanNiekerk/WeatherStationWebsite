@@ -36019,6 +36019,7 @@ function onloadMethods() {
             loadData();
         setDayInputValue();
         get7Days();
+        tester();
     }, 10);
 }
 function browserStorage() {
@@ -36414,6 +36415,27 @@ interface ResponseWeather
     cod: number;
 }
 */
+//test moveable
+var frontpage = document.getElementById('Frontpage');
+var DagsPrognongse = document.getElementById('3dagsPronogse');
+var IndendørsData = document.getElementById('IndendørsData');
+var UdendørsData = document.getElementById('UdendørsData');
+var hr = document.getElementById('hr');
+function tester() {
+    frontpage.classList.remove('grid-stack-one-column-mode');
+    console.log(screen.width);
+    if (screen.width < 780) {
+        console.log('check');
+        DagsPrognongse.classList.remove('grid-stack-one-column-mode');
+        IndendørsData.setAttribute('data-gs-width', '4');
+        IndendørsData.setAttribute('data-gs-height', '3');
+        IndendørsData.setAttribute('data-gs-x', '2');
+        UdendørsData.setAttribute('data-gs-width', '4');
+        UdendørsData.setAttribute('data-gs-height', '3');
+        hr.setAttribute('data-gs-y', '3');
+    }
+    //console.log(test2.getAttribute('data-gs-width')) 
+}
 
 
 /***/ }),

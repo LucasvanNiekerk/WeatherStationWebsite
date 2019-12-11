@@ -219,7 +219,7 @@ function onloadMethods(): void {
         if(localStorage.getItem("raspId") != null) loadData();
         setDayInputValue();
         get7Days();
-
+tester();
 
     }, 10)
 }
@@ -691,3 +691,27 @@ interface ResponseWeather
     cod: number;
 }
 */
+
+//test moveable
+
+let frontpage: HTMLDivElement = <HTMLDivElement>document.getElementById('Frontpage')
+let DagsPrognongse : HTMLDivElement = <HTMLDivElement>document.getElementById('3dagsPronogse')
+let IndendørsData: HTMLDivElement = <HTMLDivElement>document.getElementById('IndendørsData')
+let UdendørsData: HTMLDivElement = <HTMLDivElement>document.getElementById('UdendørsData')
+let hr : HTMLDivElement = <HTMLDivElement>document.getElementById('hr')
+function tester() {
+     frontpage.classList.remove('grid-stack-one-column-mode') 
+     console.log(screen.width)
+     if(screen.width < 780){
+         console.log('check')
+        DagsPrognongse.classList.remove('grid-stack-one-column-mode')
+        IndendørsData.setAttribute('data-gs-width', '4')
+        IndendørsData.setAttribute('data-gs-height', '3')
+        IndendørsData.setAttribute('data-gs-x', '2')
+        UdendørsData.setAttribute('data-gs-width', '4')
+        UdendørsData.setAttribute('data-gs-height', '3')
+        hr.setAttribute('data-gs-y', '3')
+     }
+     
+     //console.log(test2.getAttribute('data-gs-width')) 
+}
