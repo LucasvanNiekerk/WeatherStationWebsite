@@ -1,3 +1,8 @@
+:root {
+  --background-col: #ff7d8d;
+  --background-img: linear-gradient(to top right, #ffa873, #ff7d8d);
+  --div-col: #0000002d; }
+
 #content {
   color: #ffffff; }
 
@@ -5,15 +10,24 @@ html {
   min-height: 100%; }
 
 body {
-  background-color: #008585;
+  background-color: var(--background-col);
   /* For browsers that do not support gradients */
-  background-image: linear-gradient(to top right, #00558d, #00856f);
+  background-image: var(--background-img);
   /* Standard syntax (must be last) */
   color: white;
   font-size: large;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   min-height: 100%; }
 
+/*
+body {
+    background-color: #008585; /* For browsers that do not support gradients 
+    background-image: linear-gradient(to top right, #00558d, #00856f); /* Standard syntax (must be last) 
+    color: white;
+    font-size: large;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    min-height: 100%;
+}*/
 h2 {
   color: #ffffff;
   text-align: center; }
@@ -47,11 +61,11 @@ hr {
   font-weight: lighter; }
 
 .divText3days {
-  font-size: calc(10px + 2vw);
+  font-size: calc(10px + 1vw);
   font-weight: lighter; }
 
 .divBox {
-  background-color: #0000005e;
+  background-color: var(--div-col);
   display: block;
   margin: auto;
   border-radius: 20px; }
@@ -59,7 +73,9 @@ hr {
 .oldDataContainer {
   margin: auto;
   height: 100%;
-  width: 80%; }
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 20px; }
 
 .divLatestSize {
   max-width: 45%;
@@ -78,7 +94,7 @@ hr {
 
 input.inputStyle {
   color: white;
-  background-color: #0000005e;
+  background-color: var(--div-col);
   text-align: center;
   width: 50%;
   min-width: 200px;
@@ -140,6 +156,10 @@ sup3days {
 ::-webkit-scrollbar {
   display: none; }
 
+.imageInsideButton {
+  height: 30px;
+  width: 35px; }
+
 @media (max-width: 1200px) {
   .container {
     max-width: 100%; } }
@@ -147,3 +167,10 @@ sup3days {
 @media (max-width: 800px) {
   .oldDataContainer {
     width: 95%; } }
+
+@media (max-width: 400px) {
+  .imageInsideButton {
+    height: 25px;
+    width: 29px; }
+  .toggleBtn {
+    width: 70px; } }

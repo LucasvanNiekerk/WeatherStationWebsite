@@ -31,6 +31,13 @@ interface Main {
     temp_max: number;
 }
 
+interface gridLines{
+    width: string;
+    height: string;
+    x: string;
+    y: string;
+}
+
 
 //
 // Browser data / local storage.
@@ -699,6 +706,7 @@ let DagsPrognongse : HTMLDivElement = <HTMLDivElement>document.getElementById('3
 let IndendørsData: HTMLDivElement = <HTMLDivElement>document.getElementById('IndendørsData')
 let UdendørsData: HTMLDivElement = <HTMLDivElement>document.getElementById('UdendørsData')
 let hr : HTMLDivElement = <HTMLDivElement>document.getElementById('hr')
+let indendata: string;
 function tester() {
      frontpage.classList.remove('grid-stack-one-column-mode') 
      console.log(screen.width)
@@ -713,5 +721,14 @@ function tester() {
         hr.setAttribute('data-gs-y', '3')
      }
      
+     
      //console.log(test2.getAttribute('data-gs-width')) 
+}
+
+
+
+function saveStuff(){
+    let temp: gridLines;
+    temp.width = IndendørsData.getAttribute('data-gs-width')
+    localStorage.setItem(indendata, JSON.stringify())
 }

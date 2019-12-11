@@ -36421,6 +36421,7 @@ var DagsPrognongse = document.getElementById('3dagsPronogse');
 var IndendørsData = document.getElementById('IndendørsData');
 var UdendørsData = document.getElementById('UdendørsData');
 var hr = document.getElementById('hr');
+var indendata;
 function tester() {
     frontpage.classList.remove('grid-stack-one-column-mode');
     console.log(screen.width);
@@ -36435,6 +36436,11 @@ function tester() {
         hr.setAttribute('data-gs-y', '3');
     }
     //console.log(test2.getAttribute('data-gs-width')) 
+}
+function saveStuff() {
+    var temp;
+    temp.width = IndendørsData.getAttribute('data-gs-width');
+    localStorage.setItem(indendata, JSON.stringify());
 }
 
 
