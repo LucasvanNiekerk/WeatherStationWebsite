@@ -36080,10 +36080,12 @@ function displaySelectedRadioButton() {
 function displayFrontpage() {
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
+    document.title = "Hjem ( ͡° ͜ʖ ͡°)";
 }
 function displayOlderData() {
     frontpageDivElement.style.display = "none";
     olderDataDivElement.style.display = "block";
+    document.title = "Ældre data";
 }
 function changeTemperatureAnnotation() {
     if (annotationOption2.checked) {

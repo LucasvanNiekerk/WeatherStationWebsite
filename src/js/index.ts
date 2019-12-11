@@ -300,11 +300,13 @@ function displaySelectedRadioButton(){
 function displayFrontpage(): void {
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
+    document.title = "Hjem ( ͡° ͜ʖ ͡°)";
 }
 
 function displayOlderData(): void {
     frontpageDivElement.style.display = "none";
     olderDataDivElement.style.display = "block";
+    document.title = "Ældre data"
 }
 
 function changeTemperatureAnnotation(): void {
