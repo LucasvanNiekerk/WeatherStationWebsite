@@ -220,7 +220,7 @@ let tableStringArray: string[] = ["","","","","","","","",""];
 let arrayIndex: number = 0;
 
 //
-// Functions
+// Functions 
 //
 
 // Runs following functions 10 milliseconds after the page / window has loaded.

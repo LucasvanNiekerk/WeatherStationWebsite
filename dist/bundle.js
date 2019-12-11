@@ -35985,9 +35985,6 @@ var myChart = new _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"](c
     }
 });
 _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__["Chart"].defaults.global.defaultFontColor = "#fff";
-var dayInputField = document.getElementById("dayInputField");
-dayInputField.addEventListener("change", get7Days);
-var tableStringArray = ["", "", "", "", "", "", "", "", ""];
 //
 // Buttons
 //
@@ -36004,7 +36001,20 @@ frontpageButton.addEventListener("click", displayFrontpage);
 var olderDataButton = document.getElementById("OlderDataButton");
 olderDataButton.addEventListener("click", displayOlderData);
 //
-// Functions
+// Global variables
+//
+// Whether or not it is day or night, used for website theme.
+var isDay = true;
+// Sunrise time saved in unix utc. Used for determening whether it's day or night.
+var sunrise = 0;
+// Sunset time saved in unix utc. Used for determening whether it's day or night.
+var sunset = 0;
+var dayInputField = document.getElementById("dayInputField");
+dayInputField.addEventListener("change", get7Days);
+var tableStringArray = ["", "", "", "", "", "", "", "", ""];
+var arrayIndex = 0;
+//
+// Functions 
 //
 // Runs following functions 10 milliseconds after the page / window has loaded.
 // We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
@@ -36019,6 +36029,7 @@ function onloadMethods() {
             loadData();
         setDayInputValue();
         get7Days();
+        //setTheme();
     }, 10);
 }
 function browserStorage() {
@@ -36145,8 +36156,8 @@ function getAPIWeatherInformation() {
         var responseData = JSON.stringify(response.data);
         var temperature = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         var humidity = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
-        var sunset = responseData.match('(?:"sunset":)\K\d+')[1];
         var sunrise = responseData.match('(?:"sunrise":)\K\d+')[1];
+        var sunset = responseData.match('(?:"sunset":)\K\d+')[1];
         //Todo
         if (temperatureAnnotation === "celsius") {
             externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
@@ -36255,7 +36266,6 @@ function setDayInputValue() {
     var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
     dayInputField.value = s;
 }
-var arrayIndex = 0;
 function get7Days() {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
