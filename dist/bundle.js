@@ -36006,15 +36006,15 @@ olderDataButton.addEventListener("click", displayOlderData);
 // Whether or not it is day or night, used for website theme.
 var isDay = true;
 // Sunrise time saved in unix utc. Used for determening whether it's day or night.
-var sunrise = 0;
+var sunrise;
 // Sunset time saved in unix utc. Used for determening whether it's day or night.
-var sunset = 0;
+var sunset;
 var dayInputField = document.getElementById("dayInputField");
 dayInputField.addEventListener("change", get7Days);
 var tableStringArray = ["", "", "", "", "", "", "", "", ""];
 var arrayIndex = 0;
 //
-// Functions
+// Functions 
 //
 // Runs following functions 10 milliseconds after the page / window has loaded.
 // We run browserstorage to find raspberry id, prefered tempeture annotion and which city data to show.
@@ -36029,7 +36029,7 @@ function onloadMethods() {
             loadData();
         setDayInputValue();
         get7Days();
-        //setTheme();
+        setTimeout(setTheme, 100);
     }, 10);
 }
 function browserStorage() {
@@ -36080,10 +36080,12 @@ function displaySelectedRadioButton() {
 function displayFrontpage() {
     frontpageDivElement.style.display = "block";
     olderDataDivElement.style.display = "none";
+    document.title = "Hjem ( ͡° ͜ʖ ͡°)";
 }
 function displayOlderData() {
     frontpageDivElement.style.display = "none";
     olderDataDivElement.style.display = "block";
+    document.title = "Ældre data";
 }
 function changeTemperatureAnnotation() {
     if (annotationOption2.checked) {
@@ -36150,15 +36152,16 @@ function sumbitRaspberryId() {
 }
 function getAPIWeatherInformation() {
     var Url = generateUrl("weather");
-    console.log(Url);
+    console.log("Api Url: " + Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
+        //Since we did not need to use all the information given, we choose to use regex to isolate the data we need.
+        //Therefore we use a json string instead of an object.
         var responseData = JSON.stringify(response.data);
         var temperature = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         var humidity = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
-        var sunrise = responseData.match('(?:"sunrise":)\K\d+')[1];
-        var sunset = responseData.match('(?:"sunset":)\K\d+')[1];
-        //Todo
+        var sunriseString = responseData.match('"sunrise":(\\d+)')[1];
+        var sunsetString = responseData.match('"sunset":(\\d+)')[1];
         if (temperatureAnnotation === "celsius") {
             externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
         }
@@ -36166,6 +36169,10 @@ function getAPIWeatherInformation() {
             externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°F</sup>";
         }
         externalAPIHumidityOutputElement.innerHTML = Number(humidity).toFixed(1) + "%";
+        sunrise = new Date(Number(sunriseString) * 1000);
+        sunset = new Date(Number(sunsetString) * 1000);
+        console.log(sunset);
+        console.log(sunrise);
     })
         .catch(errorMessage);
 }
@@ -36313,6 +36320,30 @@ function getRangeOfDay(date, index, forthIndex) {
     myChart.data.labels[index] = date.toLocaleString('da-DK', options);
     myChart.update();
 }
+function setTheme() {
+    var now = new Date();
+    var nowMill = now.getMilliseconds();
+    var sunriseMill = sunrise.getMilliseconds();
+    var sunsetMill = sunset.getMilliseconds();
+    if (sunriseMill < nowMill && sunsetMill > nowMill) {
+        setDayTheme();
+        setTimeout(setNightTheme, (sunsetMill - nowMill));
+    }
+    else if (sunriseMill > nowMill && sunsetMill < nowMill) {
+        setNightTheme();
+        setTimeout(setDayTheme, (sunriseMill - nowMill));
+    }
+}
+function setDayTheme() {
+    document.documentElement.style.setProperty("--background-col", "#ff7d8d", "important");
+    document.documentElement.style.setProperty("--div-col", "#0000002d"); //Might need important
+    document.documentElement.style.setProperty("--background-img", "linear-gradient(to top right, #ffa873, #ff7d8d)", "important");
+}
+function setNightTheme() {
+    document.documentElement.style.setProperty("--background-col", "#00558d", "important");
+    document.documentElement.style.setProperty("--div-col", "#0000005e"); //Might need important
+    document.documentElement.style.setProperty("--background-img", "linear-gradient(to top right, #00558d, #00856f)", "important");
+}
 //
 // Helper functions
 //
@@ -36343,7 +36374,7 @@ function generateUrl(method) {
     Url += cityDropDownElement.value;
     Url += ",DK";
     Url += temperatureAnnotation === "celsius" ? "&units=metric" : "&units=imperial";
-    Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd";
+    Url += "&APPID=bc20a2ede929b0617feebeb4be3f9efd"; //abab15aaae04e0bfba24f744cc047dd1 //bc20a2ede929b0617feebeb4be3f9efd
     return Url;
 }
 function toNumberToFixed(num, amountOfDecimals) {
