@@ -46,6 +46,7 @@ let raspberryId: string = "";
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
 
+
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
 
@@ -173,11 +174,6 @@ var myChart = new Chart(chart, {
 
 Chart.defaults.global.defaultFontColor = "#fff";
 
-let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
-dayInputField.addEventListener("change", get7Days);
-
-let tableStringArray: string[] = ["","","","","","","","",""];
-
 
 //
 // Buttons
@@ -202,6 +198,26 @@ frontpageButton.addEventListener("click", displayFrontpage);
 let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
 olderDataButton.addEventListener("click", displayOlderData);
 
+//
+// Global variables
+//
+
+// Whether or not it is day or night, used for website theme.
+let isDay: boolean = true;
+
+// Sunrise time saved in unix utc. Used for determening whether it's day or night.
+let sunrise: number = 0;
+
+// Sunset time saved in unix utc. Used for determening whether it's day or night.
+let sunset: number = 0;
+
+
+let dayInputField: HTMLInputElement = <HTMLInputElement>document.getElementById("dayInputField");
+dayInputField.addEventListener("change", get7Days);
+
+let tableStringArray: string[] = ["","","","","","","","",""];
+
+let arrayIndex: number = 0;
 
 //
 // Functions
@@ -215,13 +231,18 @@ function onloadMethods(): void {
     setTimeout(() => {
         //localStorage.clear();
         browserStorage();
+        
         fillDropDown();
+        
         if(localStorage.getItem("raspId") != null) loadData();
+        
         setDayInputValue();
+        
         get7Days();
 
+        //setTheme();
 
-    }, 10)
+    }, 10);
 }
 
 function browserStorage(): void {
@@ -368,6 +389,9 @@ function getAPIWeatherInformation(): void {
 
             let temperature: string = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
             let humidity: string = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
+            let sunrise: string = responseData.match('(?:"sunrise":)\K\d+')[1];
+            let sunset: string = responseData.match('(?:"sunset":)\K\d+')[1];
+            //Todo
 
             if (temperatureAnnotation === "celsius") {
                 externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
@@ -499,7 +523,6 @@ function setDayInputValue(): void{
     dayInputField.value = s;
 }
 
-let arrayIndex: number = 0;
 
 function get7Days(): void {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";

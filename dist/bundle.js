@@ -36145,6 +36145,9 @@ function getAPIWeatherInformation() {
         var responseData = JSON.stringify(response.data);
         var temperature = responseData.match('"temp":(\\d+(?:\\.\\d+)?)')[1];
         var humidity = responseData.match('"humidity":(\\d+(?:\\.\\d+)?)')[1];
+        var sunset = responseData.match('(?:"sunset":)\K\d+')[1];
+        var sunrise = responseData.match('(?:"sunrise":)\K\d+')[1];
+        //Todo
         if (temperatureAnnotation === "celsius") {
             externalAPITemperatureOutputElement.innerHTML = Number(temperature).toFixed(1) + "<sup>°C</sup>";
         }
