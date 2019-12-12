@@ -35996,6 +35996,10 @@ var annotationOption1 = document.getElementById("annotationOption1");
 annotationOption1.onchange = changeTemperatureAnnotation;
 var annotationOption2 = document.getElementById("annotationOption2");
 annotationOption2.onchange = changeTemperatureAnnotation;
+var themeOptionDay = document.getElementById("themeOptionDay");
+themeOptionDay.onchange = setDayTheme;
+var themeOptionNight = document.getElementById("themeOptionNight");
+themeOptionNight.onchange = setNightTheme;
 var frontpageButton = document.getElementById("FrontpageButton");
 frontpageButton.addEventListener("click", displayFrontpage);
 var olderDataButton = document.getElementById("OlderDataButton");
@@ -36028,9 +36032,7 @@ function onloadMethods() {
         if (localStorage.getItem("raspId") != null)
             loadData();
         setDayInputValue();
-        get7Days();
-        tester();
-        setTimeout(setTheme, 1000);
+        setTheme();
     }, 10);
 }
 function browserStorage() {
@@ -36338,8 +36340,15 @@ function getRangeOfDay(date, index, nonAsyncIndex) {
 function setTheme() {
     var now = new Date();
     var nowMill = now.getTime();
-    var sunriseMill = sunrise.getTime();
-    var sunsetMill = sunset.getTime();
+    var sunriseMill;
+    var sunsetMill;
+    try {
+        sunriseMill = sunrise.getTime();
+        sunsetMill = sunset.getTime();
+    }
+    catch (error) {
+        setTimeout(setTheme, 50);
+    }
     if (nowMill > sunriseMill && nowMill < sunsetMill) {
         setDayTheme();
         console.log(sunsetMill - nowMill);

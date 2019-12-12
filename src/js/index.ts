@@ -199,12 +199,20 @@ annotationOption1.onchange = changeTemperatureAnnotation;
 let annotationOption2: HTMLInputElement = <HTMLInputElement>document.getElementById("annotationOption2");
 annotationOption2.onchange = changeTemperatureAnnotation;
 
+let themeOptionDay: HTMLInputElement = <HTMLInputElement>document.getElementById("themeOptionDay");
+themeOptionDay.onchange = setDayTheme;
+
+let themeOptionNight: HTMLInputElement = <HTMLInputElement>document.getElementById("themeOptionNight");
+themeOptionNight.onchange = setNightTheme;
+
 
 let frontpageButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("FrontpageButton");
 frontpageButton.addEventListener("click", displayFrontpage);
 
 let olderDataButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("OlderDataButton");
 olderDataButton.addEventListener("click", displayOlderData);
+
+
 
 //
 // Global variables
@@ -246,9 +254,11 @@ function onloadMethods(): void {
 
         setDayInputValue();
 
+        setTheme();
+
         get7Days();
+        
         tester();
-        setTimeout(setTheme, 1000);
     }, 10);
 }
 
@@ -611,8 +621,16 @@ function setTheme(): void {
     let now: Date = new Date();
     let nowMill: number = now.getTime();
 
-    let sunriseMill: number = sunrise.getTime();
-    let sunsetMill: number = sunset.getTime();
+    let sunriseMill: number;
+    let sunsetMill: number;
+    
+    try {
+        sunriseMill = sunrise.getTime();
+        sunsetMill = sunset.getTime();
+        
+    } catch (error) {
+        setTimeout(setTheme, 50);
+    }
     if (nowMill > sunriseMill && nowMill < sunsetMill) {
         setDayTheme();
         console.log(sunsetMill - nowMill);
