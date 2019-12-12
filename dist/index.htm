@@ -28,8 +28,8 @@
     </button>
 </nav>
 
-<div class="collapse" id="collapseExample" style="float: right; margin: 5px;">
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+<div class="collapse" id="collapseExample">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
         <label class="btn btn-secondary" id="label1">
             <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
         </label>
@@ -37,7 +37,7 @@
             <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
         </label>
     </div>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="margin-top: 5px;">
         <label class="btn btn-secondary">
             <input type="radio" name="options" autocomplete="off"> 🌙
         </label>
@@ -129,6 +129,13 @@
         <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
     </div>
 </div>
+
+<!--JavaScript, but it works-->
+<script>
+    $(document).on('click',function(){
+        $('.collapse').collapse('hide');
+    })
+</script>
 
 <script src="bundle.js"></script>
 </body>

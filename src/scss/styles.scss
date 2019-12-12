@@ -182,6 +182,23 @@ sup3days {
     width: 35px;
 }
 
+.collapse {
+    right: 0px;
+    margin: 5px;
+    position: absolute; /* Reposition logo from the natural layout */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
+
 // When resolution <= 1200px, hide full text and show short text
 @media (max-width: 1200px) {
     .container {

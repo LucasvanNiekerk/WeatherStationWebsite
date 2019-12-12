@@ -36457,7 +36457,7 @@ interface ResponseWeather
     name: string;
     cod: number;
 }
-*/
+*/ 
 
 
 /***/ }),

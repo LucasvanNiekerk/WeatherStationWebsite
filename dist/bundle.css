@@ -157,6 +157,22 @@ sup3days {
   height: 30px;
   width: 35px; }
 
+.collapse {
+  right: 0px;
+  margin: 5px;
+  position: absolute;
+  /* Reposition logo from the natural layout */
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+
+.collapsing {
+  -webkit-transition: none;
+  transition: none;
+  display: none; }
+
 @media (max-width: 1200px) {
   .container {
     max-width: 100%; } }
