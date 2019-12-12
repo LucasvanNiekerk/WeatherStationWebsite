@@ -532,69 +532,76 @@ function changeCity() {
     loadApiData();
 }
 
+//sets the input Date field to have a start
 function setDayInputValue(): void {
-    let D: Date = new Date();
-    let s: string = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
-    dayInputField.value = s;
+    let startDate: Date = new Date();
+    let dateString: string = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + ("0" + startDate.getDate()).slice(-2);
+    dayInputField.value = dateString;
 }
 
-
+//runs a get method with a date 7 times for the week.
 function get7Days(): void {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
-    let forthIndex: number = 0; //It just works ehh
+    let nonAsyncIndex: number = 0; //It just works ehh
     let date: Date = new Date(dayInputField.value);
 
     for (let i = 6; i >= 0; i--) {
-        getRangeOfDay(date, i, forthIndex);
+        getRangeOfDay(date, i, nonAsyncIndex);
         console.log(i);
-        forthIndex++;
+        nonAsyncIndex++;
         date.setDate(date.getDate() - 1);
     }
 }
 
-function getRangeOfDay(date: Date, index: number, forthIndex: number): void {
+//Gets all the data from a specific date and updates the chart and table.
+//The reason for multiple indexes are because the methos is running async.
+function getRangeOfDay(date: Date, index: number, nonAsyncIndex: number): void {
     let i: number = 0;
     var options = { year: 'numeric', month: 'short', day: '2-digit' };
+    //Have to use a string as date, because a date updates globally and would change while i use it.
     let tempDate: string = date.toLocaleString('da-DK', options);
     let resultTemperature: number = 0;
     let resultHumidity: number = 0;
     let avgTemperature: number = 0;
     let avgHumidity: number = 0;
+    //We use this URI to get the right data. api/wi/date/TestData22/2019-12-20/celsius
     let Url: string = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2) + "/" + temperatureAnnotation;
     console.log(Url);
     axios.get<IWeather[]>(Url)
         .then(function (response: AxiosResponse<IWeather[]>): void {
             response.data.forEach((weatherInfo: IWeather) => {
+                //For each data at this date, we count the data and creates a sum of the temperature and humidity.
                 i++;
                 resultTemperature += Number(weatherInfo.temperature);
                 resultHumidity += Number(weatherInfo.humidity);
             });
             if (i > 0) {
+                //we get the average of the data for the date.
                 avgTemperature = resultTemperature / i;
                 avgHumidity = resultHumidity / i;
             }
-
+            //Checks if celsius or Farenheit is selected.
             let tType: string = temperatureAnnotation === "celsius" ? " °C" : " °F";
-            tableStringArray[forthIndex + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
+            //Inserts the data in the table in the right order using a different index.
+            tableStringArray[nonAsyncIndex + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
 
+            //arrayIndex keeps track of how many table elements have been inserted.
             arrayIndex += 1;
-
             if (arrayIndex > 5) {
+                //inserts end table code and sets the innerHTML.
                 tableStringArray[8] = "</tbody>";
                 getAllOutputTable.innerHTML = tableStringArray.join("");
             }
 
-
+            //Inserts data in chart.
             myChart.data.datasets[0].data[index] = Number(avgTemperature.toFixed(1));
-
-
             myChart.data.datasets[1].data[index] = Number(avgHumidity.toFixed(1));
             myChart.update();
 
 
         }).catch(errorMessage);
-
+    //Inserts dates in chart (can't run async)
     myChart.data.labels[index] = date.toLocaleString('da-DK', options);
     myChart.update();
 }
