@@ -189,7 +189,8 @@ sup3days {
 .collapse {
     right: 0px;
     margin: 5px;
-    position: absolute; /* Reposition logo from the natural layout */
+    position: absolute;
+    // Sets it on top of everything on level 1
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -197,13 +198,20 @@ sup3days {
     align-items: center;
 }
 
+// Removes animation of collapse
 .collapsing {
     -webkit-transition: none;
     transition: none;
     display: none;
 }
 
-// When resolution <= 1200px, hide full text and show short text
+input::-webkit-outer-spin-button, /* Removes arrows */
+input::-webkit-inner-spin-button, /* Removes arrows */
+input::-webkit-clear-button { /* Removes blue cross */
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 @media (max-width: 1200px) {
     .container {
         max-width: 100%;

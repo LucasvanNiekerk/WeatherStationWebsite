@@ -164,7 +164,6 @@ sup3days {
   right: 0px;
   margin: 5px;
   position: absolute;
-  /* Reposition logo from the natural layout */
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -175,6 +174,13 @@ sup3days {
   -webkit-transition: none;
   transition: none;
   display: none; }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button,
+input::-webkit-clear-button {
+  /* Removes blue cross */
+  -webkit-appearance: none;
+  margin: 0; }
 
 @media (max-width: 1200px) {
   .container {

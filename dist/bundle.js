@@ -36033,6 +36033,8 @@ function onloadMethods() {
             loadData();
         setDayInputValue();
         setTheme();
+        get7Days();
+        tester();
     }, 10);
 }
 function browserStorage() {
