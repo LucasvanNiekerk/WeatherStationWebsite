@@ -36032,7 +36032,6 @@ function onloadMethods() {
         if (localStorage.getItem("raspId") != null)
             loadData();
         setDayInputValue();
-        get7Days();
         setTheme();
     }, 10);
 }
@@ -36420,14 +36419,12 @@ interface Coord
     lon: number;
     lat: number;
 }
-
 interface Weather {
     id: number;
     main: string;s
     description: string;
     icon: string;
 }
-
 interface Main {
     temp: number;
     pressure: number;
@@ -36435,16 +36432,13 @@ interface Main {
     temp_min: number;
     temp_max: number;
 }
-
 interface Wind {
     speed: number;
     deg: number;
 }
-
 interface Clouds {
     all: number;
 }
-
 interface Sys {
     type: number;
     id: number;
@@ -36453,7 +36447,6 @@ interface Sys {
     sunrise: number;
     sunset: number;
 }
-
 interface ResponseWeather
 {
     coord: Coord;
@@ -36470,6 +36463,116 @@ interface ResponseWeather
     cod: number;
 }
 */
+//test moveable
+var frontpage = document.getElementById('Frontpage');
+var TreDagsPrognongse = document.getElementById('3dagsPronogse');
+var DagsPrognongse = document.getElementById('DagsPrognongse');
+var IndendørsData = document.getElementById('IndendørsData');
+var UdendørsData = document.getElementById('UdendørsData');
+var hr = document.getElementById('hr');
+var oneDagProg = document.getElementById('oneDagProg');
+var toDagProg = document.getElementById('toDagProg');
+var treDagProg = document.getElementById('treDagProg');
+var collaspe = document.getElementById('collapseButton');
+var settingMode = false;
+collaspe.addEventListener('click', SetingsMode);
+function tester() {
+    frontpage.classList.remove('grid-stack-one-column-mode');
+    //console.log(screen.width)
+    if (screen.width < 780) {
+        // console.log('check')
+        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode');
+        IndendørsData.setAttribute('data-gs-width', '4');
+        IndendørsData.setAttribute('data-gs-height', '3');
+        IndendørsData.setAttribute('data-gs-x', '2');
+        UdendørsData.setAttribute('data-gs-width', '4');
+        UdendørsData.setAttribute('data-gs-height', '3');
+        DagsPrognongse.setAttribute('data-gs-width', '12');
+        DagsPrognongse.setAttribute('data-gs-y', '3');
+        DagsPrognongse.setAttribute('data-gs-x', '0');
+        hr.setAttribute('data-gs-y', '3');
+        oneDagProg.setAttribute('data-gs-height', '2');
+        toDagProg.setAttribute('data-gs-height', '2');
+        treDagProg.setAttribute('data-gs-height', '2');
+    }
+    else {
+        GetOneSetting(IndendørsData, 'indendata');
+        GetOneSetting(UdendørsData, 'udendata');
+        GetOneSetting(hr, 'hrdata');
+        GetOneSetting(DagsPrognongse, 'DagsPrognongse');
+        GetOneSetting(oneDagProg, 'oneDagProg');
+        GetOneSetting(toDagProg, 'toDagProg');
+        GetOneSetting(treDagProg, 'treDagProg');
+    }
+    //console.log(test2.getAttribute('data-gs-width')) 
+}
+function SetingsMode() {
+    if (screen.width > 779) {
+        if (settingMode === true) {
+            console.log("is on, turning off");
+            //turnOffMove(IndendørsData)
+            SaveAll();
+            settingMode = false;
+        }
+        else {
+            // turnOnMove(IndendørsData)
+            console.log("is off, turning on");
+            settingMode = true;
+        }
+    }
+}
+/*function turnOnMove(element: HTMLDivElement){
+    console.log("remove")
+    element.removeAttribute('data-gs-no-move')
+    element.removeAttribute('data-gs-no-resize')
+    element.removeAttribute('data-gs-locked')
+    element.classList.remove('ui-draggable-disabled', 'ui-resizable-disabled', 'ui-resizable-autohide')
+    /*element.setAttribute('movable', 'true')
+    element.setAttribute('resizable', 'true')
+    let handel: HTMLDivElement = <HTMLDivElement>element.lastElementChild;
+    handel.style.display = 'block'
+}
+
+function turnOffMove(element: HTMLDivElement){
+    element.setAttribute('data-gs-no-move', 'yes')
+    element.setAttribute('data-gs-no-resize','yes')
+    element.setAttribute('data-gs-locked', 'yes')
+    //element.setAttribute('movable', 'false')
+    //element.setAttribute('resizable', 'false')
+    
+}*/
+function SaveAll() {
+    saveOneSetting(IndendørsData, 'indendata');
+    saveOneSetting(UdendørsData, 'udendata');
+    saveOneSetting(hr, 'hrdata');
+    saveOneSetting(DagsPrognongse, 'DagsPrognongse');
+    saveOneSetting(oneDagProg, 'oneDagProg');
+    saveOneSetting(toDagProg, 'toDagProg');
+    saveOneSetting(treDagProg, 'treDagProg');
+}
+function saveOneSetting(element, str) {
+    //console.log(str)
+    var temp = { width: '0', height: '0', x: '0', y: '0' };
+    temp.width = element.getAttribute('data-gs-width');
+    temp.height = element.getAttribute('data-gs-height');
+    temp.x = element.getAttribute('data-gs-x');
+    temp.y = element.getAttribute('data-gs-y');
+    //console.log(JSON.stringify(temp))
+    localStorage.setItem(str, JSON.stringify(temp));
+}
+function GetOneSetting(element, str) {
+    if (localStorage.getItem(str) != null) {
+        var temp = { width: '0', height: '0', x: '0', y: '0' };
+        //console.log("str  " + str)
+        temp = JSON.parse(localStorage.getItem(str));
+        //console.log(JSON.parse(localStorage.getItem(str)));
+        //console.log("temp  " + temp)
+        element.setAttribute('data-gs-width', temp.width);
+        element.setAttribute('data-gs-height', temp.height);
+        element.setAttribute('data-gs-x', temp.x);
+        element.setAttribute('data-gs-y', temp.y);
+    }
+}
 
 
 /***/ }),
