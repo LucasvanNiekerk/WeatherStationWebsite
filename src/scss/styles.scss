@@ -1,6 +1,6 @@
 :root {
-    --background-col: #ff7d8d; // Day #ff7d8d | Night #00856f.
-    --background-img: linear-gradient(to top right, #ffa873, #ff7d8d); // Day #ffa873 / #ff7d8d | Night #00558d / #00856f.
+    --background-col: #00856f; // Day #ff7d8d | Night #00856f.
+    --background-img: linear-gradient(to top right, #00558d, #00856f); // Day #ffa873 / #ff7d8d | Night #00558d / #00856f.
     --div-col: #0000002d;
 }
 
@@ -106,6 +106,10 @@ hr {
     margin-left: 5px;
     margin-right: 5px;
     max-height: 300px;
+}
+
+.grid-stack-item-content{
+    text-align: center;
 }
 
 //InputColor

@@ -35996,6 +35996,10 @@ var annotationOption1 = document.getElementById("annotationOption1");
 annotationOption1.onchange = changeTemperatureAnnotation;
 var annotationOption2 = document.getElementById("annotationOption2");
 annotationOption2.onchange = changeTemperatureAnnotation;
+var themeOptionDay = document.getElementById("themeOptionDay");
+themeOptionDay.onchange = setDayTheme;
+var themeOptionNight = document.getElementById("themeOptionNight");
+themeOptionNight.onchange = setNightTheme;
 var frontpageButton = document.getElementById("FrontpageButton");
 frontpageButton.addEventListener("click", displayFrontpage);
 var olderDataButton = document.getElementById("OlderDataButton");
@@ -36028,8 +36032,7 @@ function onloadMethods() {
         if (localStorage.getItem("raspId") != null)
             loadData();
         setDayInputValue();
-        get7Days();
-        setTimeout(setTheme, 100);
+        setTheme();
     }, 10);
 }
 function browserStorage() {
@@ -36268,70 +36271,92 @@ function changeCity() {
     console.log(localStorage.getItem("currentCity"));
     loadApiData();
 }
+//sets the input Date field to have a start
 function setDayInputValue() {
-    var D = new Date();
-    var s = D.getFullYear() + "-" + (D.getMonth() + 1) + "-" + ("0" + D.getDate()).slice(-2);
-    dayInputField.value = s;
+    var startDate = new Date();
+    var dateString = startDate.getFullYear() + "-" + (startDate.getMonth() + 1) + "-" + ("0" + startDate.getDate()).slice(-2);
+    dayInputField.value = dateString;
 }
+//runs a get method with a date 7 times for the week.
 function get7Days() {
     tableStringArray[0] = "<thead> <tr> <th>Dato</th> <th>Temperatur</th> <th>Luftfugt</th> </tr> </thead> <tbody>";
     arrayIndex = 0;
-    var forthIndex = 0; //It just works ehh
+    var nonAsyncIndex = 0; //It just works ehh
     var date = new Date(dayInputField.value);
     for (var i = 6; i >= 0; i--) {
-        getRangeOfDay(date, i, forthIndex);
+        getRangeOfDay(date, i, nonAsyncIndex);
         console.log(i);
-        forthIndex++;
+        nonAsyncIndex++;
         date.setDate(date.getDate() - 1);
     }
 }
-function getRangeOfDay(date, index, forthIndex) {
+//Gets all the data from a specific date and updates the chart and table.
+//The reason for multiple indexes are because the methos is running async.
+function getRangeOfDay(date, index, nonAsyncIndex) {
     var i = 0;
     var options = { year: 'numeric', month: 'short', day: '2-digit' };
+    //Have to use a string as date, because a date updates globally and would change while i use it.
     var tempDate = date.toLocaleString('da-DK', options);
     var resultTemperature = 0;
     var resultHumidity = 0;
     var avgTemperature = 0;
     var avgHumidity = 0;
+    //We use this URI to get the right data. api/wi/date/TestData22/2019-12-20/celsius
     var Url = baseUri + "date/" + raspberryId + "/" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + ("0" + date.getDate()).slice(-2) + "/" + temperatureAnnotation;
     console.log(Url);
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
         .then(function (response) {
         response.data.forEach(function (weatherInfo) {
+            //For each data at this date, we count the data and creates a sum of the temperature and humidity.
             i++;
             resultTemperature += Number(weatherInfo.temperature);
             resultHumidity += Number(weatherInfo.humidity);
         });
         if (i > 0) {
+            //we get the average of the data for the date.
             avgTemperature = resultTemperature / i;
             avgHumidity = resultHumidity / i;
         }
+        //Checks if celsius or Farenheit is selected.
         var tType = temperatureAnnotation === "celsius" ? " °C" : " °F";
-        tableStringArray[forthIndex + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
+        //Inserts the data in the table in the right order using a different index.
+        tableStringArray[nonAsyncIndex + 1] = "<tr> <th>" + tempDate + "</th><td>" + avgTemperature.toFixed(1) + tType + "</td><td>" + avgHumidity.toFixed(1) + "%" + "</td> </tr>";
+        //arrayIndex keeps track of how many table elements have been inserted.
         arrayIndex += 1;
         if (arrayIndex > 5) {
+            //inserts end table code and sets the innerHTML.
             tableStringArray[8] = "</tbody>";
             getAllOutputTable.innerHTML = tableStringArray.join("");
         }
+        //Inserts data in chart.
         myChart.data.datasets[0].data[index] = Number(avgTemperature.toFixed(1));
         myChart.data.datasets[1].data[index] = Number(avgHumidity.toFixed(1));
         myChart.update();
     }).catch(errorMessage);
+    //Inserts dates in chart (can't run async)
     myChart.data.labels[index] = date.toLocaleString('da-DK', options);
     myChart.update();
 }
 function setTheme() {
     var now = new Date();
-    var nowMill = now.getMilliseconds();
-    var sunriseMill = sunrise.getMilliseconds();
-    var sunsetMill = sunset.getMilliseconds();
-    if (sunriseMill < nowMill && sunsetMill > nowMill) {
+    var nowMill = now.getTime();
+    var sunriseMill;
+    var sunsetMill;
+    try {
+        sunriseMill = sunrise.getTime();
+        sunsetMill = sunset.getTime();
+    }
+    catch (error) {
+        setTimeout(setTheme, 50);
+    }
+    if (nowMill > sunriseMill && nowMill < sunsetMill) {
         setDayTheme();
+        console.log(sunsetMill - nowMill);
         setTimeout(setNightTheme, (sunsetMill - nowMill));
     }
-    else if (sunriseMill > nowMill && sunsetMill < nowMill) {
+    else if (nowMill < sunriseMill || nowMill > sunsetMill) {
         setNightTheme();
-        setTimeout(setDayTheme, (sunriseMill - nowMill));
+        setTimeout(setDayTheme, (nowMill - sunriseMill));
     }
 }
 function setDayTheme() {
@@ -36408,14 +36433,12 @@ interface Coord
     lon: number;
     lat: number;
 }
-
 interface Weather {
     id: number;
     main: string;s
     description: string;
     icon: string;
 }
-
 interface Main {
     temp: number;
     pressure: number;
@@ -36423,16 +36446,13 @@ interface Main {
     temp_min: number;
     temp_max: number;
 }
-
 interface Wind {
     speed: number;
     deg: number;
 }
-
 interface Clouds {
     all: number;
 }
-
 interface Sys {
     type: number;
     id: number;
@@ -36441,7 +36461,6 @@ interface Sys {
     sunrise: number;
     sunset: number;
 }
-
 interface ResponseWeather
 {
     coord: Coord;
@@ -36457,7 +36476,117 @@ interface ResponseWeather
     name: string;
     cod: number;
 }
-*/ 
+*/
+//test moveable
+var frontpage = document.getElementById('Frontpage');
+var TreDagsPrognongse = document.getElementById('3dagsPronogse');
+var DagsPrognongse = document.getElementById('DagsPrognongse');
+var IndendørsData = document.getElementById('IndendørsData');
+var UdendørsData = document.getElementById('UdendørsData');
+var hr = document.getElementById('hr');
+var oneDagProg = document.getElementById('oneDagProg');
+var toDagProg = document.getElementById('toDagProg');
+var treDagProg = document.getElementById('treDagProg');
+var collaspe = document.getElementById('collapseButton');
+var settingMode = false;
+collaspe.addEventListener('click', SetingsMode);
+function tester() {
+    frontpage.classList.remove('grid-stack-one-column-mode');
+    //console.log(screen.width)
+    if (screen.width < 780) {
+        // console.log('check')
+        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode');
+        IndendørsData.setAttribute('data-gs-width', '4');
+        IndendørsData.setAttribute('data-gs-height', '3');
+        IndendørsData.setAttribute('data-gs-x', '2');
+        UdendørsData.setAttribute('data-gs-width', '4');
+        UdendørsData.setAttribute('data-gs-height', '3');
+        DagsPrognongse.setAttribute('data-gs-width', '12');
+        DagsPrognongse.setAttribute('data-gs-y', '3');
+        DagsPrognongse.setAttribute('data-gs-x', '0');
+        hr.setAttribute('data-gs-y', '3');
+        oneDagProg.setAttribute('data-gs-height', '2');
+        toDagProg.setAttribute('data-gs-height', '2');
+        treDagProg.setAttribute('data-gs-height', '2');
+    }
+    else {
+        GetOneSetting(IndendørsData, 'indendata');
+        GetOneSetting(UdendørsData, 'udendata');
+        GetOneSetting(hr, 'hrdata');
+        GetOneSetting(DagsPrognongse, 'DagsPrognongse');
+        GetOneSetting(oneDagProg, 'oneDagProg');
+        GetOneSetting(toDagProg, 'toDagProg');
+        GetOneSetting(treDagProg, 'treDagProg');
+    }
+    //console.log(test2.getAttribute('data-gs-width')) 
+}
+function SetingsMode() {
+    if (screen.width > 779) {
+        if (settingMode === true) {
+            console.log("is on, turning off");
+            //turnOffMove(IndendørsData)
+            SaveAll();
+            settingMode = false;
+        }
+        else {
+            // turnOnMove(IndendørsData)
+            console.log("is off, turning on");
+            settingMode = true;
+        }
+    }
+}
+/*function turnOnMove(element: HTMLDivElement){
+    console.log("remove")
+    element.removeAttribute('data-gs-no-move')
+    element.removeAttribute('data-gs-no-resize')
+    element.removeAttribute('data-gs-locked')
+    element.classList.remove('ui-draggable-disabled', 'ui-resizable-disabled', 'ui-resizable-autohide')
+    /*element.setAttribute('movable', 'true')
+    element.setAttribute('resizable', 'true')
+    let handel: HTMLDivElement = <HTMLDivElement>element.lastElementChild;
+    handel.style.display = 'block'
+}
+
+function turnOffMove(element: HTMLDivElement){
+    element.setAttribute('data-gs-no-move', 'yes')
+    element.setAttribute('data-gs-no-resize','yes')
+    element.setAttribute('data-gs-locked', 'yes')
+    //element.setAttribute('movable', 'false')
+    //element.setAttribute('resizable', 'false')
+    
+}*/
+function SaveAll() {
+    saveOneSetting(IndendørsData, 'indendata');
+    saveOneSetting(UdendørsData, 'udendata');
+    saveOneSetting(hr, 'hrdata');
+    saveOneSetting(DagsPrognongse, 'DagsPrognongse');
+    saveOneSetting(oneDagProg, 'oneDagProg');
+    saveOneSetting(toDagProg, 'toDagProg');
+    saveOneSetting(treDagProg, 'treDagProg');
+}
+function saveOneSetting(element, str) {
+    //console.log(str)
+    var temp = { width: '0', height: '0', x: '0', y: '0' };
+    temp.width = element.getAttribute('data-gs-width');
+    temp.height = element.getAttribute('data-gs-height');
+    temp.x = element.getAttribute('data-gs-x');
+    temp.y = element.getAttribute('data-gs-y');
+    //console.log(JSON.stringify(temp))
+    localStorage.setItem(str, JSON.stringify(temp));
+}
+function GetOneSetting(element, str) {
+    if (localStorage.getItem(str) != null) {
+        var temp = { width: '0', height: '0', x: '0', y: '0' };
+        //console.log("str  " + str)
+        temp = JSON.parse(localStorage.getItem(str));
+        //console.log(JSON.parse(localStorage.getItem(str)));
+        //console.log("temp  " + temp)
+        element.setAttribute('data-gs-width', temp.width);
+        element.setAttribute('data-gs-height', temp.height);
+        element.setAttribute('data-gs-x', temp.x);
+        element.setAttribute('data-gs-y', temp.y);
+    }
+}
 
 
 /***/ }),

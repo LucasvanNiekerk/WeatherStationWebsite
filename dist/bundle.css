@@ -1,6 +1,6 @@
 :root {
-  --background-col: #ff7d8d;
-  --background-img: linear-gradient(to top right, #ffa873, #ff7d8d);
+  --background-col: #00856f;
+  --background-img: linear-gradient(to top right, #00558d, #00856f);
   --div-col: #0000002d; }
 
 #content {
@@ -88,6 +88,9 @@ hr {
   margin-left: 5px;
   margin-right: 5px;
   max-height: 300px; }
+
+.grid-stack-item-content {
+  text-align: center; }
 
 input.inputStyle {
   color: white;
