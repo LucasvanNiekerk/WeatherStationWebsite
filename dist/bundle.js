@@ -35892,7 +35892,7 @@ function updateTemperature() {
             else if (temperatureAnnotation === "fahrenheit") {
                 internalTemperatureOutputElement.innerHTML = response.data.temperature + "<sup>°F</sup>";
             }
-            //internalHumidityOutputElement.innerHTML = response.data.humidity + "%";
+            internalHumidityOutputElement.innerHTML = response.data.humidity + "%";
         }
     })
         .catch(errorMessage);
