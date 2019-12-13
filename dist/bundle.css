@@ -182,6 +182,12 @@ input::-webkit-clear-button {
   -webkit-appearance: none;
   margin: 0; }
 
+input::-webkit-datetime-edit-day-field:focus,
+input::-webkit-datetime-edit-month-field:focus,
+input::-webkit-datetime-edit-year-field:focus {
+  color: white;
+  outline: none; }
+
 @media (max-width: 1200px) {
   .container {
     max-width: 100%; } }

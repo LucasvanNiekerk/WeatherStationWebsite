@@ -38,6 +38,36 @@ interface gridLines{
     y: string;
 }
 
+setInterval(() => { updateTemperature() }, 10 * 1000);
+
+function updateTemperature(): void {
+    let Url: string = baseUri + "latest/" + raspberryId + "/" + temperatureAnnotation;
+
+    axios.get<IWeather>(Url)
+        .then((response: AxiosResponse<IWeather>) => {
+            console.log(response.data.temperature);
+            console.log(internalTemperatureOutputElement.innerHTML.split("<sup>")[0]);
+
+            console.log(response.data.humidity);
+            console.log("H: " + internalHumidityOutputElement.innerHTML.replace("%", ""));
+
+            if (response.data.temperature === internalTemperatureOutputElement.innerHTML.split("<sup>")[0] &&
+                response.data.humidity === internalHumidityOutputElement.innerHTML.replace("%", "")) {
+                console.log("Still the same!");
+            }
+            else {
+                console.log("Update");
+                if (temperatureAnnotation === "celsius") {
+                    internalTemperatureOutputElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
+                }
+                else if (temperatureAnnotation === "fahrenheit") {
+                    internalTemperatureOutputElement.innerHTML = response.data.temperature + "<sup>°F</sup>";
+                }
+                //internalHumidityOutputElement.innerHTML = response.data.humidity + "%";
+            }
+        })
+        .catch(errorMessage);
+}
 
 //
 // Browser data / local storage.

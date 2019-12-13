@@ -35871,6 +35871,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__);
 
  //Ignore me I do work
+setInterval(function () { updateTemperature(); }, 10 * 1000);
+function updateTemperature() {
+    var Url = baseUri + "latest/" + raspberryId + "/" + temperatureAnnotation;
+    _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
+        .then(function (response) {
+        console.log(response.data.temperature);
+        console.log(internalTemperatureOutputElement.innerHTML.split("<sup>")[0]);
+        console.log(response.data.humidity);
+        console.log("H: " + internalHumidityOutputElement.innerHTML.replace("%", ""));
+        if (response.data.temperature === internalTemperatureOutputElement.innerHTML.split("<sup>")[0] &&
+            response.data.humidity === internalHumidityOutputElement.innerHTML.replace("%", "")) {
+            console.log("Still the same!");
+        }
+        else {
+            console.log("Update");
+            if (temperatureAnnotation === "celsius") {
+                internalTemperatureOutputElement.innerHTML = response.data.temperature + "<sup>°C</sup>";
+            }
+            else if (temperatureAnnotation === "fahrenheit") {
+                internalTemperatureOutputElement.innerHTML = response.data.temperature + "<sup>°F</sup>";
+            }
+            //internalHumidityOutputElement.innerHTML = response.data.humidity + "%";
+        }
+    })
+        .catch(errorMessage);
+}
 //
 // Browser data / local storage.
 //

@@ -16,160 +16,180 @@
 </head>
 
 <body>
-  <nav class="navbar bg-dark navbar-dark">
+    <nav class="navbar bg-dark navbar-dark">
 
-    <button title="Hjem" class="btn btn-dark" id="FrontpageButton"><img class="imageInsideButton" src="home.png"
-        alt="Home"></button>
-    <button title="Gamle data" class="btn btn-dark" id="OlderDataButton"><img class="imageInsideButton" src="graph.png"
-        alt="Graph"></button> 
+        <button title="Hjem" class="btn btn-dark" id="FrontpageButton">
+            <img class="imageInsideButton" src="home.png"
+                 alt="Home">
+        </button>
+        <button title="Gamle data" class="btn btn-dark" id="OlderDataButton">
+            <img class="imageInsideButton" src="graph.png"
+                 alt="Graph">
+        </button>
 
-    <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img class="imageInsideButton" src="ShiftPi.png" alt="ShiftPi"></button>
+        <button title="Skift Raspberry Pi" class="btn btn-dark" style="position: relative; float: right;" id="resetRaspberryId"><img class="imageInsideButton" src="ShiftPi.png" alt="ShiftPi"></button>
 
-    <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;"
-      name="By" id="cityDropDown">by</select>
+        <select class="form-control form-control-sm" style="width: 7%; min-width: 100px; background: #343a40; color: white;"
+                name="By" id="cityDropDown">
+            by
+        </select>
 
-    <button class="btn btn-dark" id="collapseButton" type="button" data-toggle="collapse" data-target="#collapseExample"
-      aria-expanded="false" aria-controls="collapseExample" onclick="setting()">
-      <img class="imageInsideButton" src="SettingsButton.png" alt="Graph">
-    </button>
-  </nav>
+        <button class="btn btn-dark" id="collapseButton" type="button" data-toggle="collapse" data-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample" onclick="setting()">
+            <img class="imageInsideButton" src="SettingsButton.png" alt="Graph">
+        </button>
+    </nav>
 
-<div class="collapse" id="collapseExample">
-    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
-        <label class="btn btn-secondary" id="label1">
-            <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
-        </label>
-        <label class="btn btn-secondary" id="label2">
-            <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
-        </label>
-    </div>
-    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="margin-top: 5px;">
-        <label class="btn btn-secondary">
-            <input type="radio" name="options" id="themeOptionNight" autocomplete="off"> 🌙
-        </label>
-        <label class="btn btn-secondary">
-            <input type="radio" name="options" id="themeOptionDay" autocomplete="off"> 🌞
-        </label>
-    </div>
-  </div>
-
-  <!--Frontpage div opening div-->
-  <div id="Frontpage" class="grid-stack" style="margin-top: 2%;">
-
-    <!--<div class="container">
-      <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">-->
-    <div id="IndendørsData" class="grid-stack-item divBox" data-gs-x="3" data-gs-y="2" data-gs-width="2"
-      data-gs-height="5">
-      <div class="grid-stack-item-content">
-        <h3>Indendørs</h3>
-        <div class="divText" id="internalTemperature">↺</div>
-        <div class="divText" id="internalHumidity">↺</div>
-        <br>
-      </div>
-    </div>
-
-    <div id="UdendørsData" class="grid-stack-item divBox" data-gs-x="6" data-gs-y="2" data-gs-width="2"
-      data-gs-height="5">
-      <div class="grid-stack-item-content">
-        <h3>Udendørs</h3>
-        <div class="divText" id="externalAPITemperature">↺</div>
-        <div class="divText" id="externalAPIHumidity">↺</div>
-        <br>
-      </div>
-    </div>
-
-    <div id="hr" class="grid-stack-item" data-gs-x="2" data-gs-y="5" data-gs-width="12" data-gs-height="1">
-      <div class="grid-stack-item-content">
-        <br>
-        <hr>
-      </div>
-    </div>
-
-
-    <div id="DagsPrognongse" class=" grid-stack-item" data-gs-x="2" data-gs-y="0" data-gs-height="5" data-gs-width="8">
-      <div class="grid-stack-item-content">
-        <h4>3 dags prognose</h4>
-        <div id="3dagsPronogse" class="grid-stack grid-stack-nested" data-gs-current-height="4">
-          <div class="grid-stack-item divBox div3dagsPrognoseSize" id="oneDagProg" data-gs-x="0" data-gs-y="0" data-gs-width="3"
-            data-gs-height="4">
-            <div class="grid-stack-item-content">
-              <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;"
-                id="prognosisDay1">I
-                dag</div>
-              <div class="divText3days" id="prognosisTemperature1">↺</div>
-              <div class="divText3days" id="prognosisHumidity1">↺</div>
-              <br>
-
-
-            </div>
-          </div>
-          <div class="grid-stack-item divBox div3dagsPrognoseSize" id="toDagProg" data-gs-x="4" data-gs-y="0" data-gs-width="3"
-            data-gs-height="4">
-            <div class="grid-stack-item-content">
-              <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;"
-                id="prognosisDay2">I
-                morgen</div>
-              <div class="divText3days" id="prognosisTemperature2">↺</div>
-              <div class="divText3days" id="prognosisHumidity2">↺</div>
-              <br>
-
-            </div>
-          </div>
-          <div class="grid-stack-item divBox div3dagsPrognoseSize " id="treDagProg" data-gs-x="8" data-gs-y="0" data-gs-width="3"
-            data-gs-height="4">
-            <div class="grid-stack-item-content">
-              <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;"
-                id="prognosisDay3">I
-                Overmorgen</div>
-              <div class="divText3days" id="prognosisTemperature3">↺</div>
-              <div class="divText3days" id="prognosisHumidity3">↺</div>
-              <br>
-            </div>
-          </div>
+    <div class="collapse" id="collapseExample">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="width: 100%;">
+            <label class="btn btn-secondary" id="label1">
+                <input type="radio" name="options" id="annotationOption1" autocomplete="off"> °C
+            </label>
+            <label class="btn btn-secondary" id="label2">
+                <input type="radio" name="options" id="annotationOption2" autocomplete="off"> °F
+            </label>
         </div>
-      </div>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" style="margin-top: 5px;">
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="themeOptionNight" autocomplete="off"> 🌙
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="themeOptionDay" autocomplete="off"> 🌞
+            </label>
+        </div>
+    </div>
+
+    <!--Frontpage div opening div-->
+    <div id="Frontpage" class="grid-stack" style="margin-top: 2%;">
+
+        <!--<div class="container">
+          <div class="row" style="width: 50vw; min-width: 330px; margin: auto;">-->
+        <div id="IndendørsData" class="grid-stack-item divBox" data-gs-x="3" data-gs-y="2" data-gs-width="2"
+             data-gs-height="5">
+            <div class="grid-stack-item-content">
+                <h3>Indendørs</h3>
+                <div class="divText" id="internalTemperature">↺</div>
+                <div class="divText" id="internalHumidity">↺</div>
+                <br>
+            </div>
+        </div>
+
+        <div id="UdendørsData" class="grid-stack-item divBox" data-gs-x="6" data-gs-y="2" data-gs-width="2"
+             data-gs-height="5">
+            <div class="grid-stack-item-content">
+                <h3>Udendørs</h3>
+                <div class="divText" id="externalAPITemperature">↺</div>
+                <div class="divText" id="externalAPIHumidity">↺</div>
+                <br>
+            </div>
+        </div>
+
+        <div id="hr" class="grid-stack-item" data-gs-x="2" data-gs-y="5" data-gs-width="12" data-gs-height="1">
+            <div class="grid-stack-item-content">
+                <br>
+                <hr>
+            </div>
+        </div>
+
+
+        <div id="DagsPrognongse" class=" grid-stack-item" data-gs-x="2" data-gs-y="0" data-gs-height="5" data-gs-width="8">
+            <div class="grid-stack-item-content">
+                <h4>3 dags prognose</h4>
+                <div id="3dagsPronogse" class="grid-stack grid-stack-nested" data-gs-current-height="4">
+                    <div class="grid-stack-item divBox div3dagsPrognoseSize" id="oneDagProg" data-gs-x="0" data-gs-y="0" data-gs-width="3"
+                         data-gs-height="4">
+                        <div class="grid-stack-item-content">
+                            <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;"
+                                 id="prognosisDay1">
+                                I
+                                dag
+                            </div>
+                            <div class="divText3days" id="prognosisTemperature1">↺</div>
+                            <div class="divText3days" id="prognosisHumidity1">↺</div>
+                            <br>
+
+
+                        </div>
+                    </div>
+                    <div class="grid-stack-item divBox div3dagsPrognoseSize" id="toDagProg" data-gs-x="4" data-gs-y="0" data-gs-width="3"
+                         data-gs-height="4">
+                        <div class="grid-stack-item-content">
+                            <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;"
+                                 id="prognosisDay2">
+                                I
+                                morgen
+                            </div>
+                            <div class="divText3days" id="prognosisTemperature2">↺</div>
+                            <div class="divText3days" id="prognosisHumidity2">↺</div>
+                            <br>
+
+                        </div>
+                    </div>
+                    <div class="grid-stack-item divBox div3dagsPrognoseSize " id="treDagProg" data-gs-x="8" data-gs-y="0" data-gs-width="3"
+                         data-gs-height="4">
+                        <div class="grid-stack-item-content">
+                            <div class="divTextHeader" style="border-bottom: 1px solid white; padding-bottom: 5px;"
+                                 id="prognosisDay3">
+                                I
+                                Overmorgen
+                            </div>
+                            <div class="divText3days" id="prognosisTemperature3">↺</div>
+                            <div class="divText3days" id="prognosisHumidity3">↺</div>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--Error text-->
+        <div id="NoLocalStorage"></div>
+
+        <!--Frontpage closing div-->
+    </div>
+
+    <!--Older data opening div-->
+    <div id="OlderData" style="display: none;">
+        <div class="oldDataContainer">
+
+            <input class="form-control inputStyle" type="date" id="dayInputField"
+                   style="margin-bottom: 10px; background-color: #0000005e;">
+            <div class="divBox" style="padding: 10px; height: 100%; width: 100%; background-color: #0000005e;">
+                <canvas id="chart"></canvas>
+            </div>
+
+            <div class="divBox" style=" margin-top: 20px; padding: 10px; background-color: #0000005e;">
+                <table class="table table-borderless" id="getAllOutputTable"></table>
+            </div>
+            <!--Older data closing div-->
+        </div>
     </div>
 
 
-    <!--Error text-->
-    <div id="NoLocalStorage"></div>
 
-    <!--Frontpage closing div-->
-  </div>
-
-  <!--Older data opening div-->
-  <div id="OlderData" style="display: none;">
-    <div class="oldDataContainer">
-
-      <input class="form-control inputStyle" type="date" id="dayInputField"
-        style="margin-bottom: 10px; background-color: #0000005e;">
-      <div class="divBox" style="padding: 10px; height: 100%; width: 100%; background-color: #0000005e;">
-        <canvas id="chart"></canvas>
-      </div>
-
-      <div class="divBox" style=" margin-top: 20px; padding: 10px; background-color: #0000005e;">
-        <table class="table table-borderless" id="getAllOutputTable"></table>
-      </div>
-      <!--Older data closing div-->
+    <!--Popup for raspberry pi ID-->
+    <div id="raspberryIdPopup" class="modal">
+        <div class="modal-content">
+            <div style="align-self: center; padding-bottom: 5px;">Indskriv dit RaspberryPi Id:</div>
+            <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
+                   id="raspberryIdInput">
+            <button class="btn btn-primary" style="width: 120px; align-self: center;"
+                    id="rasberryIdSubmitButton">
+                Indsend!
+            </button>
+            <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
+        </div>
     </div>
-  </div>
+    
 
+<!--JavaScript, but it works-->
+<script type="text/javascript">
+    
+</script>
+<script type="text/javascript">
+    
 
-
-  <!--Popup for raspberry pi ID-->
-  <div id="raspberryIdPopup" class="modal">
-    <div class="modal-content">
-      <div style="align-self: center; padding-bottom: 5px;">Indskriv dit RaspberryPi Id:</div>
-      <input style="width: 120px; align-self: center; padding-bottom: 5px; margin-bottom: 8px;" type="text"
-        id="raspberryIdInput">
-      <button class="btn btn-primary" style="width: 120px; align-self: center;"
-        id="rasberryIdSubmitButton">Indsend!</button>
-      <div style="align-self: center;" id="raspberryIdErrorOutput"></div>
-    </div>
-  </div>
-
-  <script src="bundle.js"></script>
-  <script type="text/javascript">
     $('.grid-stack').gridstack();
     var grid = $('.grid-stack').data('gridstack');
     var grid2 = $('.grid-stack').closest('#3dagsPronogse').data('gridstack');
@@ -179,34 +199,35 @@
     grid2.enableMove(false);
     grid2.enableResize(false);
     function setting() {
-      if(screen.width > 779){
-      if (settingMode === false) {
-        grid.enableMove(true);
-        grid.enableResize(true);
-        grid2.enableMove(true);
-        grid2.enableResize(true);
-        
-        settingMode = true;
-      }
+        if (screen.width > 779) {
+            if (settingMode === false) {
+                grid.enableMove(true);
+                grid.enableResize(true);
+                grid2.enableMove(true);
+                grid2.enableResize(true);
 
-      else{
-        grid.enableMove(false);
-        grid.enableResize(false);
-        grid2.enableMove(false);
-        grid2.enableResize(false);
-        settingMode = false;
-      }
+                settingMode = true;
+            }
+
+            else {
+                grid.enableMove(false);
+                grid.enableResize(false);
+                grid2.enableMove(false);
+                grid2.enableResize(false);
+                settingMode = false;
+            }
+        }
     }
-    }
-  </script>
-<!--JavaScript, but it works-->
-<script>
-    $(document).on('click',function(){
-        $('.collapse').collapse('hide');
-    })
+
+    // Auto collapse
+    $(document).ready(function(){
+        $(".collapse").click(function(){
+            $('#collapseExample').removeClass('show');
+        });
+    });
 </script>
 
-<script src="bundle.js"></script>
+    <script src="bundle.js"></script>
 </body>
 
 </html>
