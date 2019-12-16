@@ -2,7 +2,7 @@ import axios, { AxiosResponse, AxiosError } from "../../node_modules/axios/index
 import { BorderWidth, Chart, Point, ChartColor } from '../../node_modules/chart.js'; //Ignore me I do work
 
 //
-// Interfaces 
+// Interfaces
 //
 
 interface IWeather {
@@ -38,7 +38,7 @@ interface gridLines{
     y: string;
 }
 
-// Sets internal on 10 seconds to run the updateTemperature method
+// Sets internal on 10 seconds to run the updateTemperature method 
 setInterval(() => { updateTemperature() }, 10 * 1000);
 
 // Updates indoor temperature and humidity. We choose not to update outdoor, because of the free use of OpenWeather.
@@ -283,7 +283,7 @@ function onloadMethods(): void {
 
         get7Days();
         
-        tester();
+        //tester();
     }, 10);
 }
 
@@ -820,52 +820,52 @@ let toDagProg : HTMLDivElement = <HTMLDivElement>document.getElementById('toDagP
 let treDagProg : HTMLDivElement = <HTMLDivElement>document.getElementById('treDagProg')
 let collaspe : HTMLButtonElement = <HTMLButtonElement>document.getElementById('collapseButton');
 let settingMode : boolean = false;
-collaspe.addEventListener('click', SetingsMode)
-function tester() {
-     frontpage.classList.remove('grid-stack-one-column-mode') 
-     //console.log(screen.width)
-     if(screen.width < 780){
-        // console.log('check')
-        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode')
-        IndendørsData.setAttribute('data-gs-width', '4')
-        IndendørsData.setAttribute('data-gs-height', '3')
-        IndendørsData.setAttribute('data-gs-x', '2')
-        UdendørsData.setAttribute('data-gs-width', '4')
-        UdendørsData.setAttribute('data-gs-height', '3')
-        DagsPrognongse.setAttribute('data-gs-width', '12')
-        DagsPrognongse.setAttribute('data-gs-y', '3')
-        DagsPrognongse.setAttribute('data-gs-x', '0')
-        hr.setAttribute('data-gs-y', '3')
-        oneDagProg.setAttribute('data-gs-height', '2')
-        toDagProg.setAttribute('data-gs-height', '2')
-        treDagProg.setAttribute('data-gs-height', '2')
-     }
-     else{
-            GetOneSetting(IndendørsData, 'indendata')
-            GetOneSetting(UdendørsData, 'udendata') 
-            GetOneSetting(hr, 'hrdata') 
-            GetOneSetting(DagsPrognongse, 'DagsPrognongse')
-            GetOneSetting(oneDagProg, 'oneDagProg')
-            GetOneSetting(toDagProg, 'toDagProg')
-            GetOneSetting(treDagProg, 'treDagProg')
+//collaspe.addEventListener('click', SetingsMode)
+//function tester() {
+//     frontpage.classList.remove('grid-stack-one-column-mode') 
+//     //console.log(screen.width)
+//     if(screen.width < 780){
+//        // console.log('check')
+//        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode')
+//        IndendørsData.setAttribute('data-gs-width', '4')
+//        IndendørsData.setAttribute('data-gs-height', '3')
+//        IndendørsData.setAttribute('data-gs-x', '2')
+//        UdendørsData.setAttribute('data-gs-width', '4')
+//        UdendørsData.setAttribute('data-gs-height', '3')
+//        DagsPrognongse.setAttribute('data-gs-width', '12')
+//        DagsPrognongse.setAttribute('data-gs-y', '3')
+//        DagsPrognongse.setAttribute('data-gs-x', '0')
+//        hr.setAttribute('data-gs-y', '3')
+//        oneDagProg.setAttribute('data-gs-height', '2')
+//        toDagProg.setAttribute('data-gs-height', '2')
+//        treDagProg.setAttribute('data-gs-height', '2')
+//     }
+//     else{
+//            GetOneSetting(IndendørsData, 'indendata')
+//            GetOneSetting(UdendørsData, 'udendata') 
+//            GetOneSetting(hr, 'hrdata') 
+//            GetOneSetting(DagsPrognongse, 'DagsPrognongse')
+//            GetOneSetting(oneDagProg, 'oneDagProg')
+//            GetOneSetting(toDagProg, 'toDagProg')
+//            GetOneSetting(treDagProg, 'treDagProg')
          
-     }
-     //console.log(test2.getAttribute('data-gs-width')) 
-}
-function SetingsMode(){
-    if(screen.width > 779){
-    if ( settingMode === true){
-        console.log("is on, turning off")
-        //turnOffMove(IndendørsData)
-        SaveAll();
-        settingMode = false;
-    }
-    else{
-       // turnOnMove(IndendørsData)
-        console.log("is off, turning on")
-        settingMode = true;
-    }}
-}
+//     }
+//     //console.log(test2.getAttribute('data-gs-width')) 
+//}
+//function SetingsMode(){
+//    if(screen.width > 779){
+//    if ( settingMode === true){
+//        console.log("is on, turning off")
+//        //turnOffMove(IndendørsData)
+//        SaveAll();
+//        settingMode = false;
+//    }
+//    else{
+//       // turnOnMove(IndendørsData)
+//        console.log("is off, turning on")
+//        settingMode = true;
+//    }}
+//}
 
 /*function turnOnMove(element: HTMLDivElement){
     console.log("remove")

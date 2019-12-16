@@ -35871,7 +35871,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_chart_js__WEBPACK_IMPORTED_MODULE_1__);
 
  //Ignore me I do work
+// Sets internal on 10 seconds to run the updateTemperature method 
 setInterval(function () { updateTemperature(); }, 10 * 1000);
+// Updates indoor temperature and humidity. We choose not to update outdoor, because of the free use of OpenWeather.
 function updateTemperature() {
     var Url = baseUri + "latest/" + raspberryId + "/" + temperatureAnnotation;
     _node_modules_axios_index__WEBPACK_IMPORTED_MODULE_0___default.a.get(Url)
@@ -36056,7 +36058,7 @@ function onloadMethods() {
         setDayInputValue();
         setTheme();
         get7Days();
-        tester();
+        //tester();
     }, 10);
 }
 function browserStorage() {
@@ -36513,52 +36515,51 @@ var toDagProg = document.getElementById('toDagProg');
 var treDagProg = document.getElementById('treDagProg');
 var collaspe = document.getElementById('collapseButton');
 var settingMode = false;
-collaspe.addEventListener('click', SetingsMode);
-function tester() {
-    frontpage.classList.remove('grid-stack-one-column-mode');
-    //console.log(screen.width)
-    if (screen.width < 780) {
-        // console.log('check')
-        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode');
-        IndendørsData.setAttribute('data-gs-width', '4');
-        IndendørsData.setAttribute('data-gs-height', '3');
-        IndendørsData.setAttribute('data-gs-x', '2');
-        UdendørsData.setAttribute('data-gs-width', '4');
-        UdendørsData.setAttribute('data-gs-height', '3');
-        DagsPrognongse.setAttribute('data-gs-width', '12');
-        DagsPrognongse.setAttribute('data-gs-y', '3');
-        DagsPrognongse.setAttribute('data-gs-x', '0');
-        hr.setAttribute('data-gs-y', '3');
-        oneDagProg.setAttribute('data-gs-height', '2');
-        toDagProg.setAttribute('data-gs-height', '2');
-        treDagProg.setAttribute('data-gs-height', '2');
-    }
-    else {
-        GetOneSetting(IndendørsData, 'indendata');
-        GetOneSetting(UdendørsData, 'udendata');
-        GetOneSetting(hr, 'hrdata');
-        GetOneSetting(DagsPrognongse, 'DagsPrognongse');
-        GetOneSetting(oneDagProg, 'oneDagProg');
-        GetOneSetting(toDagProg, 'toDagProg');
-        GetOneSetting(treDagProg, 'treDagProg');
-    }
-    //console.log(test2.getAttribute('data-gs-width')) 
-}
-function SetingsMode() {
-    if (screen.width > 779) {
-        if (settingMode === true) {
-            console.log("is on, turning off");
-            //turnOffMove(IndendørsData)
-            SaveAll();
-            settingMode = false;
-        }
-        else {
-            // turnOnMove(IndendørsData)
-            console.log("is off, turning on");
-            settingMode = true;
-        }
-    }
-}
+//collaspe.addEventListener('click', SetingsMode)
+//function tester() {
+//     frontpage.classList.remove('grid-stack-one-column-mode') 
+//     //console.log(screen.width)
+//     if(screen.width < 780){
+//        // console.log('check')
+//        TreDagsPrognongse.classList.remove('grid-stack-one-column-mode')
+//        IndendørsData.setAttribute('data-gs-width', '4')
+//        IndendørsData.setAttribute('data-gs-height', '3')
+//        IndendørsData.setAttribute('data-gs-x', '2')
+//        UdendørsData.setAttribute('data-gs-width', '4')
+//        UdendørsData.setAttribute('data-gs-height', '3')
+//        DagsPrognongse.setAttribute('data-gs-width', '12')
+//        DagsPrognongse.setAttribute('data-gs-y', '3')
+//        DagsPrognongse.setAttribute('data-gs-x', '0')
+//        hr.setAttribute('data-gs-y', '3')
+//        oneDagProg.setAttribute('data-gs-height', '2')
+//        toDagProg.setAttribute('data-gs-height', '2')
+//        treDagProg.setAttribute('data-gs-height', '2')
+//     }
+//     else{
+//            GetOneSetting(IndendørsData, 'indendata')
+//            GetOneSetting(UdendørsData, 'udendata') 
+//            GetOneSetting(hr, 'hrdata') 
+//            GetOneSetting(DagsPrognongse, 'DagsPrognongse')
+//            GetOneSetting(oneDagProg, 'oneDagProg')
+//            GetOneSetting(toDagProg, 'toDagProg')
+//            GetOneSetting(treDagProg, 'treDagProg')
+//     }
+//     //console.log(test2.getAttribute('data-gs-width')) 
+//}
+//function SetingsMode(){
+//    if(screen.width > 779){
+//    if ( settingMode === true){
+//        console.log("is on, turning off")
+//        //turnOffMove(IndendørsData)
+//        SaveAll();
+//        settingMode = false;
+//    }
+//    else{
+//       // turnOnMove(IndendørsData)
+//        console.log("is off, turning on")
+//        settingMode = true;
+//    }}
+//}
 /*function turnOnMove(element: HTMLDivElement){
     console.log("remove")
     element.removeAttribute('data-gs-no-move')
