@@ -38,8 +38,10 @@ interface gridLines{
     y: string;
 }
 
+// Sets internal on 10 seconds to run the updateTemperature method
 setInterval(() => { updateTemperature() }, 10 * 1000);
 
+// Updates indoor temperature and humidity. We choose not to update outdoor, because of the free use of OpenWeather.
 function updateTemperature(): void {
     let Url: string = baseUri + "latest/" + raspberryId + "/" + temperatureAnnotation;
 
@@ -76,7 +78,6 @@ let raspberryId: string = "";
 
 // The City for the external temeperature. This information is saved in localStorage with the key "currentCity".
 let currentCity: string = "";
-
 
 // This is run after the page has loaded. Here we get the data to show and load localStorage.
 window.onload = onloadMethods;
